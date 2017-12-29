@@ -35,18 +35,18 @@ module.exports = {
 
   dev: {
     env: require('./dev.env'),
-    port: 8888,
+    port: 80,
     autoOpenBrowser: false,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
 
 
     proxyTable: {
-      '/e2-platform-api': {
-        target: 'http://112.126.90.50:8080',
+      '/e2-site-api': {
+        target: 'http://192.168.2.113/E2-Site',
         changeOrigin: true,
         pathRewrite: {
-          '^/e2-platform-api': ''
+          '^/e2-site-api': ''
         }
       }
     },

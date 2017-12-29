@@ -45,7 +45,7 @@
                             @click="showBigImg(index)">
                                 <img :src="item">
                         </li>
-                        <li class="weui-uploader__input-box"></li>
+                        <li @click="uploadImg" class="weui-uploader__input-box"></li>
                     </ul>
                 </div>
             </div>
@@ -66,7 +66,7 @@
         </div>
         <a class="add-file-btn">添加附件</a>
         <div class="weui-btn-area">
-            <a class="weui-btn weui-btn_primary" @click="goBack">发布</a>
+            <a class="weui-btn weui-btn_primary" @click="submitComment">发布</a>
         </div>
         <delete-img :index="nowIndex"
                     :img-path="nowPath"
@@ -75,7 +75,8 @@
     </section>
 </template>
 <script>
-import tools from '../../utils/tools'
+import util from '../../utils/tools'
+import jsSdk from '../../utils/jsSdk'
 import deleteImg from '../common/deleteImg.vue'
 
 export default {
@@ -83,11 +84,7 @@ export default {
         return {
             fontNum: 0,
             submitCotent: '',
-            imgList: [
-                '/static/images/bench1.png',
-                '/static/images/bench1.png',
-                '/static/images/bench1.png'
-            ],
+            imgData: {},
             fileList: [
                 {
                     id: 0,
@@ -100,18 +97,6 @@ export default {
                     imgUrl: '/static/images/detail1.png',
                     title: '不知道不明了',
                     des: '由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。'
-                },
-                {
-                    id: 2,
-                    imgUrl: '/static/images/detail1.png',
-                    title: '你瞅啥，你看啥',
-                    des: '由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。'
-                },
-                {
-                    id: 3,
-                    imgUrl: '/static/images/detail1.png',
-                    title: '瞅你咋地',
-                    des: '由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。'
                 }
             ],
             totalFont: 140,
@@ -119,11 +104,13 @@ export default {
             nowPath: '',
             isShowImg: {
                 value: false
-            }
+            },
+            userInfo: {},
+            imgList: []
         }
     },
     mounted () {
-        console.log(this.imgList, 'imgList')
+        jsSdk.init()
     },
     watch: {
         submitCotent () {
@@ -131,19 +118,28 @@ export default {
         }
     },
     methods: {
-        uploadImg (e) {
-            console.log(e)
-            tools.upFile(e).then((res) => {
-                if (res.result.success == '1') {
-                    let imgUrl = res.result.result[0]
-                    this.imgList.push(imgUrl)
-                } else {
-
-                }
-            })
+        uploadImg () {
+            this.imgData = jsSdk.uploadImage()
         },
-        goBack () {
-            this.$router.go(-1)
+        submitComment () {
+            this.userInfo = util.getUserInfo()
+
+            if (this.userInfo && this.userInfo.nickname) {
+                util.request({
+                    method: 'post',
+                    interface: 'submitComment',
+                    data: {
+                        enterpriseCode: this.$route.query.enterpriseCode,
+                        openid: this.userInfo.openid
+                    }
+                }).then(res => {
+                    if (res.result.success == '1') {
+                      this.$router.go(-1)
+                    } else {
+                      alert(res.result.message)
+                    }
+                })
+            }
         },
         showBigImg (index) {
             this.nowIndex = index
@@ -161,13 +157,7 @@ export default {
 </script>
 <style lang="scss">
 .submit-box {
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
     background: #ffffff;
-    z-index: 1001;
 
     .weui-cells {
         margin-top: 0;

@@ -1,31 +1,65 @@
 
-import axios from 'axios';
-import interfaces from './interfaces';
+import axios from 'axios'
+import interfaces from './interfaces'
+import queryString from 'query-string'
 
 const tools = {
+  getOpenId () {
+    var parsed = queryString.parse(location.search)
+    var userInfo = window.sessionStorage.getItem('userInfo')
+    userInfo = userInfo ?  JSON.parse(userInfo) : {}
 
-  goWechatAuth (url) {
-    this.request({
-      method: 'post',
-      interface: 'wechatAuth',
-      data: {'redirect': url}
-    }).then(res => {
-      var data = res.result.result;
-      if(data.startsWith('https')){
-        console.log(data);
-        window.location.href=data; //转向微信授权
-      }
-    });
+    if (!userInfo.openid) {
+        var path = '/registor?enterpriseCode=' + parsed.enterpriseCode + '&appid=' + parsed.appid +'&scope=snsapi_base&redirectUrl=' + window.encodeURIComponent(window.location.href)
+        window.location.replace(path)
+    } else {
+        return userInfo.openid
+    }
   },
 
-  getTokenByCode (code, cb) {
-    this.request({
-      method: 'post',
-      interface: 'findUserByWeCode',
-      data: {'code':code}
-    }).then(res => {
-      cb(res)
-    });
+  getUserInfo () {
+    var parsed = queryString.parse(location.search)
+    var userInfo = window.sessionStorage.getItem('userInfo')
+    userInfo = userInfo ?  JSON.parse(userInfo) : {}
+
+    if (!userInfo.nickname) {
+        var path = '/registor?enterpriseCode=' + parsed.enterpriseCode + '&appid=' + parsed.appid +'&scope=snsapi_userinfo&redirectUrl=' + window.encodeURIComponent(window.location.href)
+        window.location.replace(path)
+    } else {
+        return userInfo
+    }
+  },
+
+  /**
+   * 格式化日期函数
+   * @param date {Date|Date String} [需要格式化的日期]
+   * @param frm {String} [格式(如：yyyy-MM-dd hh:mm:ss)]
+   * @return 格式化后的日期
+  */
+  formatDate (date, fmt) {
+      if (!date) {
+        return ''
+      }
+
+      let theDate = new Date(date)
+      var o = {
+          'M+': theDate.getMonth() + 1, // 月份
+          'd+': theDate.getDate(), // 日
+          'h+': theDate.getHours(), // 小时
+          'm+': theDate.getMinutes(), // 分
+          's+': theDate.getSeconds(), // 秒
+          'q+': Math.floor((theDate.getMonth() + 3) / 3), // 季度
+          'S': theDate.getMilliseconds() // 毫秒
+      }
+      if (/(y+)/.test(fmt)) {
+          fmt = fmt.replace(RegExp.$1, (theDate.getFullYear() + '').substr(4 - RegExp.$1.length))
+      }
+      for (var k in o) {
+        if (new RegExp('(' + k + ')').test(fmt)) {
+          fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)))
+        }
+      }
+      return fmt
   },
 
   request (option) {

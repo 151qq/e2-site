@@ -3,7 +3,7 @@
         <div class="weui-cells no-margin">
             <router-link class="weui-cell weui-cell_access"
                     v-for="(item, index) in listData"
-                    :to="{name: item.pathName, query: {enterpriseCode: item.enterpriseCode}}">
+                    :to="{name: item.pathName, query: {enterpriseCode: item.enterpriseCode, appid: item.appid, pageCode: item.pageCode, templateCode: item.templateCode, userId: item.userId, oppenId: item.oppenId}}">
                 <div class="weui-cell__bd">{{item.title}}</div>
                 <div class="weui-cell__ft"></div>
             </router-link>
@@ -16,47 +16,20 @@ export default {
         return {
             listData: [
                 {
-                    title: '营销活动',
-                    pathName: 'marketCase',
-                    enterpriseCode: 'joneslanglasalle.com.cn'
-                },
-                {
-                    title: '营销任务',
-                    pathName: 'marketTask',
-                    enterpriseCode: 'joneslanglasalle.com.cn'
-                },
-                {
-                    title: '外呼工作',
-                    pathName: 'nolineJob',
-                    enterpriseCode: 'joneslanglasalle.com.cn'
-                },
-                {
-                    title: '在线预约',
-                    pathName: 'onlineBooking',
-                    enterpriseCode: 'joneslanglasalle.com.cn'
-                },
-                {
                     title: '推广文章',
-                    pathName: 'spreedArticle',
-                    enterpriseCode: 'joneslanglasalle.com.cn'
-                },
-                {
-                    title: '产品中心',
-                    pathName: 'productCategory',
-                    enterpriseCode: 'joneslanglasalle.com.cn'
-                },
-                {
-                    title: '营销分析',
-                    pathName: 'marketAnalyse',
-                    enterpriseCode: 'joneslanglasalle.com.cn'
-                },
-                {
-                    title: '营销红包',
-                    pathName: 'marketPacket',
-                    enterpriseCode: 'joneslanglasalle.com.cn'
+                    pathName: 'article-detail',
+                    enterpriseCode: '20171225151720001',
+                    appid: 'wx8b8c3ab0670be56f',
+                    pageCode: '20171218200506884621',
+                    templateCode: '20171218150821701481',
+                    userId: '111111',
+                    oppenId: '222222'
                 }
             ]
         }
+    },
+    mounted () {
+        console.log(this.$router)
     }
 }
 </script>

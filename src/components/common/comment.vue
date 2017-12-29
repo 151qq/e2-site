@@ -68,13 +68,11 @@
                 </div>
             </div>
         </section>
-        <submit-comment :is-show-modal="isShowModal"></submit-comment>
     </section>
 </template>
 <script>
 import imgList from './imgList.vue'
 import {getDateDiff} from '../../assets/common/utils.js'
-import submitComment from './submitComment.vue'
 
 export default {
     props: ['commentUrl'],
@@ -129,23 +127,25 @@ export default {
                         submitTime: '2017-18-21'
                     }
                 }
-            ],
-            isShowModal: {
-                value: false
-            }
+            ]
         }
     },
     methods: {
         showSubmit () {
-            this.$router.push({name: this.commentUrl})
+            this.$router.push({
+                name: this.commentUrl,
+                query: {
+                    enterpriseCode: this.$route.query.enterpriseCode,
+                    appid: this.$route.query.appid
+                }
+            })
         }
     },
     filters: {
         getDateDiff
     },
     components: {
-        imgList,
-        submitComment
+        imgList
     }
 }
 </script>

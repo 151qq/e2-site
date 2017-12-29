@@ -4,6 +4,9 @@ import routes from './router'
 import store from '../../vuex/store'
 import tools from '../../utils/tools'
 import '../../assets/scss/common.scss'
+import FastClick from 'fastclick'
+
+FastClick.attach(document.body)
 
 Vue.use(VueRouter)
 
@@ -21,30 +24,7 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-    if (to.meta.title) {
-        document.title = to.meta.title
-    }
-
-    if (!to.meta.token) {
-        next()
-        return
-    }
-    var code = to.query.code
-    var e2Token = jsCookie.get('e2_enterprise_staff')
-    if (code && !e2Token) {
-        tools.getTokenByCode(code, (res) => {
-            var data = res.result.result;
-            jsCookie.set('e2_enterprise_staff', data.e2_enterprise_staff)
-            jsCookie.set('token', 'data.token')
-            // 清空code
-            to.query.code = ''
-            next()
-        })
-    } else if (!code && !e2Token) {
-        tools.goWechatAuth(window.location.href)
-    } else {
-        next()
-    }
+    next()
 })
 
 new Vue({
