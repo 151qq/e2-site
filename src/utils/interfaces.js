@@ -12,6 +12,13 @@ export default{
         html5PageGet: platform + 'html5PageGet.json',
         listPageArea: platform + 'listPageArea.json',
 
-        getTemplates: platform +'templateListPage.json'
+        getTemplates: platform +'templateListPage.json',
+
+        commentList: platform + 'comment/commentList.json',
+        publishComment: platform + 'comment/publishComment.json',
+        replyComment: platform + 'comment/replyComment.json',
+        deleteComment: platform + 'comment/deleteComment.json',
+        countCommentGoodJob: platform + 'comment/countCommentGoodJob.json',
+        countCommentBadJob: platform + 'comment/countCommentBadJob.json'
     }
 }

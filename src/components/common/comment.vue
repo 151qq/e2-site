@@ -4,46 +4,58 @@
             <span class="left">评论</span>
             <img class="right"
                     src="../../assets/images/edit-icon.png"
-                    @click="showSubmit">
+                    @click="showSubmit('1')">
         </div>
         <section class="comment-b"
-                    v-for="(item, index) in commentDatas">
+                    v-for="(item, index) in commentList">
             <div class="avatar-box">
-                <img :src="item.author.avatar">
+                <img :src="item.memberInfo.memberImage">
             </div>
             <div class="content-box">
                 <div class="title-box">
-                    <span class="title">{{item.author.name}}</span>
+                    <span class="title">{{item.memberInfo.memberName}}</span>
                     <div class="date-box">
-                        {{index + 1}}楼 {{item.submitTime | getDateDiff}}
+                        {{commentFloor + 1}}楼 {{item.createTime | getDateDiff}}
                     </div>
                 </div>
-                <div class="des-box" v-if="item.commentContent">{{item.commentContent}}</div>
-                <div class="imgs-box" v-if="item.commentImgs && item.commentImgs.length">
-                    <img-list :img-list="item.commentImgs"></img-list>
+                <div class="des-box"
+                     v-if="item.status == '1' && item.commentContent">{{item.commentContent}}</div>
+
+                <div class="des-box"
+                     v-if="item.status == '0'">该评论已被删除！！！</div>
+
+                <div class="imgs-box" 
+                     v-if="item.status == '1' && item.attachments && item.attachments.length">
+                    <img-list :img-list="item.attachments"></img-list>
                 </div>
                 <div class="response-box">
                     <div class="top-box">
                         <span class="response"
-                                v-if="item.responseComment && item.responseComment.author">作者回复</span>
+                                v-if="item.responseComment && item.responseComment.commentContent">
+                            作者回复
+                        </span>
                         <div class="comment-btn">
-                            <img src="../../assets/images/zan-icon.png">{{item.zanNum}}
-                            <img src="../../assets/images/nozan-icon.png">{{item.hateNum}}
-                            <img src="../../assets/images/edit-icon.png" @click="showSubmit">
-                            <img src="../../assets/images/delete-icon.png">
+                            <img src="../../assets/images/zan-icon.png">{{item.commentGoodJob}}
+                            <img src="../../assets/images/nozan-icon.png">{{item.commentBadJob}}
+                            <img src="../../assets/images/edit-icon.png"
+                                 @click="showSubmit('2')"
+                                 v-if="userInfo.oppenid && item.memberInfo.memberWechatOpenid != userInfo.oppenid">
+                            <img src="../../assets/images/delete-icon.png"
+                                 @click="deleteComment(item)"
+                                 v-if="userInfo.oppenid && item.memberInfo.memberWechatOpenid == userInfo.oppenid">
                         </div>
                     </div>
                     <div class="response-content"
-                            v-if="item.responseComment && item.responseComment.author">
+                            v-if="item.responseComment && item.responseComment.commentContent">
                         <div class="des-box"
                                 v-if="item.responseComment.commentContent">
                             {{item.responseComment.commentContent}}
                         </div>
                         <div class="imgs-box"
-                                v-if="item.responseComment.commentImgs && item.responseComment.commentImgs.length">
-                            <img-list :img-list="item.responseComment.commentImgs"></img-list>
+                                v-if="item.responseComment.attachments && item.responseComment.attachments.length">
+                            <img-list :img-list="item.responseComment.attachments"></img-list>
                         </div>
-                        <div class="article-box"
+                        <!-- <div class="article-box"
                                 v-if="item.responseComment.commentArticles && item.responseComment.commentArticles.length">
                             <router-link :to="article.href"
                                         v-for="(article, index) in item.responseComment.commentArticles">
@@ -52,8 +64,8 @@
                                     {{article.title}}
                                 </div>          
                             </router-link>
-                        </div>
-                        <div class="response-box">
+                        </div> -->
+                        <!-- <div class="response-box">
                             <div class="top-box">
                                 <span class="response"></span>
                                 <div class="comment-btn">
@@ -63,7 +75,7 @@
                                     <img src="../../assets/images/delete-icon.png">
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
@@ -71,6 +83,7 @@
     </section>
 </template>
 <script>
+import util from '../../utils/tools'
 import imgList from './imgList.vue'
 import {getDateDiff} from '../../assets/common/utils.js'
 
@@ -78,65 +91,53 @@ export default {
     props: ['commentUrl'],
     data () {
         return {
-            commentDatas: [
-                {
-                    id: 0,
-                    author: {
-                        name: '大家好，我是ms',
-                        avatar: '/static/images/bench1.png'
-                    },
-                    zanNum: 11,
-                    hateNum: 12,
-                    commentContent: '其实吧，没什么想说的，哎，都不容呀！',
-                    commentImgs: [
-                        '/static/images/bench1.png',
-                        '/static/images/bench1.png',
-                        '/static/images/bench1.png',
-                        '/static/images/bench1.png',
-                        '/static/images/bench1.png'
-                    ],
-                    submitTime: '2017-11-20',
-                    responseComment: {
-                        id: 1,
-                        author: {
-                            name: '大家好，我是ms',
-                            avatar: '/static/images/detail1.png'
-                        },
-                        commentContent: '其实吧，没什么想说的，哎，都不容呀！',
-                        commentImgs: [
-                            '/static/images/bench1.png',
-                            '/static/images/bench1.png',
-                            '/static/images/bench1.png',
-                            '/static/images/bench1.png',
-                            '/static/images/bench1.png'
-                        ],
-                        commentArticles: [
-                            {
-                                id: 0,
-                                title: '咋啦，妹砸，被煮啦！',
-                                imgUrl: '/static/images/detail1.png',
-                                href: ''
-                            },
-                            {
-                                id: 1,
-                                title: '论妹砸被煮二三事！',
-                                imgUrl: '/static/images/detail1.png',
-                                href: ''
-                            }
-                        ],
-                        submitTime: '2017-18-21'
-                    }
-                }
-            ]
+            commentList: [],
+            userInfo: {}
         }
     },
+    mounted () {
+        this.userInfo = window.sessionStorage.getItem('userInfo')
+        this.getComments()
+    },
     methods: {
-        showSubmit () {
+        showSubmit (type) {
             this.$router.push({
                 name: this.commentUrl,
                 query: {
                     enterpriseCode: this.$route.query.enterpriseCode,
-                    appid: this.$route.query.appid
+                    appid: this.$route.query.appid,
+                    pageCode: this.$route.query.pageCode,
+                    commentType: type
+                }
+            })
+        },
+        getComments () {
+            util.request({
+                method: 'get',
+                interface: 'commentList',
+                data: {
+                    pageCode: this.$route.query.pageCode
+                }
+            }).then(res => {
+                if (res.result.success == '1') {
+                    this.commentList = res.result.result
+                } else {
+                    this.$message.error(res.result.message)
+                }
+            })
+        },
+        deleteComment (item) {
+            util.request({
+                method: 'post',
+                interface: 'deleteComment',
+                data: {
+                    commentCode: item.commentCode
+                }
+            }).then(res => {
+                if (res.result.success == '1') {
+                    this.getComments()
+                } else {
+                    this.$message.error(res.result.message)
                 }
             })
         }

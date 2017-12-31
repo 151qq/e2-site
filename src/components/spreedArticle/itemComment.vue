@@ -1,6 +1,6 @@
 <template>
     <section class="submit-box">
-        <div class="weui-cell weui-cell_select weui-cell_select-after">
+        <!-- <div class="weui-cell weui-cell_select weui-cell_select-after">
             <div class="weui-cell__hd">
                 <label for="" class="weui-label">评论情绪</label>
             </div>
@@ -24,14 +24,14 @@
                 </select>
             </div>
         </div>
-        <div class="wx-area-line"></div>
-        <div class="weui-cells weui-cells_form no-line">
+        <div class="wx-area-line"></div> -->
+        <div class="weui-cells weui-cells_form no-line no-margin">
             <div class="weui-cell no-line">
                 <div class="weui-cell__bd">
                     <textarea class="weui-textarea"
                                 placeholder="这一刻的想法..."
                                 rows="3"
-                                v-model="submitCotent"></textarea>
+                                v-model="commentData.commentContent"></textarea>
                     <!-- <div class="weui-textarea-counter"><span>{{fontNum}}</span>/{{totalFont}}</div> -->
                 </div>
             </div>
@@ -50,21 +50,6 @@
                 </div>
             </div>
         </div>
-        <div class="weui-cells__title">附件</div>
-        <div class="weui-cells no-margin">
-            <router-link class="weui-media-box weui-media-box_appmsg"
-                    v-for="(item, index) in fileList"
-                    :to="{}">
-                <div class="weui-media-box__hd">
-                    <img class="weui-media-box__thumb" :src="item.imgUrl">
-                </div>
-                <div class="weui-media-box__bd">
-                    <h4 class="weui-media-box__title">{{item.title}}</h4>
-                    <p class="weui-media-box__desc">{{item.des}}</p>
-                </div>
-            </router-link>
-        </div>
-        <a class="add-file-btn">添加附件</a>
         <div class="weui-btn-area">
             <a class="weui-btn weui-btn_primary" @click="submitComment">发布</a>
         </div>
@@ -82,24 +67,10 @@ import deleteImg from '../common/deleteImg.vue'
 export default {
     data () {
         return {
-            fontNum: 0,
-            submitCotent: '',
-            imgData: {},
-            fileList: [
-                {
-                    id: 0,
-                    imgUrl: '/static/images/detail1.png',
-                    title: '爱谁谁爱啥啥',
-                    des: '由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。'
-                },
-                {
-                    id: 1,
-                    imgUrl: '/static/images/detail1.png',
-                    title: '不知道不明了',
-                    des: '由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。'
-                }
-            ],
-            totalFont: 140,
+            commentData: {
+                commentContent: '',
+                attachments: []
+            },
             nowIndex: '',
             nowPath: '',
             isShowImg: {
@@ -112,26 +83,22 @@ export default {
     mounted () {
         jsSdk.init()
     },
-    watch: {
-        submitCotent () {
-            this.fontNum = this.submitCotent.length
-        }
-    },
     methods: {
         uploadImg () {
-            this.imgData = jsSdk.uploadImage()
+            this.commentData.attachments = jsSdk.uploadImage()
         },
         submitComment () {
             this.userInfo = util.getUserInfo()
 
             if (this.userInfo && this.userInfo.nickname) {
+                this.commentData.enterpriseCode = this.$route.query.enterpriseCode
+                this.commentData.pageCode = this.$route.query.pageCode
+                this.commentData.commentType = this.$route.query.commentType
+
                 util.request({
                     method: 'post',
                     interface: 'submitComment',
-                    data: {
-                        enterpriseCode: this.$route.query.enterpriseCode,
-                        openid: this.userInfo.openid
-                    }
+                    data: this.commentData
                 }).then(res => {
                     if (res.result.success == '1') {
                       this.$router.go(-1)

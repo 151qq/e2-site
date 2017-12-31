@@ -10,11 +10,7 @@ export default {
     data () {
         return {
             isShowPage: false,
-            appid: 'wx8b8c3ab0670be56f',
-            secret: '27db9d99d44eb4d7499cfc075307490d',
-            access_token: '5_0uh-_xw2JfozpKsxuMnBih2Uvba3rsCRo1waBCO7EY8iK4yQO2gkJjvJBCYPYK1rr4_qjoJyVtVadmI3LPIegA',
-            openid: 'oFOk40bprwbmfmr_ajRjnT71hD5I',
-            refresh_token: '5_xDiQLRWeKZvAm4CNce3Z-QzPHp5Vn7eY7iDPHwPwBbk7Po0i5xoYm-Bgvcg5Nm3zs_A5DHBNcP4_GQOGvCwwZQ'
+            appid: 'wx8b8c3ab0670be56f'
         }
     },
     mounted () {

@@ -22,7 +22,7 @@
         </section>
 
         <div class="wx-area-line"></div>
-        <div class="comments-box">
+        <div class="comments-box" v-if="isComments">
             <comment :comment-url="'article-comment'"></comment>
         </div>
         <!-- <div class="wx-bottom-nav">
@@ -58,7 +58,8 @@ export default {
                 dateStyle: ''
             },
             areaList: [],
-            openid: ''
+            openid: '',
+            isComments: false
         }
     },
     mounted () {
@@ -68,6 +69,7 @@ export default {
             jsSdk.init()
             this.getData()
             this.getTemplate()
+            this.isComments = true
         }
     },
     computed: {
