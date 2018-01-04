@@ -41,11 +41,11 @@
                 <div class="weui-uploader__bd">
                      <ul class="weui-uploader__files" id="uploaderFiles">
                         <li class="weui-uploader__file"
-                            v-for="(item, index) in imgList"
+                            v-for="(item, index) in commentData.attachments"
                             @click="showBigImg(index)">
                                 <img :src="item">
                         </li>
-                        <li @click="uploadImg" class="weui-uploader__input-box"></li>
+                        <li @click="chooseImage" class="weui-uploader__input-box"></li>
                     </ul>
                 </div>
             </div>
@@ -77,44 +77,79 @@ export default {
                 value: false
             },
             userInfo: {},
-            imgList: []
+            serverIdList: []
         }
     },
     mounted () {
-        jsSdk.init()
+        this.userInfo = util.getUserInfo()
+        if (this.userInfo.memberCode) {
+            jsSdk.init()
+            window.wx.ready(() =>{
+                console.log(window.wx, 'con')
+            })
+        }
     },
     methods: {
-        uploadImg () {
-            this.commentData.attachments = jsSdk.uploadImage()
+        chooseImage () {
+            var num = 9 - this.commentData.attachments.length
+            jsSdk.chooseImage(num ,(localIds) => {
+                this.commentData.attachments = this.commentData.attachments.concat(localIds).splice(0, 9)
+            })
         },
         submitComment () {
-            this.userInfo = util.getUserInfo()
+            jsSdk.uploadImgs(this.commentData.attachments, (serverIdList) => {
+                this.serverIdList = this.serverIdList.concat(serverIdList).splice(0, 9)
+                this.submitFn()
+            })
+        },
+        submitFn () {
+            if (this.userInfo && this.userInfo.memberCode) {
+                var formData = {
+                    appId: this.$route.query.appid,
+                    enterpriseCode: this.$route.query.enterpriseCode,
+                    pageCode: this.$route.query.pageCode,
+                    commentType: this.$route.query.commentType,
+                    commentFloor: this.$route.query.commentFloor,
+                    memberCode: this.userInfo.memberCode,
+                    attachments: this.serverIdList,
+                    commentContent: this.commentData.commentContent
+                }
 
-            if (this.userInfo && this.userInfo.nickname) {
-                this.commentData.enterpriseCode = this.$route.query.enterpriseCode
-                this.commentData.pageCode = this.$route.query.pageCode
-                this.commentData.commentType = this.$route.query.commentType
+                if (this.$route.query.commentTitle) {
+                    formData.commentTitle = this.$route.query.commentTitle
+                }
 
                 util.request({
                     method: 'post',
-                    interface: 'submitComment',
-                    data: this.commentData
+                    interface: 'publishComment',
+                    data: formData
                 }).then(res => {
                     if (res.result.success == '1') {
-                      this.$router.go(-1)
+                        var pathUrl = {
+                            name: 'article-detail',
+                            query: {
+                                enterpriseCode: this.$route.query.enterpriseCode,
+                                appid: this.$route.query.appid,
+                                pageCode: this.$route.query.pageCode,
+                                templateCode: this.$route.query.templateCode,
+                                userId: this.$route.query.userId,
+                                openId: this.$route.query.openId
+                            }
+                        }
+                        this.$router.replace(pathUrl)
                     } else {
-                      alert(res.result.message)
+                        this.$message.error(res.result.message)
                     }
                 })
             }
         },
         showBigImg (index) {
             this.nowIndex = index
-            this.nowPath = this.imgList[index]
+            this.nowPath = this.commentData.attachments[index]
             this.isShowImg.value = true
         },
         deleteImg (index) {
-            this.imgList.splice(index, 1)
+            this.commentData.attachments.splice(index, 1)
         }
     },
     components: {

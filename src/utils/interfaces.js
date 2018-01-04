@@ -5,6 +5,8 @@ export default{
     interfaces: {
         getServiceWechatUserInfo: platform + 'getServiceWechatUserInfo.json',
         getSignature: platform + 'getSignature.json',
+        saveMemberInfo: platform + 'member/saveMemberInfo.json',
+        sentSms: platform + 'customer/sentSms.json',
         /**
         * 推荐文章 get
         * key 搜索时使用，返回搜索相关数据

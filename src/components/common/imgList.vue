@@ -21,6 +21,7 @@
 </template>
 <script>
 import showBigImg from './showBigImg.vue'
+// import jsSdk from '../../utils/jsSdk'
 
 export default {
     props: ['imgList', 'morePath'],
@@ -34,6 +35,7 @@ export default {
     },
     methods: {
         showBigImg (index) {
+            // jsSdk.previewImage(this.imgList[index], this.imgList)
             this.isShowImg.value = true
             this.index = index
         }
@@ -64,6 +66,14 @@ export default {
     .weui-grid {
         width: 33%;
         margin-bottom: 0.15em;
+    }
+
+    .weui-grids:before {
+        border: none;
+    }
+
+    .weui-grids:after {
+        border:none;
     }
 
     .margin-box {

@@ -58,14 +58,14 @@ export default {
                 dateStyle: ''
             },
             areaList: [],
-            openid: '',
+            userInfo: {},
             isComments: false
         }
     },
     mounted () {
-        this.openid = util.getOpenId()
+        this.userInfo = util.getOpenId()
 
-        if (this.openid) {
+        if (this.userInfo.openid || this.userInfo.memberCode) {
             jsSdk.init()
             this.getData()
             this.getTemplate()
@@ -201,13 +201,16 @@ export default {
                     link: window.location.href,
                     imgUrl: this.articleData.pageCover,
                     success () {
-                        alert('分享成功！')
+                        this.$message({
+                              message: '恭喜你，分享成功！',
+                              type: 'success'
+                        })
                     }
                   }
 
                   jsSdk.setShare(shareData)
                 } else {
-                  alert(res.result.message)
+                  this.$message.error(res.result.message)
                 }
             })
         },

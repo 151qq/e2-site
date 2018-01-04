@@ -1,5 +1,5 @@
 <template>
-    <section class="img-box-bg" v-show="isShowImg.value" @click="hiddenImg">
+    <section class="img-box-bg" v-show="isShowImg.value" @click.self="hiddenImg">
         <swiper :options="swiperOption" class="img-big-box" ref="mySwiper">
           <!-- slides -->
           <swiper-slide v-for="item in bigImgs"><img :src="item"></swiper-slide>
@@ -27,6 +27,9 @@ export default {
     methods: {
         hiddenImg () {
             this.isShowImg.value = false
+        },
+        stopHandle () {
+            return false
         }
     },
     watch: {

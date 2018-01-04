@@ -1,5 +1,6 @@
 import queryString from 'query-string'
 import tools from './tools'
+import store from '../vuex/store'
 
 const jsSdk = {
     init () {
@@ -7,6 +8,13 @@ const jsSdk = {
         const nonceStr = 'Wm3WZYTPz0wzccnW'
         const timestamp = String(Math.floor(new Date().getTime() / 1000))
         const appid = parsed.appid
+        let url = ''
+
+        if (window.__wxjs_is_wkwebview === true) {
+            url = store.state.iosUrl.split('#')[0]
+        } else {
+            url = window.location.href.split('#')[0]
+        }
 
         tools.request({
             method: 'post',
@@ -14,7 +22,7 @@ const jsSdk = {
             data: {
                 appId: appid,
                 noncestr: nonceStr,
-                url: window.location.href.split('#')[0],
+                url: url,
                 timestamp: timestamp
             }
         }).then(res => {
@@ -39,8 +47,6 @@ const jsSdk = {
                         'showMenuItems'
                     ]
                 })
-
-                return window.wx
             } else {
               alert(res.result.message)
             }
@@ -92,28 +98,42 @@ const jsSdk = {
             }
         })
     },
-    uploadImage () {
+    // 本地选择图片
+    chooseImage (num, cb) {
         window.wx.chooseImage({
-            count: 1,
+            count: num,
             sizeType: ['original', 'compressed'],
             sourceType: ['album', 'camera'],
             success (res) {
-                var serverIdList = []
-                res.localIds.forEach((item) => {
-                    // 图片上传
-                    wx.uploadImage({
-                        localId: item,
-                        isShowProgressTips: 1,
-                        success: function (res) {
-                            serverIdList.push(res.serverId)
-                        }
-                    })
-                })
+                cb(res.localIds)
+            }
+        })
+    },
+    //  多上上传微信服务器
+    uploadImgs (datas, cb) {
+        var serverIdList = []
+        var localIds = datas.concat([])
+        
+        jsSdk.uploadImg(localIds, serverIdList, cb)
+    },
+    uploadImg (localIds, serverIdList, cb) {
 
-                var imgData = {
-                    serverIdList: serverIdList,
-                    localIds: res.localIds
-                }
+        if (!localIds.length) {
+            cb(serverIdList)
+            return false
+        }
+
+        var localId = localIds.splice(0, 1)[0]
+
+        alert(localId + 'localId')
+        
+        window.wx.uploadImage({
+            localId: localId,
+            isShowProgressTips: 1,
+            success: function (res) {
+                serverIdList.push(res.serverId)
+
+                jsSdk.uploadImg(localIds, serverIdList, cb)
             }
         })
     },

@@ -2,24 +2,30 @@
     <section class="comment-box">
         <div class="head-box">
             <span class="left">评论</span>
-            <img class="right"
-                    src="../../assets/images/edit-icon.png"
-                    @click="showSubmit('1')">
+            <div class="right" @click="showSubmit('1')">
+                <img src="../../assets/images/edit-icon.png">
+            </div>
         </div>
         <section class="comment-b"
+                    :id="'comment-' + item.commentFloor"
                     v-for="(item, index) in commentList">
             <div class="avatar-box">
-                <img :src="item.memberInfo.memberImage">
+                <img v-if="item.memberInfo.memberImage" :src="item.memberInfo.memberImage">
             </div>
             <div class="content-box">
                 <div class="title-box">
                     <span class="title">{{item.memberInfo.memberName}}</span>
                     <div class="date-box">
-                        {{commentFloor + 1}}楼 {{item.createTime | getDateDiff}}
+                        {{item.commentFloor}}楼 {{item.createTime | getDateDiff}}
                     </div>
                 </div>
                 <div class="des-box"
-                     v-if="item.status == '1' && item.commentContent">{{item.commentContent}}</div>
+                     v-if="item.status == '1' && item.commentContent">
+                     <a v-if="item.commentTitle"
+                        class="response-nav"
+                        :href="'#comment-' + item.commentTitle">@第{{item.commentTitle}}楼：</a>
+                    {{item.commentContent}}
+                </div>
 
                 <div class="des-box"
                      v-if="item.status == '0'">该评论已被删除！！！</div>
@@ -31,34 +37,44 @@
                 <div class="response-box">
                     <div class="top-box">
                         <span class="response"
-                                v-if="item.responseComment && item.responseComment.commentContent">
+                                v-if="item.reportComment && item.reportComment.commentContent">
                             作者回复
                         </span>
-                        <div class="comment-btn">
-                            <img src="../../assets/images/zan-icon.png">{{item.commentGoodJob}}
-                            <img src="../../assets/images/nozan-icon.png">{{item.commentBadJob}}
-                            <img src="../../assets/images/edit-icon.png"
-                                 @click="showSubmit('2')"
-                                 v-if="userInfo.oppenid && item.memberInfo.memberWechatOpenid != userInfo.oppenid">
-                            <img src="../../assets/images/delete-icon.png"
+                        <div class="comment-btn" v-if="item.status == '1'">
+                            <div class="btn-out-box" @click="countCommentGoodJob(item)">
+                                <img src="../../assets/images/zan-icon.png">
+                                <span class="text">{{item.commentGoodJob}}</span>
+                            </div>
+                            <div class="btn-out-box" @click="countCommentBadJob(item)">
+                                <img src="../../assets/images/nozan-icon.png">
+                                <span class="text">{{item.commentBadJob}}</span>
+                            </div>
+                            <div class="btn-out-box"
+                                 @click="showSubmit('1', item.commentFloor)"
+                                 v-if="(userInfo.oppenid && item.memberInfo.memberWechatOpenid != userInfo.oppenid) || (userInfo.memberCode && item.memberInfo.memberCode != userInfo.memberCode)">
+                                <img src="../../assets/images/edit-icon.png">
+                            </div>
+                            <div class="btn-out-box"
                                  @click="deleteComment(item)"
-                                 v-if="userInfo.oppenid && item.memberInfo.memberWechatOpenid == userInfo.oppenid">
+                                 v-if="(userInfo.oppenid && item.memberInfo.memberWechatOpenid == userInfo.oppenid) || (userInfo.memberCode && item.memberInfo.memberCode == userInfo.memberCode)">
+                                <img src="../../assets/images/edit-icon.png">
+                            </div>
                         </div>
                     </div>
                     <div class="response-content"
-                            v-if="item.responseComment && item.responseComment.commentContent">
+                            v-if="item.reportComment && item.reportComment.commentContent">
                         <div class="des-box"
-                                v-if="item.responseComment.commentContent">
-                            {{item.responseComment.commentContent}}
+                                v-if="item.reportComment.commentContent">
+                            {{item.reportComment.commentContent}}
                         </div>
                         <div class="imgs-box"
-                                v-if="item.responseComment.attachments && item.responseComment.attachments.length">
-                            <img-list :img-list="item.responseComment.attachments"></img-list>
+                                v-if="item.reportComment.attachments && item.reportComment.attachments.length">
+                            <img-list :img-list="item.reportComment.attachments"></img-list>
                         </div>
                         <!-- <div class="article-box"
-                                v-if="item.responseComment.commentArticles && item.responseComment.commentArticles.length">
+                                v-if="item.reportComment.commentArticles && item.reportComment.commentArticles.length">
                             <router-link :to="article.href"
-                                        v-for="(article, index) in item.responseComment.commentArticles">
+                                        v-for="(article, index) in item.reportComment.commentArticles">
                                 <img :src="article.imgUrl">
                                 <div class="article-title-box">
                                     {{article.title}}
@@ -92,22 +108,82 @@ export default {
     data () {
         return {
             commentList: [],
-            userInfo: {}
+            userInfo: {},
+            isGood: [],
+            isBad: []
         }
     },
     mounted () {
-        this.userInfo = window.sessionStorage.getItem('userInfo')
+        this.userInfo = JSON.parse(window.sessionStorage.getItem('userInfo'))
         this.getComments()
     },
     methods: {
-        showSubmit (type) {
-            this.$router.push({
+        showSubmit (type, floor) {
+            var pathUrl = {
                 name: this.commentUrl,
                 query: {
                     enterpriseCode: this.$route.query.enterpriseCode,
                     appid: this.$route.query.appid,
                     pageCode: this.$route.query.pageCode,
-                    commentType: type
+                    templateCode: this.$route.query.templateCode,
+                    userId: this.$route.query.userId,
+                    openId: this.$route.query.openId,
+                    commentType: type,
+                    commentFloor: this.commentList.length + 1
+                }
+            }
+
+            if (floor) {
+                pathUrl.query.commentTitle = floor
+            }
+
+            this.$router.push(pathUrl)
+        },
+        countCommentGoodJob (item) {
+            if (this.isGood.indexOf(item.commentCode) > -1) {
+                return false
+            }
+
+            util.request({
+                method: 'post',
+                interface: 'countCommentGoodJob',
+                data: {
+                    commentCode: item.commentCode
+                }
+            }).then(res => {
+                if (res.result.success == '1') {
+                    this.$message({
+                      message: '恭喜你，点赞成功！',
+                      type: 'success'
+                    })
+                    this.isGood.push(item.commentCode)
+                    this.getComments()
+                } else {
+                    this.$message.error(res.result.message)
+                }
+            })
+        },
+        countCommentBadJob (item) {
+            if (this.isBad.indexOf(item.commentCode) > -1) {
+                return false
+            }
+
+            util.request({
+                method: 'post',
+                interface: 'countCommentBadJob',
+                data: {
+                    commentCode: item.commentCode
+                }
+            }).then(res => {
+                if (res.result.success == '1') {
+                    this.$message({
+                      message: '恭喜你，操作成功！',
+                      type: 'success'
+                    })
+                    this.isBad.push(item.commentCode)
+                    this.getComments()
+                } else {
+                    this.$message.error(res.result.message)
                 }
             })
         },
@@ -166,9 +242,21 @@ export default {
 
         .right {
             display: block;
-            width: 18px;
-            height: 18px;
+            width: 28px;
+            height: 28px;
+            text-align: right;
+
+            img {
+                display: inline-block;
+                width: 18px;
+                height: 18px;
+                margin-top: 5px;
+            }
         }
+    }
+
+    .response-nav {
+        color: #20a0ff;
     }
 
     .comment-b {
@@ -240,15 +328,30 @@ export default {
                 }
 
                 .comment-btn {
-                    display: flex;
-                    align-items: center;
+                    flex: 1;
+                    text-align: right;
                     font-size: 14px;
                     color: #000000;
+                    line-height: 1;
+
+                    .btn-out-box {
+                        display: inline-block;
+                        padding: 5px 4px 0px;
+                        height: 24px;
+                        box-sizing: border-box;
+                        overflow: hidden;
+                    }
 
                     img {
-                        display: inline-block;
+                        float: left;
                         height: 16px;
-                        margin-left: 8px;
+                    }
+
+                    .text {
+                        float: right;
+                        font-size: 15px;
+                        margin-left: 5px;
+                        line-height: 16px;
                     }
                 }
             }

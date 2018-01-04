@@ -6,7 +6,8 @@ Vue.use(Vuex)
 const userStore = new Vuex.Store({
   state: {
     detailData: {},
-    giftData: []
+    giftData: [],
+    iosUrl: ''
   },
   getters: {
     getDetail (state) {
@@ -22,6 +23,9 @@ const userStore = new Vuex.Store({
     },
     setGift (state, giftData) {
       state.giftData = giftData
+    },
+    setUrl (state, url) {
+      state.iosUrl = url
     }
   },
   actions: {
@@ -30,6 +34,9 @@ const userStore = new Vuex.Store({
     },
     setGift ({ commit }, gift) {
       commit('setGift', gift)
+    },
+    setUrl ({ commit }, url) {
+      commit('setUrl', url)
     }
   }
 })

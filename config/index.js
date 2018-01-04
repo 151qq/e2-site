@@ -30,16 +30,13 @@ for (var pathname in pages) {
   build[pathname] = path.resolve(__dirname, '../dist/' + pathname + '.html')
 }
 module.exports = {
-
   build:build,
-
   dev: {
     env: require('./dev.env'),
     port: 80,
     autoOpenBrowser: false,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-
 
     proxyTable: {
       '/e2-site-api': {
@@ -50,7 +47,6 @@ module.exports = {
         }
       }
     },
-
     cssSourceMap: false
   }
 }

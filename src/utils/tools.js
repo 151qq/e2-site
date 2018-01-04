@@ -7,22 +7,22 @@ const tools = {
   getOpenId () {
     var parsed = queryString.parse(location.search)
     var userInfo = window.sessionStorage.getItem('userInfo')
-    userInfo = userInfo ?  JSON.parse(userInfo) : {}
+    userInfo = userInfo ? JSON.parse(userInfo) : {}
 
-    if (!userInfo.openid) {
+    if (!userInfo.openid && !userInfo.memberCode) {
         var path = '/registor?enterpriseCode=' + parsed.enterpriseCode + '&appid=' + parsed.appid +'&scope=snsapi_base&redirectUrl=' + window.encodeURIComponent(window.location.href)
         window.location.replace(path)
     } else {
-        return userInfo.openid
+        return userInfo
     }
   },
 
   getUserInfo () {
     var parsed = queryString.parse(location.search)
     var userInfo = window.sessionStorage.getItem('userInfo')
-    userInfo = userInfo ?  JSON.parse(userInfo) : {}
+    userInfo = userInfo ? JSON.parse(userInfo) : {}
 
-    if (!userInfo.nickname) {
+    if (!userInfo.memberCode) {
         var path = '/registor?enterpriseCode=' + parsed.enterpriseCode + '&appid=' + parsed.appid +'&scope=snsapi_userinfo&redirectUrl=' + window.encodeURIComponent(window.location.href)
         window.location.replace(path)
     } else {
