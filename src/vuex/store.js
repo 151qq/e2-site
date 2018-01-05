@@ -5,35 +5,25 @@ Vue.use(Vuex)
 
 const userStore = new Vuex.Store({
   state: {
-    detailData: {},
-    giftData: [],
+    userInfo: {},
     iosUrl: ''
   },
   getters: {
-    getDetail (state) {
-      return state.detailData
-    },
-    getGift (state) {
-      return state.giftData
+    getUserInfo (state) {
+      return state.userInfo
     }
   },
   mutations: {
-    setDetail (state, detailData) {
-      state.detailData = detailData
-    },
-    setGift (state, giftData) {
-      state.giftData = giftData
+    setUserInfo (state, userInfo) {
+      state.userInfo = userInfo
     },
     setUrl (state, url) {
       state.iosUrl = url
     }
   },
   actions: {
-    setDetail ({ commit }, detail) {
-      commit('setDetail', detail)
-    },
-    setGift ({ commit }, gift) {
-      commit('setGift', gift)
+    setUserInfo ({ commit }, userInfo) {
+      commit('setUserInfo', userInfo)
     },
     setUrl ({ commit }, url) {
       commit('setUrl', url)

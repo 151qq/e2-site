@@ -56,7 +56,7 @@ const jsSdk = {
         // 分享到朋友圈
         window.wx.onMenuShareTimeline({
             title: con.title,
-            link: con.link,
+            link: con.link + 'G',
             imgUrl: con.imgUrl,
             success () {
                 con.success && con.success()
@@ -67,7 +67,7 @@ const jsSdk = {
         window.wx.onMenuShareAppMessage({
             title: con.title,
             desc: con.desc,
-            link: con.link,
+            link: con.link + 'F',
             imgUrl: con.imgUrl,
             type: con.type ? con.type : '',
             dataUrl: con.dataUrl ? con.dataUrl : '',

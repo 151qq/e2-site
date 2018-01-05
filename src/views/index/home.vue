@@ -3,7 +3,7 @@
         <div class="weui-cells no-margin">
             <router-link class="weui-cell weui-cell_access"
                     v-for="(item, index) in listData"
-                    :to="{name: item.pathName, query: {enterpriseCode: item.enterpriseCode, appid: item.appid, pageCode: item.pageCode, templateCode: item.templateCode, userId: item.userId, openId: item.openId}}">
+                    :to="{name: item.pathName, query: {enterpriseCode: item.enterpriseCode, appid: item.appid, pageCode: item.pageCode, templateCode: item.templateCode, pageType: item.pageType, S: item.S, C: item.C, T: item.T}}">
                 <div class="weui-cell__bd">{{item.title}}</div>
                 <div class="weui-cell__ft"></div>
             </router-link>
@@ -22,8 +22,10 @@ export default {
                     appid: 'wx8b8c3ab0670be56f',
                     pageCode: '20171218200506884621',
                     templateCode: '20171218150821701481',
-                    userId: '111111',
-                    openId: '222222'
+                    pageType: 'propagate_article',
+                    S: '15164369647',
+                    C: 'e2nochannel',
+                    T: 'e2nospread'
                 }
             ]
         }

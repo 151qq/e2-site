@@ -51,13 +51,13 @@
                             </div>
                             <div class="btn-out-box"
                                  @click="showSubmit('1', item.commentFloor)"
-                                 v-if="(userInfo.oppenid && item.memberInfo.memberWechatOpenid != userInfo.oppenid) || (userInfo.memberCode && item.memberInfo.memberCode != userInfo.memberCode)">
+                                 v-if="(userInfo.memberInfo.memberCode && item.memberInfo.memberCode != userInfo.memberInfo.memberCode)">
                                 <img src="../../assets/images/edit-icon.png">
                             </div>
                             <div class="btn-out-box"
                                  @click="deleteComment(item)"
-                                 v-if="(userInfo.oppenid && item.memberInfo.memberWechatOpenid == userInfo.oppenid) || (userInfo.memberCode && item.memberInfo.memberCode == userInfo.memberCode)">
-                                <img src="../../assets/images/edit-icon.png">
+                                 v-if="(userInfo.memberInfo.memberCode && item.memberInfo.memberCode == userInfo.memberInfo.memberCode)">
+                                <img src="../../assets/images/delete-icon.png">
                             </div>
                         </div>
                     </div>
@@ -102,20 +102,24 @@
 import util from '../../utils/tools'
 import imgList from './imgList.vue'
 import {getDateDiff} from '../../assets/common/utils.js'
+import { mapGetters } from 'vuex'
 
 export default {
     props: ['commentUrl'],
     data () {
         return {
             commentList: [],
-            userInfo: {},
             isGood: [],
             isBad: []
         }
     },
     mounted () {
-        this.userInfo = JSON.parse(window.sessionStorage.getItem('userInfo'))
         this.getComments()
+    },
+    computed: {
+        ...mapGetters({
+            userInfo: 'getUserInfo'
+        })
     },
     methods: {
         showSubmit (type, floor) {
@@ -126,8 +130,10 @@ export default {
                     appid: this.$route.query.appid,
                     pageCode: this.$route.query.pageCode,
                     templateCode: this.$route.query.templateCode,
-                    userId: this.$route.query.userId,
-                    openId: this.$route.query.openId,
+                    pageType: this.$route.query.pageType,
+                    S: this.$route.query.S,
+                    C: this.$route.query.C,
+                    T: this.$route.query.T,
                     commentType: type,
                     commentFloor: this.commentList.length + 1
                 }

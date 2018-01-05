@@ -63,6 +63,7 @@
 import util from '../../utils/tools'
 import jsSdk from '../../utils/jsSdk'
 import deleteImg from '../common/deleteImg.vue'
+import { mapGetters } from 'vuex'
 
 export default {
     data () {
@@ -76,18 +77,18 @@ export default {
             isShowImg: {
                 value: false
             },
-            userInfo: {},
             serverIdList: []
         }
     },
     mounted () {
-        this.userInfo = util.getUserInfo()
-        if (this.userInfo.memberCode) {
+        util.getUser(() => {
             jsSdk.init()
-            window.wx.ready(() =>{
-                console.log(window.wx, 'con')
-            })
-        }
+        }, 'snsapi_userinfo')
+    },
+    computed: {
+        ...mapGetters({
+            userInfo: 'getUserInfo'
+        })
     },
     methods: {
         chooseImage () {
@@ -110,7 +111,7 @@ export default {
                     pageCode: this.$route.query.pageCode,
                     commentType: this.$route.query.commentType,
                     commentFloor: this.$route.query.commentFloor,
-                    memberCode: this.userInfo.memberCode,
+                    memberCode: this.userInfo.memberInfo.memberCode,
                     attachments: this.serverIdList,
                     commentContent: this.commentData.commentContent
                 }
@@ -132,8 +133,10 @@ export default {
                                 appid: this.$route.query.appid,
                                 pageCode: this.$route.query.pageCode,
                                 templateCode: this.$route.query.templateCode,
-                                userId: this.$route.query.userId,
-                                openId: this.$route.query.openId
+                                pageType: this.$route.query.pageType,
+                                S: this.$route.query.S,
+                                C: this.$route.query.C,
+                                T: this.$route.query.T
                             }
                         }
                         this.$router.replace(pathUrl)

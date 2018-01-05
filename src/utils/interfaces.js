@@ -7,6 +7,7 @@ export default{
         getSignature: platform + 'getSignature.json',
         saveMemberInfo: platform + 'member/saveMemberInfo.json',
         sentSms: platform + 'customer/sentSms.json',
+        checkCustome: platform + 'customer/checkCustomer.json',
         /**
         * 推荐文章 get
         * key 搜索时使用，返回搜索相关数据
@@ -15,6 +16,8 @@ export default{
         listPageArea: platform + 'listPageArea.json',
 
         getTemplates: platform +'templateListPage.json',
+
+        selectEscs: platform + 'eventScenarioCouponStore/selectEscs.json',
 
         commentList: platform + 'comment/commentList.json',
         publishComment: platform + 'comment/publishComment.json',

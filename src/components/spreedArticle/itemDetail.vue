@@ -25,6 +25,8 @@
         <div class="comments-box" v-if="isComments">
             <comment :comment-url="'article-comment'"></comment>
         </div>
+
+        <paket :is-show="isShow" :path-url="pathUrl" :show-text="showText"></paket>
         <!-- <div class="wx-bottom-nav">
             <router-link class="wx-nav-item"
                             :to="{name: 'off-shell'}">
@@ -45,6 +47,8 @@
 import util from '../../utils/tools'
 import jsSdk from '../../utils/jsSdk'
 import comment from '../common/comment.vue'
+import paket from '../common/paket'
+import { mapGetters } from 'vuex'
 
 export default {
     data () {
@@ -58,21 +62,28 @@ export default {
                 dateStyle: ''
             },
             areaList: [],
-            userInfo: {},
-            isComments: false
+            isComments: false,
+            isShow: {
+                value: false
+            },
+            pathUrl: '',
+            showText: '',
+            escData: {}
         }
     },
     mounted () {
-        this.userInfo = util.getOpenId()
-
-        if (this.userInfo.openid || this.userInfo.memberCode) {
+        util.getUser(() => {
             jsSdk.init()
             this.getData()
             this.getTemplate()
+            this.selectEscs()
             this.isComments = true
-        }
+        }, 'snsapi_base')
     },
     computed: {
+        ...mapGetters({
+            userInfo: 'getUserInfo'
+        }),
         arTitle () {
             var styleData = {
                 'display': 'block',
@@ -195,13 +206,36 @@ export default {
                   this.articleData = res.result.result
                   this.areaList = res.result.result.pageAreas
 
+                  var queryData = {
+                    enterpriseCode: this.$route.query.enterpriseCode,
+                    appid: this.$route.query.appid,
+                    pageCode: this.$route.query.pageCode,
+                    templateCode: this.$route.query.templateCode,
+                    pageType: this.$route.query.pageType,
+                    S: this.userInfo.salesCode ? this.userInfo.salesCode : this.$route.query.S,
+                    C: this.userInfo.channelMemberCode ? this.userInfo.channelMemberCode : this.$route.query.C
+                  }
+
+                  var queryList = []
+                  for (var k in queryData) {
+                    queryList.push(k + '=' + queryData[k])
+                  }
+
+                  var location = window.location
+
+                  var spreadCode = this.userInfo.spreadCode ? this.userInfo.spreadCode : this.$route.query.T
+
+                  var link = location.origin + location.pathname + '?' + queryList.join('&') + '&T=' + spreadCode
+
+                  var _self = this
+
                   var shareData = {
                     title: this.articleData.pageTitle,
                     desc: this.articleData.pageAbstract,
-                    link: window.location.href,
+                    link: link,
                     imgUrl: this.articleData.pageCover,
                     success () {
-                        this.$message({
+                        _self.$message({
                               message: '恭喜你，分享成功！',
                               type: 'success'
                         })
@@ -209,6 +243,21 @@ export default {
                   }
 
                   jsSdk.setShare(shareData)
+                } else {
+                  this.$message.error(res.result.message)
+                }
+            })
+        },
+        selectEscs () {
+            util.request({
+                method: 'get',
+                interface: 'selectEscs',
+                data: {
+                    enterpriseCode: this.$route.query.enterpriseCode
+                }
+            }).then(res => {
+                if (res.result.success == '1') {
+                  this.escData = res.result.result
                 } else {
                   this.$message.error(res.result.message)
                 }
@@ -231,7 +280,8 @@ export default {
         }
     },
     components: {
-        comment
+        comment,
+        paket
     }
 }
 </script>

@@ -53,6 +53,7 @@
 </template>
 <script>
 import tools from '../../utils/tools'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
     data () {
@@ -83,16 +84,55 @@ export default {
         if (!code) {
             this.corpWechatRedirectUrl(scope)
         } else {
-            this.getCorpWechatUserInfo(scope)
+            if (scope == 'snsapi_base') {
+                this.setCustom()
+            } else {
+                this.getCorpWechatUserInfo()
+            }   
         }
     },
+    computed: {
+        ...mapGetters({
+            userInfo: 'getUserInfo'
+        })
+    },
     methods: {
+        ...mapActions([
+          'setUserInfo'
+        ]),
         corpWechatRedirectUrl (scope) {
             var appid = this.$route.query.appid
             var redirectUri = window.encodeURIComponent(window.location.href)
             var pathStr = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + appid +'&redirect_uri=' + redirectUri + '&response_type=code&scope=' + scope + '&state=000#wechat_redirect'
 
             window.location.replace(pathStr)
+        },
+        setCustom () {
+            var formData = {
+                userCode: this.$route.query.code,
+                enterpriseCode: this.$route.query.enterpriseCode,
+                adObejectCode: this.$route.query.pageCode,
+                adObjectType: this.$route.query.pageType,
+                appId: this.$route.query.appid,
+                scope: this.$route.query.scope
+            }
+
+            tools.request({
+                method: 'post',
+                interface: 'checkCustome',
+                data: formData
+            }).then(res => {
+                if (res.result.success == '1') {
+                    // var result = res.result.result
+                    // this.setUserInfo(result)
+                    // setTimeout(() => {
+                    //     window.location.replace(this.$route.query.redirectUrl)
+                    // }, 0)
+                    window.location.replace(this.$route.query.redirectUrl)
+                } else {
+                    this.$message.error(res.result.message)
+                }
+            })
         },
         getCorpWechatUserInfo () {
             var formData = {
@@ -110,31 +150,20 @@ export default {
                 if (res.result.success == '1') {
                     var data = res.result.result
 
-                    if (this.$route.query.scope == 'snsapi_base') {
-                        window.sessionStorage.setItem('userInfo', JSON.stringify(data))
-                        window.location.replace(this.$route.query.redirectUrl)
-                        return false
+                    var memberInfo = {
+                        memberImage: data.headimgurl,
+                        enterpriseCode: this.$route.query.enterpriseCode,
+                        memberMobile: '',
+                        memberName: '',
+                        memberWechatOpenid: data.openid,
+                        memberWechatImg: data.headimgurl,
+                        memberWechatNickname: data.nickname,
+                        memberGender: data.sex,
+                        smsCode: ''
                     }
 
-                    if (!data.memberCode) {
-                        var memberInfo = {
-                            memberImage: data.headimgurl,
-                            enterpriseCode: this.$route.query.enterpriseCode,
-                            memberMobile: '',
-                            memberName: '',
-                            memberWechatOpenid: data.openid,
-                            memberWechatImg: data.headimgurl,
-                            memberWechatNickname: data.nickname,
-                            memberGender: data.sex,
-                            smsCode: ''
-                        }
-
-                        this.isShowPage = true
-                        this.memberInfo = memberInfo
-                    } else {
-                        window.sessionStorage.setItem('userInfo', JSON.stringify(data))
-                        window.location.replace(this.$route.query.redirectUrl)
-                    }
+                    this.isShowPage = true
+                    this.memberInfo = memberInfo
                 } else {
                     this.$message.error(res.result.message)
                 }
@@ -196,8 +225,16 @@ export default {
               data: this.memberInfo
             }).then(res => {
                 if (res.result.success == '1') {
-                    window.sessionStorage.setItem('userInfo', JSON.stringify(res.result.result))
-                    window.location.href = this.$route.query.redirectUrl
+                    // result = Object.assign(this.userInfo, res.result.result)
+                    // result.customType = '1'
+
+                    // this.setUserInfo(result)
+
+                    // setTimeout(() => {
+                    //     window.location.replace(this.$route.query.redirectUrl)
+                    // }, 0)
+
+                    window.location.replace(this.$route.query.redirectUrl)
                 } else {
                     this.$message.error(res.result.message)
                 }

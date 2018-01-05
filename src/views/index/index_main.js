@@ -7,6 +7,7 @@ import '../../assets/scss/common.scss'
 import Element from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
 import FastClick from 'fastclick'
+import jsCookie from 'js-cookie'
 
 FastClick.attach(document.body)
 
@@ -31,6 +32,7 @@ router.beforeEach((to, from, next) => {
     if (!store.state.iosUrl) {
       store.commit('setUrl', document.URL)
     }
+    
     next()
 })
 

@@ -1,33 +1,52 @@
-
+import jsCookie from 'js-cookie'
 import axios from 'axios'
 import interfaces from './interfaces'
+import store from '../vuex/store'
 import queryString from 'query-string'
 
 const tools = {
-  getOpenId () {
+  getUser (cb, type) {
     var parsed = queryString.parse(location.search)
-    var userInfo = window.sessionStorage.getItem('userInfo')
-    userInfo = userInfo ? JSON.parse(userInfo) : {}
+    var e2Token = jsCookie.get('customer_infomation')
+    var userInfo = store.state.userInfo
 
-    if (!userInfo.openid && !userInfo.memberCode) {
-        var path = '/registor?enterpriseCode=' + parsed.enterpriseCode + '&appid=' + parsed.appid +'&scope=snsapi_base&redirectUrl=' + window.encodeURIComponent(window.location.href)
+    if (type == 'snsapi_base') {
+      if (!e2Token) {
+          var path = '/registor?enterpriseCode=' + parsed.enterpriseCode + '&appid=' + parsed.appid  + '&pageType=' + parsed.pageType  + '&pageCode=' + parsed.pageCode +'&scope=' + type + '&redirectUrl=' + window.encodeURIComponent(window.location.href)
+          window.location.replace(path)
+      } else {
+          if (!userInfo.openId) {
+            tools.getCustom(cb)
+          } else {
+            cb()
+          }
+      }
+    }
+
+    if (type == 'snsapi_userinfo') {
+      if (userInfo.customerType == '0') {
+        var path = '/registor?enterpriseCode=' + parsed.enterpriseCode + '&appid=' + parsed.appid  + '&pageType=' + parsed.pageType  + '&pageCode=' + parsed.pageCode +'&scope=' + type + '&redirectUrl=' + window.encodeURIComponent(window.location.href)
         window.location.replace(path)
-    } else {
-        return userInfo
+      } else {
+        cb()
+      }
     }
   },
 
-  getUserInfo () {
-    var parsed = queryString.parse(location.search)
-    var userInfo = window.sessionStorage.getItem('userInfo')
-    userInfo = userInfo ? JSON.parse(userInfo) : {}
-
-    if (!userInfo.memberCode) {
-        var path = '/registor?enterpriseCode=' + parsed.enterpriseCode + '&appid=' + parsed.appid +'&scope=snsapi_userinfo&redirectUrl=' + window.encodeURIComponent(window.location.href)
-        window.location.replace(path)
-    } else {
-        return userInfo
-    }
+  getCustom (cb) {
+    tools.request({
+        method: 'post',
+        interface: 'checkCustome',
+        data: {}
+    }).then(res => {
+        if (res.result.success == '1') {
+            var result = res.result.result
+            store.commit('setUserInfo', result)
+            cb()
+        } else {
+            alert(res.result.message)
+        }
+    })
   },
 
   /**
