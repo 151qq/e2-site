@@ -110,7 +110,8 @@ export default {
         return {
             commentList: [],
             isGood: [],
-            isBad: []
+            isBad: [],
+            commentsLen: ''
         }
     },
     mounted () {
@@ -203,6 +204,13 @@ export default {
             }).then(res => {
                 if (res.result.success == '1') {
                     this.commentList = res.result.result
+                    var len = this.commentList.length
+
+                    if (this.commentsLen !== '' && len > this.commentsLen) {
+                        this.$emit('submitSuccess')
+                    }
+
+                    this.commentsLen = len
                 } else {
                     this.$message.error(res.result.message)
                 }

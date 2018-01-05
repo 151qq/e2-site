@@ -1,6 +1,6 @@
 <template>
-    <section class="paket-big-box" v-if="isShow.value" @click.self="isShow.value = false">
-        <div class="paket-bg"></div>
+    <section class="paket-big-box" v-if="isShow.value">
+        <div class="paket-bg" @click.self="isShow.value = false"></div>
         <a class="paket-con" :href="pathUrl">
             <img :src="iconUrl">
             <span>{{showText}}</span>
@@ -32,13 +32,13 @@ export default {
         width: 100%;
         height: 100%;
         background: #000000;
-        opacity: 0.6;
+        opacity: 0.9;
     }
 
     .paket-con {
         position: absolute;
         width: 100%;
-        top: 50%;
+        top: 45%;
         left: 0;
         transform: translateY(-50%);
 
@@ -49,11 +49,12 @@ export default {
         }
 
         span {
-            font-size: 14px;
+            display: block;
+            font-size: 18px;
             text-align: center;
-            color: #000000;
+            color: #ffffff;
             line-height: 20px;
-            margin-top: 10px;
+            margin-top: 20px;
         }
     }
 }

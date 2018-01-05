@@ -23,7 +23,7 @@
 
         <div class="wx-area-line"></div>
         <div class="comments-box" v-if="isComments">
-            <comment :comment-url="'article-comment'"></comment>
+            <comment :comment-url="'article-comment'" @submitSuccess="submitSuccess"></comment>
         </div>
 
         <paket :is-show="isShow" :path-url="pathUrl" :show-text="showText"></paket>
@@ -235,10 +235,14 @@ export default {
                     link: link,
                     imgUrl: this.articleData.pageCover,
                     success () {
-                        _self.$message({
-                              message: '恭喜你，分享成功！',
-                              type: 'success'
-                        })
+                        if (_self.escData.coupon_scenario_2) {
+                            _self.showEsc('coupon_scenario_2')
+                        } else {
+                            _self.$message({
+                                message: '恭喜你，分享成功！',
+                                type: 'success'
+                            })
+                        }
                     }
                   }
 
@@ -258,10 +262,19 @@ export default {
             }).then(res => {
                 if (res.result.success == '1') {
                   this.escData = res.result.result
+                  this.showEsc('coupon_scenario_1')
                 } else {
                   this.$message.error(res.result.message)
                 }
             })
+        },
+        showEsc (type) {
+            if (this.escData[type]) {
+                this.pathUrl = this.escData[type].scenarioCouponStoreUrl
+                this.showText = this.escData[type].scenarioAd
+
+                this.isShow.value = true
+            }
         },
         getTemplate () {
             util.request({
@@ -277,6 +290,9 @@ export default {
                     this.$message.error(res.result.message)
                 }
             })
+        },
+        submitSuccess () {
+            this.showEsc('coupon_scenario_3')
         }
     },
     components: {

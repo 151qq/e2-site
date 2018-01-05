@@ -104,7 +104,7 @@ export default {
             })
         },
         submitFn () {
-            if (this.userInfo && this.userInfo.memberCode) {
+            if (this.userInfo && this.userInfo.memberInfo.memberCode) {
                 var formData = {
                     appId: this.$route.query.appid,
                     enterpriseCode: this.$route.query.enterpriseCode,
