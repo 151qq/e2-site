@@ -16,7 +16,7 @@ export default {
         }
     },
     mounted () {
-        this.iconUrl = '/static/images/paket_' + Math.floor(Math.random() * 2) + '.png'
+        this.iconUrl = '/static/images/paket_' + Math.floor(Math.random() * 4) + '.png'
     }
 }
 </script>

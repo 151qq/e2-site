@@ -9,6 +9,14 @@ const routers = [
   },
   {
     // 详情编辑
+    path: '/enterpriseRegistor',
+    name: 'enterprise-registor',
+    component (resolve) {
+      require(["./enterprise-registor.vue"], resolve)
+    }
+  },
+  {
+    // 详情编辑
     path: '/registor',
     name: 'registor',
     component (resolve) {
@@ -56,6 +64,14 @@ const routers = [
         }
       }
     ]
+  },
+  {
+    // 推广注册
+    path: '/channelRegister',
+    name: 'channelRegister',
+    component (resolve) {
+      require(["../../components/wxPromotion/editChannel.vue"], resolve)
+    }
   }
 ]
 

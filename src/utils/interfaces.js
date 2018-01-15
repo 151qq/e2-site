@@ -8,6 +8,10 @@ export default{
         saveMemberInfo: platform + 'member/saveMemberInfo.json',
         sentSms: platform + 'customer/sentSms.json',
         checkCustome: platform + 'customer/checkCustomer.json',
+
+        saveEnterpriseUserInfo: platform + 'site/user/saveEnterpriseUserInfo.json',
+        corpWechatRedirectUrl: platform + 'corpWechatRedirectUrl.json',
+        getSiteWechatUserInfo: platform + 'getSiteWechatUserInfo.json',
         /**
         * 推荐文章 get
         * key 搜索时使用，返回搜索相关数据
@@ -24,6 +28,12 @@ export default{
         replyComment: platform + 'comment/replyComment.json',
         deleteComment: platform + 'comment/deleteComment.json',
         countCommentGoodJob: platform + 'comment/countCommentGoodJob.json',
-        countCommentBadJob: platform + 'comment/countCommentBadJob.json'
+        countCommentBadJob: platform + 'comment/countCommentBadJob.json',
+
+        /**
+        * 推广 get
+        */
+        getChannelInfo: platform + 'organizePromoterInfo/selectOrganizePromoterInfo.json',
+        updateChannel: platform + 'organizePromoterInfo/manageOrganizePromoterInfo.json'
     }
 }

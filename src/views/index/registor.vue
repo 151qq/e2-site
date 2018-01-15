@@ -53,13 +53,12 @@
 </template>
 <script>
 import tools from '../../utils/tools'
-import { mapActions, mapGetters } from 'vuex'
 
 export default {
     data () {
         return {
             isShowPage: false,
-            coverImg: '/static/images/bench1.png',
+            coverImg: '',
             memberInfo: {
                 memberImage: '',
                 enterpriseCode: '',
@@ -78,6 +77,7 @@ export default {
         }
     },
     mounted () {
+        this.coverImg = '/static/images/B' + Math.ceil(Math.random() * 13) + '.jpg'
         var code = this.$route.query.code
         var scope = this.$route.query.scope
 
@@ -91,15 +91,7 @@ export default {
             }   
         }
     },
-    computed: {
-        ...mapGetters({
-            userInfo: 'getUserInfo'
-        })
-    },
     methods: {
-        ...mapActions([
-          'setUserInfo'
-        ]),
         corpWechatRedirectUrl (scope) {
             var appid = this.$route.query.appid
             var redirectUri = window.encodeURIComponent(window.location.href)
@@ -123,11 +115,6 @@ export default {
                 data: formData
             }).then(res => {
                 if (res.result.success == '1') {
-                    // var result = res.result.result
-                    // this.setUserInfo(result)
-                    // setTimeout(() => {
-                    //     window.location.replace(this.$route.query.redirectUrl)
-                    // }, 0)
                     window.location.replace(this.$route.query.redirectUrl)
                 } else {
                     this.$message.error(res.result.message)
@@ -225,15 +212,6 @@ export default {
               data: this.memberInfo
             }).then(res => {
                 if (res.result.success == '1') {
-                    // result = Object.assign(this.userInfo, res.result.result)
-                    // result.customType = '1'
-
-                    // this.setUserInfo(result)
-
-                    // setTimeout(() => {
-                    //     window.location.replace(this.$route.query.redirectUrl)
-                    // }, 0)
-
                     window.location.replace(this.$route.query.redirectUrl)
                 } else {
                     this.$message.error(res.result.message)
