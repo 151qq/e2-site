@@ -248,6 +248,30 @@ body {
   }
 }
 
+.wx-cells-box {
+  width: 100%;
+}
+
+.wx-cell-box {
+  display: flex;
+  padding-left: 15px;
+
+  .wx-left-cell {
+    font-size: 14px;
+    color: #999999;
+    margin-right: 10px;
+    line-height: 2.4;
+  }
+
+  .wx-right-cell {
+    flex: 1;
+    font-size: 14px;
+    color: #999999;
+    text-align: right;
+    line-height: 2.4;
+  }
+}
+
 .weui-btn-area {
     position: fixed;
     width: 100%;
@@ -422,5 +446,20 @@ body {
 
 .height-1 {
   height: 1px;
+}
+
+.mapBox {
+    box-sizing: border-box;
+    height: 120px;
+    overflow: hidden;
+
+    img {
+        display: block;
+        width: auto;
+        height: 100%;
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+    }
 }
 
