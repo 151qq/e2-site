@@ -41,14 +41,14 @@
                             作者回复
                         </span>
                         <div class="comment-btn" v-if="item.status == '1'">
-                            <div class="btn-out-box" @click="countCommentGoodJob(item)">
+                            <!-- <div class="btn-out-box" @click="countCommentGoodJob(item)">
                                 <img src="../../assets/images/zan-icon.png">
                                 <span class="text">{{item.commentGoodJob}}</span>
                             </div>
                             <div class="btn-out-box" @click="countCommentBadJob(item)">
                                 <img src="../../assets/images/nozan-icon.png">
                                 <span class="text">{{item.commentBadJob}}</span>
-                            </div>
+                            </div> -->
                             <div class="btn-out-box"
                                  @click="showSubmit('1', item.commentFloor)"
                                  v-if="(userInfo.memberInfo.memberCode && item.memberInfo.memberCode != userInfo.memberInfo.memberCode)">
@@ -71,31 +71,42 @@
                                 v-if="item.reportComment.attachments && item.reportComment.attachments.length">
                             <img-list :img-list="item.reportComment.attachments"></img-list>
                         </div>
-                        <!-- <div class="article-box"
+                        <div class="article-box"
                                 v-if="item.reportComment.commentArticles && item.reportComment.commentArticles.length">
-                            <router-link :to="article.href"
-                                        v-for="(article, index) in item.reportComment.commentArticles">
-                                <img :src="article.imgUrl">
-                                <div class="article-title-box">
-                                    {{article.title}}
-                                </div>          
-                            </router-link>
-                        </div> -->
-                        <!-- <div class="response-box">
-                            <div class="top-box">
-                                <span class="response"></span>
-                                <div class="comment-btn">
-                                    <img src="../../assets/images/zan-icon.png">{{item.zanNum}}
-                                    <img src="../../assets/images/nozan-icon.png">{{item.hateNum}}
-                                    <img src="../../assets/images/edit-icon.png">
-                                    <img src="../../assets/images/delete-icon.png">
-                                </div>
+                            <div class="weui-cells no-margin">
+                                <router-link class="weui-media-box weui-media-box_appmsg"
+                                        v-for="(article, index) in item.reportComment.commentArticles"
+                                        :to="{
+                                                name: 'article-detail',
+                                                query: {
+                                                    enterpriseCode: $route.query.enterpriseCode,
+                                                    agentId: $route.query.agentId,
+                                                    pageCode: article.pageCode,
+                                                    appid: article.appId,
+                                                    templateCode: article.templateCode,
+                                                    S: $route.query.S,
+                                                    C: 'e2nochannel',
+                                                    T: 'e2nospread'
+                                                }
+                                            }">
+                                    <div class="weui-media-box__hd">
+                                        <img class="weui-media-box__thumb" :src="article.pageCover">
+                                    </div>
+                                    <div class="weui-media-box__bd">
+                                        <h4 class="weui-media-box__title">{{article.pageTitle}}</h4>
+                                        <p class="weui-media-box__desc">{{article.pageAbstract}}</p>
+                                    </div>
+                                </router-link>
                             </div>
-                        </div> -->
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
+
+        <div class="null-box" v-if="!commentList.length && isPage">
+            暂无内容！
+        </div>
     </section>
 </template>
 <script>
@@ -108,6 +119,7 @@ export default {
     props: ['commentUrl'],
     data () {
         return {
+            isPage: false,
             commentList: [],
             isGood: [],
             isBad: [],
@@ -131,7 +143,6 @@ export default {
                     appid: this.$route.query.appid,
                     pageCode: this.$route.query.pageCode,
                     templateCode: this.$route.query.templateCode,
-                    pageType: this.$route.query.pageType,
                     S: this.$route.query.S,
                     C: this.$route.query.C,
                     T: this.$route.query.T,
@@ -204,13 +215,7 @@ export default {
             }).then(res => {
                 if (res.result.success == '1') {
                     this.commentList = res.result.result
-                    var len = this.commentList.length
-
-                    if (this.commentsLen !== '' && len > this.commentsLen) {
-                        this.$emit('submitSuccess')
-                    }
-
-                    this.commentsLen = len
+                    this.isPage = true
                 } else {
                     this.$message.error(res.result.message)
                 }
@@ -244,9 +249,9 @@ export default {
 .comment-box {
     .head-box {
         padding: 10px 0;
-        border-bottom: 1px solid #e5e5e5;
         display: flex;
         align-items: center;
+        border-bottom: 1px solid #e5e5e5;
         justify-content: space-between;
 
         .left {
@@ -388,6 +393,15 @@ export default {
                     flex: 1;
                     font-size: 14px;
                     color: #000000;
+                }
+
+                .weui-media-box {
+                    padding: 10px 0;
+                }
+
+                .weui-media-box_appmsg .weui-media-box__hd {
+                    height: 40px;
+                    line-height: 40px;
                 }
             }
 

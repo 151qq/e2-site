@@ -55,10 +55,8 @@ export default {
     },
     mounted () {
         util.getUser(() => {
-            util.getUser(() => {
-                jsSdk.init()
-            }, 'snsapi_userinfo')
-        }, 'snsapi_base')
+            jsSdk.init()
+        }, 'snsapi_userinfo')
     },
     computed: {
         ...mapGetters({

@@ -4,12 +4,12 @@
             <section class='bodyMain' :style="arTextBody">
                 <div class="ar-title" :style="arTitle">{{articleData.pageTitle}}</div>
                 <div class="ar-author-date" :style="arAuthorDate">
-                    <span class="ar-date">{{ articleData.pageEditTime | formatDate(base.dateStyle)}}</span>
+                    <span class="ar-date">{{ articleData.pagePublishTime | formatDate(base.dateStyle)}}</span>
                     <a  class="ar-author"
                         target="_blank" 
                         :style="arAuthor"
                         :href="base.editorLink">
-                            {{articleData.pageEditorName}}
+                            {{articleData.eidtorCode}}
                     </a>
                 </div>
 
@@ -52,10 +52,25 @@
             </div>
         </template>
 
-        <div class="wx-area-line"></div>
-        <div class="comments-box" v-if="isComments">
-            <comment :comment-url="'article-comment'" @submitSuccess="submitSuccess"></comment>
-        </div>
+        <template v-if="isCreator">
+            <div class="btn-height-box"></div>
+            <div class="wx-bottom-nav">
+                <a class="wx-nav-item"
+                    @click="sharePartener">
+                    分享同事
+                </a>
+                <a class="wx-nav-item"
+                    @click="showSheet">
+                    产品相关
+                </a>
+                <a class="wx-nav-item"
+                    @click="shareWechat">
+                    分享微信
+                </a>
+            </div>
+        </template>
+
+        <sheet :is-show-sheet="isShowSheet" :item-list="sheetList" :cb="publistOpt"></sheet>
 
         <paket :is-show="isShow" :path-url="pathUrl" :show-text="showText"></paket>
     
@@ -70,8 +85,9 @@
 <script>
 import util from '../../utils/tools'
 import jsSdk from '../../utils/jsSdk'
+import comment from '../common/comment.vue'
 import paket from '../common/paket'
-import comment from '../common/comment'
+import sheet from '../common/sheet.vue'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -94,7 +110,25 @@ export default {
             },
             pathUrl: '',
             showText: '',
-            escData: {}
+            escData: {},
+            isShowSheet: {
+                value: false
+            },
+            sheetList: [
+                {
+                    label: '详细规格',
+                    pathName: 'product-spec'
+                },
+                {
+                    label: '应用场景',
+                    pathName: 'product-senior'
+                },
+                {
+                    label: '客户评论',
+                    pathName: 'product-log'
+                }
+            ],
+            articleList: []
         }
     },
     mounted () {
@@ -103,7 +137,7 @@ export default {
             this.getData()
             this.getTemplate()
             this.getArticles()
-            // this.selectEscs()
+            this.selectEscs()
             this.isComments = true
         }, 'snsapi_base')
     },
@@ -220,6 +254,26 @@ export default {
         formatDate: util.formatDate
     },
     methods: {
+        showSheet () {
+            if (!this.isPublist) {
+                return false
+            }
+
+            this.isShowSheet.value = true
+        },
+        publistOpt (item) {
+            var pathUrl = {
+                name: item.pathName,
+                query: {
+                    enterpriseCode: this.$route.query.enterpriseCode,
+                    agentId: this.$route.query.agentId,
+                    templateCode: this.$route.query.templateCode,
+                    pageCode: this.$route.query.pageCode
+                }
+            }
+            
+            this.$router.push(pathUrl)
+        },
         getData () {
             util.request({
                 method: 'get',
@@ -239,8 +293,9 @@ export default {
                     appid: this.$route.query.appid,
                     pageCode: this.$route.query.pageCode,
                     templateCode: this.$route.query.templateCode,
-                    S: this.userInfo.s ? this.userInfo.s : this.$route.query.S,
-                    C: this.userInfo.c ? this.userInfo.c : this.$route.query.C
+                    pageType: this.$route.query.pageType,
+                    S: this.userInfo.salesCode ? this.userInfo.salesCode : this.$route.query.S,
+                    C: this.userInfo.channelMemberCode ? this.userInfo.channelMemberCode : this.$route.query.C
                   }
 
                   var queryList = []
@@ -250,9 +305,9 @@ export default {
 
                   var location = window.location
 
-                  var spreadCode = this.userInfo.t ? this.userInfo.t : this.$route.query.T
+                  var spreadCode = this.userInfo.spreadCode ? this.userInfo.spreadCode : this.$route.query.T
 
-                  var link = location.origin + location.pathname + '?' + queryList.join('&') + '&T=' + t
+                  var link = location.origin + location.pathname + '?' + queryList.join('&') + '&T=' + spreadCode
 
                   var _self = this
 
@@ -312,7 +367,7 @@ export default {
                 }
             }).then(res => {
                 if (res.result.success == '1') {
-                    this.base = res.result.result[0]
+                    this.base = Object.assign(res.result.result[0], this.base)
                 } else {
                     this.$message.error(res.result.message)
                 }
@@ -342,7 +397,8 @@ export default {
     },
     components: {
         comment,
-        paket
+        paket,
+        sheet
     }
 }
 </script>
@@ -353,7 +409,6 @@ export default {
     }
 
     .comments-box {
-        background: #ffffff;
         padding: 0 15px;
     }
 

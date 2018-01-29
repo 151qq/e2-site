@@ -133,6 +133,7 @@ export default {
                                 appid: this.$route.query.appid,
                                 pageCode: this.$route.query.pageCode,
                                 templateCode: this.$route.query.templateCode,
+                                pageType: this.$route.query.pageType,
                                 S: this.$route.query.S,
                                 C: this.$route.query.C,
                                 T: this.$route.query.T

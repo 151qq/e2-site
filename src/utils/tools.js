@@ -24,12 +24,16 @@ const tools = {
     }
 
     if (type == 'snsapi_userinfo') {
-      if (userInfo.customerType == '0') {
+      if (!e2Token || userInfo.customerType == '0') {
         var path = '/registor?enterpriseCode=' + parsed.enterpriseCode + '&appid=' + parsed.appid  + '&pageType=' + parsed.pageType  + '&pageCode=' + parsed.pageCode +'&scope=' + type + '&redirectUrl=' + window.encodeURIComponent(window.location.href)
         window.location.replace(path)
-      } else {
-        cb()
+        return false
       }
+      if (!userInfo.openId) {
+        tools.getCustom(cb)
+        return false
+      }
+      cb()
     }
   },
 
@@ -78,6 +82,7 @@ const tools = {
           fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)))
         }
       }
+
       return fmt
   },
 

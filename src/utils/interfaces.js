@@ -30,10 +30,17 @@ export default{
         countCommentGoodJob: platform + 'comment/countCommentGoodJob.json',
         countCommentBadJob: platform + 'comment/countCommentBadJob.json',
 
+        getExtendPages: platform + 'htmlPageExtend/getExtendPages.json',
+
         /**
         * 推广 get
         */
         getChannelInfo: platform + 'organizePromoterInfo/selectOrganizePromoterInfo.json',
-        updateChannel: platform + 'organizePromoterInfo/manageOrganizePromoterInfo.json'
+        updateChannel: platform + 'organizePromoterInfo/manageOrganizePromoterInfo.json',
+
+        /**
+        * 预约 get
+        */
+        selectAll: platform + 'reserveInfo/selectAll.json'
     }
 }

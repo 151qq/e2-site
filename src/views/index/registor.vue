@@ -88,7 +88,7 @@ export default {
                 this.setCustom()
             } else {
                 this.getCorpWechatUserInfo()
-            }   
+            }
         }
     },
     methods: {
@@ -101,7 +101,7 @@ export default {
         },
         setCustom () {
             var formData = {
-                userCode: this.$route.query.code,
+                code: this.$route.query.code,
                 enterpriseCode: this.$route.query.enterpriseCode,
                 adObejectCode: this.$route.query.pageCode,
                 adObjectType: this.$route.query.pageType,
@@ -180,6 +180,7 @@ export default {
                     this.timer = setInterval(() => {
                         this.seconds--
                         if (this.seconds === 0) {
+                            this.seconds = 90
                             clearInterval(this.timer)
                             this.timer = null
                         }

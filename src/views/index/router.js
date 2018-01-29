@@ -40,14 +40,6 @@ const routers = [
     },
     children: [
       {
-        path: '',
-        name: 'off-shell',
-        component: resolve => require(["../../components/spreedArticle/offShell.vue"], resolve),
-        meta: {
-          token:false
-        }
-      },
-      {
         path: 'detail',
         name: 'article-detail',
         component: resolve => require(["../../components/spreedArticle/itemDetail.vue"], resolve),
@@ -59,6 +51,83 @@ const routers = [
         path: 'comment',
         name: 'article-comment',
         component: resolve => require(["../../components/spreedArticle/itemComment.vue"], resolve),
+        meta: {
+          token:false
+        }
+      }
+    ]
+  },
+  {
+    // 产品分类
+    path: '/productCenter',
+    name: 'productCenter',
+    component (resolve) {
+      require(["../../components/productCenter/main.vue"], resolve)
+    },
+    children: [
+      {
+        path: 'productDetail',
+        name: 'product-detail',
+        component: resolve => require(["../../components/productCenter/articleDetail.vue"], resolve),
+        meta: {
+          token:false
+        }
+      },
+      {
+        path: 'productLog',
+        name: 'product-log',
+        component: resolve => require(["../../components/productCenter/articleLog.vue"], resolve),
+        meta: {
+          token:false
+        }
+      },
+      {
+        path: 'productComment',
+        name: 'product-comment',
+        component: resolve => require(["../../components/productCenter/itemComment.vue"], resolve),
+        meta: {
+          token:false
+        }
+      },
+      {
+        path: 'productSpec',
+        name: 'product-spec',
+        component: resolve => require(["../../components/productCenter/productSpec.vue"], resolve),
+        meta: {
+          token:false
+        }
+      },
+      {
+        path: 'productSenior',
+        name: 'product-senior',
+        component: resolve => require(["../../components/productCenter/productSenior.vue"], resolve),
+        meta: {
+          token:false
+        }
+      },
+      {
+        path: 'productimg',
+        name: 'product-img',
+        component: resolve => require(["../../components/productCenter/imgList.vue"], resolve),
+        meta: {
+          token:false
+        }
+      }
+    ]
+  },
+  // 预约详情
+  {
+    // 在线预约
+    path: '/reserveOnline',
+    name: 'reserveOnline',
+    component (resolve) {
+      require(["../../components/reserveOnline/main.vue"], resolve)
+    },
+    children: [
+      {
+        path: '',
+        name: 'reserve-detail',
+        component: resolve => require(["../../components/reserveOnline/reserveDetail.vue"], resolve),
         meta: {
           token:false
         }
