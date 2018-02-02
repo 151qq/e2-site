@@ -285,8 +285,8 @@ export default {
 
     .wx-uploader {
         position: relative;
-        width: 200px;
-        height: 200px;
+        width: 180px;
+        height: 180px;
         margin: auto;
         border: 1px solid #d9d9d9;
 
