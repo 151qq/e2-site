@@ -230,7 +230,11 @@ export default {
               data: this.memberInfo
             }).then(res => {
                 if (res.result.success == '1') {
-                    //window.location.replace(this.$route.query.redirectUrl)
+                    var pathUrl = {
+                        name: 'registor-message'
+                    }
+
+                    this.$router.replace(pathUrl)
                 } else {
                     this.$message.error(res.result.message)
                 }
