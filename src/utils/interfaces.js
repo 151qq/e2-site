@@ -41,6 +41,11 @@ export default{
         /**
         * 预约 get
         */
-        selectAll: platform + 'reserveInfo/selectAll.json'
+        selectAll: platform + 'reserveInfo/selectAll.json',
+
+        /**
+        * 地推 get
+        */
+        getPartyCouponGroup: platform + 'E2site/partyInfo/getPartyCouponGroup.json'
     }
 }

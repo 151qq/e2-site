@@ -149,6 +149,14 @@ const routers = [
     component (resolve) {
       require(["../../components/wxPromotion/editChannel.vue"], resolve)
     }
+  },
+  {
+    // 地推活动
+    path: '/receiveGift',
+    name: 'receiveGift',
+    component (resolve) {
+      require(["../../components/party/receiveGift.vue"], resolve)
+    }
   }
 ]
 
