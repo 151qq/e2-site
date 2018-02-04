@@ -1,0 +1,69 @@
+<template>
+    <section class="case-target">
+        <div class="height-1"></div>
+        <div class="wx-area-title">
+            {{base.couponGroupName}}
+        </div>
+        <div class="wx-area-img">
+            <img :src="base.couponGroupCover">
+        </div>
+        <div class="wx-area-text">
+            {{base.couponGroupIntro}}
+        </div>
+        
+        <div class="btn-height-box"></div>
+        <div class="weui-btn-area">
+            <a class="weui-btn weui-btn_primary"
+                :href="base.couponGroupStore">
+                领取
+            </a>
+        </div>
+    </section>
+</template>
+<script>
+import util from '../../utils/tools'
+
+export default {
+    data () {
+        return {
+            base: {
+                couponGroupName: '',
+                couponGroupCover: '',
+                couponGroupIntro: '',
+                couponGroupStore: ''
+            }
+        }
+    },
+    mounted () {
+        util.getUser(() => {
+            this.selectEscs()
+        }, 'snsapi_userinfo')
+    },
+    methods: {
+        formDataDate (str) {
+            var dateStr = new Date(str)
+            var year = dateStr.getFullYear()
+            var monthStr = dateStr.getMonth() + 1
+            var dayStr = dateStr.getDate()
+            var month = monthStr < 10 ? '0' + monthStr : monthStr
+            var day = dayStr < 10 ? '0' + dayStr : dayStr
+            return year + '-' + month + '-' + day
+        },
+        selectEscs () {
+            util.request({
+                method: 'post',
+                interface: 'groupStores',
+                data: {
+                    enterpriseCode: this.$route.query.enterpriseCode
+                }
+            }).then(res => {
+                if (res.result.success == '1') {
+                    this.base = res.result.result[this.$route.query.couponGroupType][0]
+                } else {
+                  this.$message.error(res.result.message)
+                }
+            })
+        }
+    }
+}
+</script>

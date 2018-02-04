@@ -41,7 +41,8 @@ export default{
         /**
         * 预约 get
         */
-        selectAll: platform + 'reserveInfo/selectAll.json',
+        selectAll: platform + 'E2site/reserve/selectAll.json',
+        confrimReserve: platform + 'E2site/reserve/confrimReserve.json',
 
         /**
         * 地推 get

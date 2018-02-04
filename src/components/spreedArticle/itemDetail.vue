@@ -257,7 +257,7 @@ export default {
 
                   var spreadCode = this.userInfo.t ? this.userInfo.t : this.$route.query.T
 
-                  var link = location.origin + location.pathname + '?' + queryList.join('&') + '&T=' + t
+                  var link = location.origin + location.pathname + '?' + queryList.join('&') + '&T=' + spreadCode
 
                   var _self = this
 
@@ -267,7 +267,7 @@ export default {
                     link: link,
                     imgUrl: this.articleData.pageCover,
                     success () {
-                        if (_self.escData.coupon_scenario_2) {
+                        if (_self.escData['coupon_scenario_2']) {
                             _self.showEsc('coupon_scenario_2')
                         } else {
                             _self.$message({
@@ -286,7 +286,7 @@ export default {
         },
         selectEscs () {
             util.request({
-                method: 'get',
+                method: 'post',
                 interface: 'groupStores',
                 data: {
                     enterpriseCode: this.$route.query.enterpriseCode
@@ -307,14 +307,18 @@ export default {
         showEsc (type) {
             var types = ['enterprise_channel_open', 'enterprise_user_open']
 
-            if (types.indexOf(this.userInfo.openType) > -1) {
+            // if (types.indexOf(this.userInfo.openType) > -1) {
+            //     return false
+            // }
+            
+            if (!this.escData[type].length || !this.escData[type]) {
                 return false
             }
 
             if (this.escData[type]) {
-                this.pathUrl = this.escData[type].scenarioCouponStoreUrl
-                this.iconUrl = this.escData[type].scenarioCouponStoreUrl
-                this.showText = this.escData[type].scenarioAd
+                this.pathUrl = this.escData[type][0].couponGroutScenario
+                this.iconUrl = this.escData[type][0].couponGroupCover
+                this.showText = this.escData[type][0].couponGroupName
 
                 window.ISCOMMENT = false
                 this.isShow.value = true

@@ -46,7 +46,7 @@ export default {
 
         img {
             display: block;
-            width: 120px;
+            width: 100%;
             margin: auto;
         }
 
