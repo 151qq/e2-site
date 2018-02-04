@@ -21,7 +21,7 @@ export default{
 
         getTemplates: platform +'templateListPage.json',
 
-        selectEscs: platform + 'eventScenarioCouponStore/selectEscs.json',
+        groupStores: platform + 'eventScenarioCouponStore/groupStores.json',
 
         commentList: platform + 'comment/commentList.json',
         publishComment: platform + 'comment/publishComment.json',

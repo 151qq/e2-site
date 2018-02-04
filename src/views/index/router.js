@@ -157,6 +157,14 @@ const routers = [
     component (resolve) {
       require(["../../components/party/receiveGift.vue"], resolve)
     }
+  },
+  {
+    // 地推活动
+    path: '/groupDetail',
+    name: 'groupDetail',
+    component (resolve) {
+      require(["../../components/group/groupDetail.vue"], resolve)
+    }
   }
 ]
 

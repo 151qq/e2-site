@@ -1,22 +1,24 @@
 <template>
     <section class="paket-big-box" v-if="isShow.value">
         <div class="paket-bg" @click.self="isShow.value = false"></div>
-        <a class="paket-con" :href="pathUrl">
+        <router-link class="paket-con"
+                    :to="{
+                        name: 'groupDetail',
+                        query: {
+                            enterpriseCode: $route.query.enterpriseCode,
+                            couponGroupType: pathUrl
+                        }
+                    }">
             <img :src="iconUrl">
             <span>{{showText}}</span>
-        </a>
+        </router-link>
     </section>
 </template>
 <script>
 export default {
-    props: ['isShow', 'pathUrl', 'showText'],
+    props: ['isShow', 'iconUrl', 'pathUrl', 'showText'],
     data () {
-        return {
-            iconUrl: ''
-        }
-    },
-    mounted () {
-        this.iconUrl = '/static/images/paket_' + Math.floor(Math.random() * 4) + '.png'
+        return {}
     }
 }
 </script>

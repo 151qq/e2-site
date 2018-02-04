@@ -57,7 +57,7 @@
             <comment :comment-url="'article-comment'" @submitSuccess="submitSuccess"></comment>
         </div>
 
-        <paket :is-show="isShow" :path-url="pathUrl" :show-text="showText"></paket>
+        <paket :is-show="isShow" :path-url="pathUrl" :icon-url="iconUrl" :show-text="showText"></paket>
     
         <section class="no-article-box" v-if="!articleData.pageTitle && isPage">
             您寻找的文章已经去了迷失之城了！<br>
@@ -93,6 +93,7 @@ export default {
                 value: false
             },
             pathUrl: '',
+            iconUrl: '',
             showText: '',
             escData: {}
         }
@@ -103,8 +104,12 @@ export default {
             this.getData()
             this.getTemplate()
             this.getArticles()
-            // this.selectEscs()
+            this.selectEscs()
             this.isComments = true
+
+            if (window.ISCOMMENT) {
+                this.showEsc('coupon_scenario_3')
+            }
         }, 'snsapi_base')
     },
     computed: {
@@ -282,24 +287,36 @@ export default {
         selectEscs () {
             util.request({
                 method: 'get',
-                interface: 'selectEscs',
+                interface: 'groupStores',
                 data: {
                     enterpriseCode: this.$route.query.enterpriseCode
                 }
             }).then(res => {
                 if (res.result.success == '1') {
-                  this.escData = res.result.result
-                  this.showEsc('coupon_scenario_1')
+                    this.escData = res.result.result
+
+                    // 第一次打开可以领取
+                    if (this.userInfo.openType != 'customer_open_first') {
+                        this.showEsc('coupon_scenario_1')
+                    }
                 } else {
                   this.$message.error(res.result.message)
                 }
             })
         },
         showEsc (type) {
+            var types = ['enterprise_channel_open', 'enterprise_user_open']
+
+            if (types.indexOf(this.userInfo.openType) > -1) {
+                return false
+            }
+
             if (this.escData[type]) {
                 this.pathUrl = this.escData[type].scenarioCouponStoreUrl
+                this.iconUrl = this.escData[type].scenarioCouponStoreUrl
                 this.showText = this.escData[type].scenarioAd
 
+                window.ISCOMMENT = false
                 this.isShow.value = true
             }
         },

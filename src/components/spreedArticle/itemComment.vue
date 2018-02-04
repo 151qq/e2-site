@@ -138,6 +138,7 @@ export default {
                                 T: this.$route.query.T
                             }
                         }
+                        window.ISCOMMENT = true
                         this.$router.replace(pathUrl)
                     } else {
                         this.$message.error(res.result.message)
