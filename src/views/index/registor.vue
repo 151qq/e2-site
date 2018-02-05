@@ -53,6 +53,7 @@
 </template>
 <script>
 import tools from '../../utils/tools'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
     data () {
@@ -91,7 +92,15 @@ export default {
             }
         }
     },
+    computed: {
+        ...mapGetters({
+            userInfo: 'getUserInfo'
+        })
+    },
     methods: {
+        ...mapActions([
+          'setUserInfo'
+        ]),
         corpWechatRedirectUrl (scope) {
             var appid = this.$route.query.appid
             var redirectUri = window.encodeURIComponent(window.location.href)
@@ -101,11 +110,17 @@ export default {
         },
         setCustom () {
             var formData = {
-                code: this.$route.query.code,
                 enterpriseCode: this.$route.query.enterpriseCode,
-                adObejectCode: this.$route.query.pageCode,
-                adObjectType: this.$route.query.pageType,
                 appId: this.$route.query.appid,
+                pageCode: this.$route.query.pageCode,
+                spreadOriginCode: this.$route.query.S,
+                spreadOriginShareTo: this.$route.query.sShareTo,
+                spreadChannelCode: this.$route.query.C,
+                spreadChannelShareTo: this.$route.query.cShareTo,
+                spreadParentType: this.$route.query.spreadType,
+                spreadParentCode: this.$route.query.T,
+                spreadParentShareTo: this.$route.query.tShareTo,
+                code: this.$route.query.code,
                 scope: this.$route.query.scope
             }
 
@@ -115,7 +130,10 @@ export default {
                 data: formData
             }).then(res => {
                 if (res.result.success == '1') {
-                    window.location.replace(this.$route.query.redirectUrl)
+                    this.setUserInfo(res.result.result)
+
+                    var pathUrl = tools.formDataUrl(window.decodeURIComponent(this.$route.query.redirectUrl))
+                    this.$router.replace(pathUrl)
                 } else {
                     this.$message.error(res.result.message)
                 }
@@ -137,20 +155,27 @@ export default {
                 if (res.result.success == '1') {
                     var data = res.result.result
 
-                    var memberInfo = {
-                        memberImage: data.headimgurl,
-                        enterpriseCode: this.$route.query.enterpriseCode,
-                        memberMobile: '',
-                        memberName: '',
-                        memberWechatOpenid: data.openid,
-                        memberWechatImg: data.headimgurl,
-                        memberWechatNickname: data.nickname,
-                        memberGender: data.sex,
-                        smsCode: ''
-                    }
+                    if (data.openid) {
+                        var memberInfo = {
+                            memberImage: data.headimgurl,
+                            enterpriseCode: this.$route.query.enterpriseCode,
+                            memberMobile: '',
+                            memberName: '',
+                            memberWechatOpenid: data.openid,
+                            memberWechatImg: data.headimgurl,
+                            memberWechatNickname: data.nickname,
+                            memberGender: data.sex,
+                            smsCode: ''
+                        }
 
-                    this.isShowPage = true
-                    this.memberInfo = memberInfo
+                        this.isShowPage = true
+                        this.memberInfo = memberInfo
+                    } else {
+                        this.setUserInfo(res.result.result)
+
+                        var pathUrl = tools.formDataUrl(window.decodeURIComponent(this.$route.query.redirectUrl))
+                        this.$router.replace(pathUrl)
+                    }
                 } else {
                     this.$message.error(res.result.message)
                 }
@@ -207,13 +232,20 @@ export default {
                 return
             }
 
+            if (this.$route.query.T) {
+                this.memberInfo.spreadCode = this.$route.query.T
+            }
+
             tools.request({
               method: 'post',
               interface: 'saveMemberInfo',
               data: this.memberInfo
             }).then(res => {
                 if (res.result.success == '1') {
-                    window.location.replace(this.$route.query.redirectUrl)
+                    this.setUserInfo(res.result.result)
+
+                    var pathUrl = tools.formDataUrl(window.decodeURIComponent(this.$route.query.redirectUrl))
+                    this.$router.replace(pathUrl)
                 } else {
                     this.$message.error(res.result.message)
                 }

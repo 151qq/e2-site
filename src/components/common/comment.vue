@@ -144,8 +144,12 @@ export default {
                     pageCode: this.$route.query.pageCode,
                     templateCode: this.$route.query.templateCode,
                     S: this.$route.query.S,
+                    sShareTo: this.$route.query.sShareTo,
                     C: this.$route.query.C,
+                    cShareTo: this.$route.query.cShareTo,
+                    spreadType: this.$route.query.spreadType,
                     T: this.$route.query.T,
+                    tShareTo: this.$route.query.tShareTo,
                     commentType: type,
                     commentFloor: this.commentList.length + 1
                 }

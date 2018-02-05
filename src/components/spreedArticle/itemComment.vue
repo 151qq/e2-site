@@ -99,6 +99,7 @@ export default {
                     enterpriseCode: this.$route.query.enterpriseCode,
                     customerCode: this.userInfo.customerCode,
                     customerType: customerType,
+                    userCode: this.$route.query.S,
                     interactionType: interactionType,
                     interactionObjectCode: code
                 }
@@ -147,8 +148,12 @@ export default {
                                 pageCode: this.$route.query.pageCode,
                                 templateCode: this.$route.query.templateCode,
                                 S: this.$route.query.S,
+                                sShareTo: this.$route.query.sShareTo,
                                 C: this.$route.query.C,
-                                T: this.$route.query.T
+                                cShareTo: this.$route.query.cShareTo,
+                                spreadType: this.$route.query.spreadType,
+                                T: this.$route.query.T,
+                                tShareTo: this.$route.query.tShareTo
                             }
                         }
                         window.ISCOMMENT = true
@@ -156,8 +161,10 @@ export default {
                         var types = ['enterprise_channel_open', 'enterprise_user_open']
 
                         if (types.indexOf(this.userInfo.openType) < 0) {
-                            this.setLog('customerGeneralLog', '1', 'memberCommentRate', res.result.result)
+                            this.setLog('customerGeneralLog', '1', 'memberCommentRate', res.result.result.commentCode)
                         }
+
+                        this.setLog('customerGeneralLog', '1', 'memberCommentRate', res.result.result.commentCode)
 
                         this.$router.replace(pathUrl)
                     } else {

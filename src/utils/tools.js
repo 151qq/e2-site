@@ -6,53 +6,39 @@ import queryString from 'query-string'
 
 const tools = {
   getUser (cb, type) {
+    var location = window.location
     var parsed = queryString.parse(location.search)
-    var e2Token = jsCookie.get('customer_infomation')
     var userInfo = store.state.userInfo
 
     if (type == 'snsapi_base') {
-      if (!e2Token) {
-          var path = '/registor?enterpriseCode=' + parsed.enterpriseCode + '&appid=' + parsed.appid  + '&pageType=' + parsed.pageType  + '&pageCode=' + parsed.pageCode +'&scope=' + type + '&redirectUrl=' + window.encodeURIComponent(window.location.href)
-          window.location.replace(path)
+      if (!userInfo.openId) {
+        var path = location.origin + '/registor' + location.search + '&scope=snsapi_base&redirectUrl=' + window.encodeURIComponent(window.location.href)
+
+        console.log(path, 'snsapi_base')
+        window.location.replace(path)
       } else {
-          if (!userInfo.openId) {
-            tools.getCustom(cb)
-          } else {
-            cb()
-          }
+        cb()
       }
     }
 
     if (type == 'snsapi_userinfo') {
-      if (!e2Token || userInfo.customerType == '0') {
-        var path = '/registor?enterpriseCode=' + parsed.enterpriseCode + '&appid=' + parsed.appid  + '&pageType=' + parsed.pageType  + '&pageCode=' + parsed.pageCode +'&scope=' + type + '&redirectUrl=' + window.encodeURIComponent(window.location.href)
+      if (!userInfo.openId || userInfo.customerType == '0') {
+        var path = location.origin + '/registor' + location.search + '&scope=snsapi_userinfo&redirectUrl=' + window.encodeURIComponent(window.location.href)
+        console.log(path, 'snsapi_userinfo')
         window.location.replace(path)
-        return false
-      }
-      if (!userInfo.openId) {
-        tools.getCustom(cb)
         return false
       }
       cb()
     }
   },
-
-  getCustom (cb) {
-    tools.request({
-        method: 'post',
-        interface: 'checkCustome',
-        data: {}
-    }).then(res => {
-        if (res.result.success == '1') {
-            var result = res.result.result
-            store.commit('setUserInfo', result)
-            cb()
-        } else {
-            alert(res.result.message)
-        }
-    })
+  formDataUrl (url) {
+    var a =  document.createElement('a')
+    a.href = url
+    return {
+      path: a.pathname,
+      query: queryString.parse(a.search)
+    }
   },
-
   /**
    * 格式化日期函数
    * @param date {Date|Date String} [需要格式化的日期]

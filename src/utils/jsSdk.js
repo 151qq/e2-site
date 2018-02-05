@@ -56,7 +56,7 @@ const jsSdk = {
         // 分享到朋友圈
         window.wx.onMenuShareTimeline({
             title: con.title,
-            link: con.link + 'G',
+            link: con.link + '&sShareTo=Q&cShareTo=Q&tShareTo=Q',
             imgUrl: con.imgUrl,
             success () {
                 con.success && con.success('memberShareWechatZoneRate')
@@ -70,7 +70,7 @@ const jsSdk = {
         window.wx.onMenuShareAppMessage({
             title: con.title,
             desc: con.desc,
-            link: con.link + 'F',
+            link: con.link + '&sShareTo=F&cShareTo=F&tShareTo=F',
             imgUrl: con.imgUrl,
             type: con.type ? con.type : '',
             dataUrl: con.dataUrl ? con.dataUrl : '',

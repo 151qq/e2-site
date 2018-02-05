@@ -246,7 +246,6 @@ export default {
                   this.areaList = res.result.result.pageAreas
                   this.isPage = true
 
-                  // 第一次打开可以领取
                   if (this.userInfo.openType == 'customer_open_first') {
                     this.setLog('customerSpreadLog', '0', 'memberReadingRate', this.$route.query.pageCode)
                   }
@@ -257,7 +256,9 @@ export default {
                     pageCode: this.$route.query.pageCode,
                     templateCode: this.$route.query.templateCode,
                     S: this.userInfo.s ? this.userInfo.s : this.$route.query.S,
-                    C: this.userInfo.c ? this.userInfo.c : this.$route.query.C
+                    C: this.userInfo.spreadChannelCode ? this.userInfo.spreadChannelCode : this.$route.query.C,
+                    spreadType: this.userInfo.spreadParentType ? this.userInfo.spreadParentType : this.$route.query.spreadType,
+                    T: this.userInfo.adchanneltrace ? this.userInfo.adchanneltrace : this.$route.query.T
                   }
 
                   var queryList = []
@@ -267,9 +268,7 @@ export default {
 
                   var location = window.location
 
-                  var spreadCode = this.userInfo.t ? this.userInfo.t : this.$route.query.T
-
-                  var link = location.origin + location.pathname + '?' + queryList.join('&') + '&T=' + spreadCode
+                  var link = location.origin + location.pathname + '?' + queryList.join('&')
 
                   var _self = this
 
@@ -337,6 +336,7 @@ export default {
                     enterpriseCode: this.$route.query.enterpriseCode,
                     customerCode: this.userInfo.customerCode,
                     customerType: customerType,
+                    userCode: this.$route.query.S,
                     interactionType: interactionType,
                     interactionObjectCode: code
                 }
