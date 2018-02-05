@@ -29,7 +29,7 @@ const jsSdk = {
             if (res.result.success == '1') {
 
                 window.wx.config({
-                    debug: true,
+                    debug: false,
                     appId: appid,
                     timestamp: timestamp,
                     nonceStr: nonceStr,
