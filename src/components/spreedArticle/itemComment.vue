@@ -91,6 +91,19 @@ export default {
         })
     },
     methods: {
+        setLog (interfaceName ,customerType, interactionType, code) {
+            util.request({
+                method: 'post',
+                interface: interfaceName,
+                data: {
+                    enterpriseCode: this.$route.query.enterpriseCode,
+                    customerCode: this.userInfo.customerCode,
+                    customerType: customerType,
+                    interactionType: interactionType,
+                    interactionObjectCode: code
+                }
+            }).then(res => {})
+        },
         chooseImage () {
             var num = 9 - this.commentData.attachments.length
             jsSdk.chooseImage(num ,(localIds) => {
@@ -139,6 +152,13 @@ export default {
                             }
                         }
                         window.ISCOMMENT = true
+
+                        var types = ['enterprise_channel_open', 'enterprise_user_open']
+
+                        if (types.indexOf(this.userInfo.openType) < 0) {
+                            this.setLog('customerGeneralLog', '1', 'memberCommentRate', res.result.result)
+                        }
+
                         this.$router.replace(pathUrl)
                     } else {
                         this.$message.error(res.result.message)

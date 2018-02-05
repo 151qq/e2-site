@@ -59,7 +59,10 @@ const jsSdk = {
             link: con.link + 'G',
             imgUrl: con.imgUrl,
             success () {
-                con.success && con.success()
+                con.success && con.success('memberShareWechatZoneRate')
+            },
+            cancel () {
+                con.cancel && con.cancel('memberCancelSharePage')
             }
         })
 
@@ -72,7 +75,10 @@ const jsSdk = {
             type: con.type ? con.type : '',
             dataUrl: con.dataUrl ? con.dataUrl : '',
             success () {
-                con.success && con.success()
+                con.success && con.success('memberShareWechatFriendRate')
+            },
+            cancel () {
+                con.cancel && con.cancel('memberCancelSharePage')
             }
         })
 
@@ -84,6 +90,9 @@ const jsSdk = {
             imgUrl: con.imgUrl,
             success () {
                 con.success && con.success()
+            },
+            cancel () {
+                con.cancel && con.cancel()
             }
         })
 
@@ -95,6 +104,9 @@ const jsSdk = {
             imgUrl: con.imgUrl,
             success () {
                 con.success && con.success()
+            },
+            cancel () {
+                con.cancel && con.cancel()
             }
         })
     },

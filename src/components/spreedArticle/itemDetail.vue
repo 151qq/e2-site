@@ -57,7 +57,12 @@
             <comment :comment-url="'article-comment'" @submitSuccess="submitSuccess"></comment>
         </div>
 
-        <paket :is-show="isShow" :path-url="pathUrl" :icon-url="iconUrl" :show-text="showText"></paket>
+        <paket :is-show="isShow"
+                :path-url="pathUrl"
+                :icon-url="iconUrl"
+                :gift-url="giftUrl"
+                :show-text="showText"
+                :hidden-paket="hiddenPaket"></paket>
     
         <section class="no-article-box" v-if="!articleData.pageTitle && isPage">
             您寻找的文章已经去了迷失之城了！<br>
@@ -94,7 +99,9 @@ export default {
             },
             pathUrl: '',
             iconUrl: '',
+            giftUrl: '',
             showText: '',
+            groupCode: '',
             escData: {}
         }
     },
@@ -239,6 +246,11 @@ export default {
                   this.areaList = res.result.result.pageAreas
                   this.isPage = true
 
+                  // 第一次打开可以领取
+                  if (this.userInfo.openType == 'customer_open_first') {
+                    this.setLog('customerSpreadLog', '0', 'memberReadingRate', this.$route.query.pageCode)
+                  }
+
                   var queryData = {
                     enterpriseCode: this.$route.query.enterpriseCode,
                     appid: this.$route.query.appid,
@@ -266,14 +278,27 @@ export default {
                     desc: this.articleData.pageAbstract,
                     link: link,
                     imgUrl: this.articleData.pageCover,
-                    success () {
+                    success (type) {
                         if (_self.escData['coupon_scenario_2']) {
                             _self.showEsc('coupon_scenario_2')
                         } else {
+                            var types = ['enterprise_channel_open', 'enterprise_user_open']
+
+                            if (types.indexOf(_self.userInfo.openType) < 0 && type) {
+                                _self.setLog('customerGeneralLog', '1', type, _self.$route.query.pageCode)
+                            }
+
                             _self.$message({
                                 message: '恭喜你，分享成功！',
                                 type: 'success'
                             })
+                        }
+                    },
+                    cancel (type) {
+                        var types = ['enterprise_channel_open', 'enterprise_user_open']
+
+                        if (types.indexOf(_self.userInfo.openType) < 0 && type) {
+                            _self.setLog('customerGeneralLog', '1', type, _self.$route.query.pageCode)
                         }
                     }
                   }
@@ -304,12 +329,25 @@ export default {
                 }
             })
         },
+        setLog (interfaceName ,customerType, interactionType, code) {
+            util.request({
+                method: 'post',
+                interface: interfaceName,
+                data: {
+                    enterpriseCode: this.$route.query.enterpriseCode,
+                    customerCode: this.userInfo.customerCode,
+                    customerType: customerType,
+                    interactionType: interactionType,
+                    interactionObjectCode: code
+                }
+            }).then(res => {})
+        },
         showEsc (type) {
             var types = ['enterprise_channel_open', 'enterprise_user_open']
 
-            // if (types.indexOf(this.userInfo.openType) > -1) {
-            //     return false
-            // }
+            if (types.indexOf(this.userInfo.openType) > -1) {
+                return false
+            }
             
             if (!this.escData[type].length || !this.escData[type]) {
                 return false
@@ -319,9 +357,25 @@ export default {
                 this.pathUrl = this.escData[type][0].couponGroutScenario
                 this.iconUrl = this.escData[type][0].couponGroupCover
                 this.showText = this.escData[type][0].couponGroupName
+                this.groupCode = this.escData[type][0].couponGroupCode
+
+                if (this.userInfo.customerType != '0') {
+                    this.giftUrl = this.escData[type][0].couponGroupStore
+                } else {
+                    this.giftUrl = ''
+                }
 
                 window.ISCOMMENT = false
                 this.isShow.value = true
+            }
+        },
+        hiddenPaket () {
+            this.isShow.value = false
+
+            var types = ['enterprise_channel_open', 'enterprise_user_open']
+
+            if (types.indexOf(this.userInfo.openType) < 0) {
+                this.setLog('customerGeneralLog', '1', 'memberCancelGetCoupon', this.groupCode)
             }
         },
         getTemplate () {

@@ -47,6 +47,10 @@ export default{
         /**
         * 地推 get
         */
-        getPartyCouponGroup: platform + 'E2site/partyInfo/getPartyCouponGroup.json'
+        getPartyCouponGroup: platform + 'E2site/partyInfo/getPartyCouponGroup.json',
+
+        customerSpreadLog: platform + 'log/customerSpreadLog.json',
+        customerGeneralLog: platform + 'log/customerGeneralLog.json',
+        customerLog: platform + 'log/customerLog.json'
     }
 }

@@ -1,7 +1,8 @@
 <template>
     <section class="paket-big-box" v-if="isShow.value">
-        <div class="paket-bg" @click.self="isShow.value = false"></div>
+        <div class="paket-bg" @click.self="hiddenPaket"></div>
         <router-link class="paket-con"
+                    v-if="!giftUrl"
                     :to="{
                         name: 'groupDetail',
                         query: {
@@ -12,11 +13,13 @@
             <img :src="iconUrl">
             <span>{{showText}}</span>
         </router-link>
+
+        <a :href="giftUrl" v-if="giftUrl"></a>
     </section>
 </template>
 <script>
 export default {
-    props: ['isShow', 'iconUrl', 'pathUrl', 'showText'],
+    props: ['isShow', 'iconUrl', 'pathUrl', 'giftUrl', 'showText', 'hiddenPaket'],
     data () {
         return {}
     }
