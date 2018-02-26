@@ -1,14 +1,16 @@
 <template>
     <section class="submit-box">
-        <div class="weui-cells weui-cells_form no-line no-margin">
-            <div class="weui-cell no-line">
+        <div class="height-1"></div>
+        <div class="weui-cells no-margin no-line">
+            <div class="weui-cell weui-cell_access no-center">
+                <div class="weui-cell__hd"><label class="weui-label">评论内容</label></div>
                 <div class="weui-cell__bd">
-                    <textarea class="weui-textarea"
-                                placeholder="这一刻的想法..."
-                                rows="3"
-                                v-model="commentData.commentContent"></textarea>
+                   <textarea class="weui-textarea"
+                        placeholder="请输入文字"
+                        :rows="commentData.commentContent ? 3 : 1"
+                        v-model="commentData.commentContent"></textarea>
                 </div>
-            </div>
+            </div>       
         </div>
 
         <div class="wx-area-line"></div>

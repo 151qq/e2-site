@@ -38,9 +38,6 @@ body {
 
 .wx-area-img {
   position: relative;
-  width: 100%;
-  height: 240px;
-  overflow: hidden;
 
   img {
     display: block;
@@ -286,7 +283,7 @@ body {
 }
 
 .left-padding {
-  padding-left: 105px;
+  padding-left: 120px;
   position: relative;
 
   .left-title {
@@ -661,5 +658,15 @@ body {
   top: 10px;
   left: 70px;
   z-index: 188;
+}
+
+.small-img {
+  width: 20px;
+  margin-right: 5px;
+  display: block;
+}
+
+.small-title {
+  font-size: 14px;
 }
 

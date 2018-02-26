@@ -1,73 +1,79 @@
 <template>
     <section class="registor-box" v-if="isShowPage">
-        <div class="wx-area-img">
-            <img :src="coverImg">
-        </div>
-        <div class="avatar-box">
-            <div class="img-box">
-                <img :src="base.memberWechatImg">
+        <template v-if="!isSave">
+            <div class="wx-area-img">
+                <img :src="coverImg">
             </div>
-            <div class="name-box">
-                {{base.memberWechatNickname}}
-            </div>
-        </div>
-        <section class="weui-cells weui-cells_form">
-            <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">姓名</label></div>
-                <div class="weui-cell__bd">
-                    <input class="weui-input" v-model="base.memberName" placeholder="请输入">
+            <div class="avatar-box">
+                <div class="img-box">
+                    <img :src="base.memberWechatImg">
+                </div>
+                <div class="name-box">
+                    {{base.memberWechatNickname}}
                 </div>
             </div>
-            <div class="weui-cell weui-cell_select weui-cell_select-after">
-                <div class="weui-cell__hd"><label class="weui-label">性别</label></div>
-                <div class="weui-cell__bd">
-                    <select class="weui-select" v-model="base.memberGender">
-                        <option v-for="(item, index) in genderList" :value="item.key">
-                            {{item.value}}
-                        </option>
-                    </select>
+            <section class="weui-cells weui-cells_form">
+                <div class="weui-cell">
+                    <div class="weui-cell__hd"><label class="weui-label">姓名</label></div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" v-model="base.memberName" placeholder="请输入">
+                    </div>
                 </div>
-            </div>
-            <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">身份证</label></div>
-                <div class="weui-cell__bd">
-                    <input class="weui-input" v-model="base.memberIdentificaitonCard" placeholder="请输入">
+                <div class="weui-cell weui-cell_select weui-cell_select-after">
+                    <div class="weui-cell__hd"><label class="weui-label">性别</label></div>
+                    <div class="weui-cell__bd">
+                        <select class="weui-select" v-model="base.memberGender">
+                            <option v-for="(item, index) in genderList" :value="item.key">
+                                {{item.value}}
+                            </option>
+                        </select>
+                    </div>
                 </div>
-            </div>
-            <div class="weui-cell weui-cell_vcode">
-                <div class="weui-cell__hd">
-                    <label class="weui-label">手机</label>
+                <div class="weui-cell">
+                    <div class="weui-cell__hd"><label class="weui-label">身份证</label></div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" v-model="base.memberIdentificaitonCard" placeholder="请输入">
+                    </div>
                 </div>
-                <div class="weui-cell__bd">
-                    <input class="weui-input"
-                           v-model="base.memberMobile"
-                           type="tel"
-                           placeholder="请输入手机号"
-                           @input="mobileChange">
+                <div class="weui-cell weui-cell_vcode">
+                    <div class="weui-cell__hd">
+                        <label class="weui-label">手机</label>
+                    </div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input"
+                               v-model="base.memberMobile"
+                               type="tel"
+                               placeholder="请输入手机号"
+                               @input="mobileChange">
+                    </div>
+                    <div class="weui-cell__ft">
+                        <template v-if="timer">
+                            <button class="weui-vcode-btn">剩余<i>{{seconds}}</i>秒</button>
+                        </template>
+                        <template v-else>
+                            <button class="weui-vcode-btn"
+                                    :class="{notClick: !isClick}"
+                                    @click="getCode">获取验证码</button>
+                        </template>
+                        
+                    </div>
                 </div>
-                <div class="weui-cell__ft">
-                    <template v-if="timer">
-                        <button class="weui-vcode-btn">剩余<i>{{seconds}}</i>秒</button>
-                    </template>
-                    <template v-else>
-                        <button class="weui-vcode-btn"
-                                :class="{notClick: !isClick}"
-                                @click="getCode">获取验证码</button>
-                    </template>
-                    
+                <div class="weui-cell">
+                    <div class="weui-cell__hd"><label class="weui-label">验证码</label></div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" v-model="base.smsCode" placeholder="请输入">
+                    </div>
                 </div>
-            </div>
-            <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">验证码</label></div>
-                <div class="weui-cell__bd">
-                    <input class="weui-input" v-model="base.smsCode" placeholder="请输入">
-                </div>
-            </div>
-        </section>
+            </section>
 
-        <div class="btn-height-box"></div>
-        <div class="weui-btn-area">
-            <a class="weui-btn weui-btn_primary" @click="saveUserInfo">确认</a>
+            <div class="btn-height-box"></div>
+            <div class="weui-btn-area">
+                <a class="weui-btn weui-btn_primary" @click="saveUserInfo">确认</a>
+            </div>
+        </template>
+        
+        <div class="null-page" v-else>
+            您已成为推广员！
         </div>
     </section>
 </template>
@@ -109,7 +115,8 @@ export default {
             ],
             timer: null,
             seconds: 90,
-            isClick: false
+            isClick: false,
+            isSave: false
         }
     },
     mounted () {
@@ -140,13 +147,11 @@ export default {
 
             tools.request({
               method: 'get',
-              interface: 'getServiceWechatUserInfo',
+              interface: 'getSiteWechatUserInfo',
               data: formData
             }).then(res => {
                 if (res.result.success == '1') {
                     var data = res.result.result
-
-                    var link = 'http://mobile.socialmarketingcloud.com/wxPromotion/channelDetail?enterpriseCode=' + this.$route.query.enterpriseCode + '&agentId=' + this.$route.query.agentId
 
                     var memberInfo = {
                         enterpriseCode: this.$route.query.enterpriseCode,
@@ -162,7 +167,6 @@ export default {
                         memberIdentificaitonCard: '',
                         smsCode: '',
                         agentId: this.$route.query.agentId,
-                        tourl: link,
                         userId: this.$route.query.userId,
                         adManager: this.$route.query.userCode
                     }
@@ -235,6 +239,8 @@ export default {
                       message: '恭喜你，保存成功！',
                       type: 'success'
                     })
+
+                    this.isSave = true
                 } else {
                     this.$message.error(res.result.message)
                 }

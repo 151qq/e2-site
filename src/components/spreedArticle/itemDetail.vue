@@ -25,23 +25,34 @@
 
         <template v-if="articleList.length">
             <div class="wx-area-line"></div>
+            <div class="weui-cells no-margin no-line">
+                <div class="weui-cell weui-cell_access">
+                    <div class="weui-cell__hd"><label class="weui-label">推荐文章</label></div>
+                    <div class="weui-cell__bd wx-placeholder">
+                       选择了{{articleList ? articleList.length : 0}}个推荐
+                    </div>
+                </div>
+            </div>
             <div class="weui-cells no-line left-padding">
-                <div class="left-title">推荐文章</div>
                 <router-link class="weui-media-box weui-media-box_appmsg"
                         v-for="(item, index) in articleList"
                         :to="{
-                            name: 'article-detail',
-                            query: {
-                                enterpriseCode: $route.query.enterpriseCode,
-                                agentId: $route.query.agentId,
-                                pageCode: item.pageCode,
-                                appid: item.pubWechatAppId,
-                                templateCode: item.templateCode,
-                                S: $route.query.S,
-                                C: 'e2nochannel',
-                                T: 'e2nospread'
-                            }
-                        }">
+                                name: 'article-detail',
+                                query: {
+                                    enterpriseCode: $route.query.enterpriseCode,
+                                    agentId: $route.query.agentId,
+                                    pageCode: item.pageCode,
+                                    appid: item.pubWechatAppId,
+                                    templateCode: item.templateCode,
+                                    S: $route.query.S,
+                                    sShareTo: 'F',
+                                    C: 'N',
+                                    cShareTo: 'N',
+                                    T: $route.query.S,
+                                    tShareTo: 'N',
+                                    spreadType: '1'
+                                }
+                            }">
                     <div class="weui-media-box__hd">
                         <img class="weui-media-box__thumb" :src="item.pageCover">
                     </div>
