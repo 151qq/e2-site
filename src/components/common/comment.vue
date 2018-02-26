@@ -302,6 +302,7 @@ export default {
 
         .content-box {
             flex: 1;
+            overflow: hidden;
 
             .title-box {
                 display: flex;

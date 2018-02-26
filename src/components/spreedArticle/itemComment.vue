@@ -1,30 +1,5 @@
 <template>
     <section class="submit-box">
-        <!-- <div class="weui-cell weui-cell_select weui-cell_select-after">
-            <div class="weui-cell__hd">
-                <label for="" class="weui-label">评论情绪</label>
-            </div>
-            <div class="weui-cell__bd">
-                <select class="weui-select">
-                    <option value="1">中国</option>
-                    <option value="2">美国</option>
-                    <option value="3">英国</option>
-                </select>
-            </div>
-        </div>
-        <div class="weui-cell weui-cell_select weui-cell_select-after">
-            <div class="weui-cell__hd">
-                <label for="" class="weui-label">评论标注</label>
-            </div>
-            <div class="weui-cell__bd">
-                <select class="weui-select">
-                    <option value="1">中国</option>
-                    <option value="2">美国</option>
-                    <option value="3">英国</option>
-                </select>
-            </div>
-        </div>
-        <div class="wx-area-line"></div> -->
         <div class="weui-cells weui-cells_form no-line no-margin">
             <div class="weui-cell no-line">
                 <div class="weui-cell__bd">
@@ -32,24 +7,38 @@
                                 placeholder="这一刻的想法..."
                                 rows="3"
                                 v-model="commentData.commentContent"></textarea>
-                    <!-- <div class="weui-textarea-counter"><span>{{fontNum}}</span>/{{totalFont}}</div> -->
                 </div>
             </div>
         </div>
-        <div class="weui-cell no-line">
-            <div class="weui-uploader">
-                <div class="weui-uploader__bd">
-                     <ul class="weui-uploader__files" id="uploaderFiles">
-                        <li class="weui-uploader__file"
-                            v-for="(item, index) in commentData.attachments"
-                            @click="showBigImg(index)">
-                                <img :src="item">
-                        </li>
-                        <li @click="chooseImage" class="weui-uploader__input-box"></li>
-                    </ul>
+
+        <div class="wx-area-line"></div>
+        <div class="weui-cells no-margin no-line">
+            <div class="weui-cell weui-cell_access">
+                <div class="weui-cell__hd"><label class="weui-label">本地图片</label></div>
+                <div class="weui-cell__bd wx-placeholder">
+                   最多可以选择9张图片
+                </div>
+                <div class="weui-cell__ft"></div>
+            </div>
+        </div>
+        <div class="weui-cells no-margin">
+            <div class="weui-cell no-line">
+                <div class="weui-uploader">
+                    <div class="weui-uploader__bd">
+                         <ul class="weui-uploader__files" id="uploaderFiles">
+                            <li class="weui-uploader__file"
+                                v-for="(item, index) in commentData.attachments"
+                                @click="showBigImg(index)">
+                                    <img :src="item">
+                            </li>
+                            <li @click="chooseImage" class="weui-uploader__input-box"></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
+        
+        <div class="btn-height-box"></div>
         <div class="weui-btn-area">
             <a class="weui-btn weui-btn_primary" @click="submitComment">发布</a>
         </div>

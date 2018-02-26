@@ -24,8 +24,9 @@
         </div>
 
         <template v-if="articleList.length">
-            <div class="weui-cells__title">推荐文章</div>
-            <div class="weui-cells no-line">
+            <div class="wx-area-line"></div>
+            <div class="weui-cells no-line left-padding">
+                <div class="left-title">推荐文章</div>
                 <router-link class="weui-media-box weui-media-box_appmsg"
                         v-for="(item, index) in articleList"
                         :to="{

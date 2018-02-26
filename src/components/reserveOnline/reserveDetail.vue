@@ -1,45 +1,64 @@
 <template>
     <section class="reserve-box">
         <div class="height-1"></div>
-        <div class="weui-cells__title">预约信息</div>
+        <div v-if="base.reserveAddr" class="mapBox">
+            <img :src="base.reserveAddr">
+        </div>
+        <div class="weui-cells no-margin">
+            <div class="weui-cell weui-cell_access show-message-box">
+                <div class="weui-cell__hd"><label class="weui-label">预约地点</label></div>
+                <div class="weui-cell__bd">{{base.reserveCity}}</div>
+            </div>
+        </div>
         <div class="weui-cells">
             <div class="weui-cell weui-cell_access show-message-box">
-                <div class="weui-cell__bd">预约标题</div>
-                <div class="weui-cell__ft">{{base.reserveTitle}}</div>
+                <div class="weui-cell__hd"><label class="weui-label">预约标题</label></div>
+                <div class="weui-cell__bd">{{base.reserveTitle}}</div>
             </div>
             <div class="weui-cell weui-cell_access show-message-box">
-                <div class="weui-cell__bd">预约人</div>
-                <div class="weui-cell__ft">{{base.reserverName}}</div>
+                <div class="weui-cell__hd"><label class="weui-label">预约人</label></div>
+                <div class="weui-cell__bd">{{base.reserverName}}</div>
             </div>
             <div class="weui-cell weui-cell_access show-message-box">
-                <div class="weui-cell__bd">预约手机</div>
-                <div class="weui-cell__ft">{{base.reserverMobile}}</div>
+                <div class="weui-cell__hd"><label class="weui-label">预约手机</label></div>
+                <div class="weui-cell__bd">{{base.reserverMobile}}</div>
             </div>
             <div class="weui-cell weui-cell_access show-message-box">
-                <div class="weui-cell__bd">开始时间</div>
-                <div class="weui-cell__ft">{{base.reserveBeginTime}}</div>
+                <div class="weui-cell__hd"><label class="weui-label">开始时间</label></div>
+                <div class="weui-cell__bd">{{base.reserveBeginTime}}</div>
             </div>
             <div class="weui-cell weui-cell_access show-message-box">
-                <div class="weui-cell__bd">结束时间</div>
-                <div class="weui-cell__ft">{{base.reserveEndTime}}</div>
+                <div class="weui-cell__hd"><label class="weui-label">结束时间</label></div>
+                <div class="weui-cell__bd">{{base.reserveEndTime}}</div>
             </div>
             <div class="weui-cell weui-cell_access show-message-box">
-                <div class="weui-cell__bd">预约地点</div>
-                <div class="weui-cell__ft">{{base.reserveCity}}</div>
-            </div>
-            <div v-if="base.reserveAddr" class="mapBox">
-                <img :src="base.reserveAddr">
-            </div>
-            <div class="weui-cell weui-cell_access show-message-box">
-                <div class="weui-cell__bd">预约接待</div>
-                <div class="weui-cell__ft">{{base.reserveReceptionName}}</div>
+                <div class="weui-cell__hd"><label class="weui-label">预约地点</label></div>
+                <div class="weui-cell__bd">{{base.reserveCity}}</div>
             </div>
         </div>
-        <div class="weui-cells__title">预约详情</div>
-        <div class="wx-area-text">{{base.reserveDesc}}</div>
-        <div class="wx-area-text">
-            <img-list :img-list="newReserveImgData"></img-list>
+        
+        <div class="wx-area-line"></div>
+        <div class="weui-cells no-margin no-line">
+            <div class="weui-cell weui-cell_access no-center">
+                <div class="weui-cell__hd"><label class="weui-label">预约详情</label></div>
+                <div class="weui-cell__bd">
+                   {{base.reserveDesc}}
+                </div>
+            </div>       
         </div>
+
+        <template v-if="newReserveImgData.length">
+            <div class="wx-area-line"></div>
+            <div class="weui-cells no-margin">
+                <div class="weui-cell weui-cell_access no-center">
+                    <div class="weui-cell__hd"><label class="weui-label">附加图片</label></div>
+
+                    <div class="weui-cell__bd">
+                        <img-list :img-list="newReserveImgData"></img-list>
+                    </div>
+                </div>
+            </div>
+        </template>
         
         <div class="btn-height-box" v-if="base.reserveStatus == '1'"></div>
 
@@ -54,6 +73,7 @@
 import imgList from '../common/imgList.vue'
 import jsSdk from '../../utils/jsSdk'
 import util from '../../utils/tools'
+import { mapGetters } from 'vuex'
 
 export default {
     data () {
@@ -81,18 +101,21 @@ export default {
         }
     },
     mounted () {
-        this.getBase()
-    },
-    watch: {
-        $route () {
+        util.getUser(() => {
             this.getBase()
-        }
+        }, 'snsapi_userinfo')
+    },
+    computed: {
+        ...mapGetters({
+            userInfo: 'getUserInfo'
+        })
     },
     methods: {
         confirmReserve () {
             var formData = {
                 enterpriseCode: this.$route.query.enterpriseCode,
-                reserveCode: this.$route.query.reserveCode
+                reserveCode: this.$route.query.reserveCode,
+                memberCode: this.userInfo.memberCode
             }
 
             util.request({

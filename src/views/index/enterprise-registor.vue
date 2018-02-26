@@ -46,7 +46,7 @@
                 </div>
             </div>
             <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">微信二维码</label></div>
+                <div class="weui-cell__hd"><label class="weui-label">微信<br>二维码</label></div>
                 <div class="weui-cell__bd">
                     <div class="wx-uploader"
                         @click="chooseImage">
@@ -285,9 +285,8 @@ export default {
 
     .wx-uploader {
         position: relative;
-        width: 180px;
-        height: 180px;
-        margin: auto;
+        width: 90px;
+        height: 90px;
         border: 1px solid #d9d9d9;
 
         img {

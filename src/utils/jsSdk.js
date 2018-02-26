@@ -136,8 +136,6 @@ const jsSdk = {
         }
 
         var localId = localIds.splice(0, 1)[0]
-
-        alert(localId + 'localId')
         
         window.wx.uploadImage({
             localId: localId,

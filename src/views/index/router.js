@@ -32,14 +32,6 @@ const routers = [
     }
   },
   {
-    // 验证确认
-    path: '/check-confirm',
-    name: 'check-confirm',
-    component (resolve) {
-      require(["../../components/common/check-confirm.vue"], resolve)
-    }
-  },
-  {
     // 推广文章
     path: '/spreedArticle',
     name: 'spreedArticle',
