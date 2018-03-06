@@ -328,8 +328,9 @@ export default {
             }
 
             .des-box {
-                font-size: 14px;
+                font-size: 16px;
                 line-height: 1.4;
+                color: #666666;
                 margin-top: 5px;
             }
 
