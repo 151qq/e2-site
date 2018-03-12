@@ -28,6 +28,9 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
+    if (to.meta.title) {
+      document.title = to.meta.title
+    }
     // 处理jssdk签名,兼容history模式
     if (!store.state.iosUrl) {
       store.commit('setUrl', document.URL)

@@ -46,11 +46,36 @@ const tools = {
    * @return 格式化后的日期
   */
   formatDate (date, fmt) {
-      if (!date) {
+      if (!date || !fmt) {
         return ''
       }
 
-      let theDate = new Date(date)
+      var theDate = ''
+      if (typeof date == 'number') {
+        theDate = new Date(date)
+      } else {
+        if (date.length > 10) {
+          var dateArr = date.split(/[T\s]/)
+
+          var beforeTime = dateArr[0].split('-')
+          var afterTime = dateArr[1].split(':')
+
+          afterTime[2] = afterTime[2] ? afterTime[2] : '00'
+        } else {
+          var beforeTime = date.split('-')
+        }
+
+        if (afterTime) {
+          theDate = new Date(beforeTime[0], beforeTime[1], beforeTime[2], afterTime[0], afterTime[1], afterTime[2])
+        } else {
+          theDate = new Date(beforeTime[0], beforeTime[1], beforeTime[2])
+        }
+      }
+
+      if (!theDate) {
+        return
+      }
+
       var o = {
           'M+': theDate.getMonth() + 1, // 月份
           'd+': theDate.getDate(), // 日

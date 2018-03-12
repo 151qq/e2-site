@@ -13,6 +13,9 @@ const routers = [
     name: 'enterprise-registor',
     component (resolve) {
       require(["./enterprise-registor.vue"], resolve)
+    },
+    meta: {
+      title: '员工注册'
     }
   },
   {
@@ -21,6 +24,9 @@ const routers = [
     name: 'registor-message',
     component (resolve) {
       require(["./registorMessage.vue"], resolve)
+    },
+    meta: {
+      title: '注册成功'
     }
   },
   {
@@ -29,6 +35,9 @@ const routers = [
     name: 'registor',
     component (resolve) {
       require(["./registor.vue"], resolve)
+    },
+    meta: {
+      title: '会员注册'
     }
   },
   {
@@ -44,7 +53,7 @@ const routers = [
         name: 'article-detail',
         component: resolve => require(["../../components/spreedArticle/itemDetail.vue"], resolve),
         meta: {
-          token:false
+          title: '文章详情'
         }
       },
       {
@@ -52,7 +61,7 @@ const routers = [
         name: 'article-comment',
         component: resolve => require(["../../components/spreedArticle/itemComment.vue"], resolve),
         meta: {
-          token:false
+          title: '发表评论'
         }
       }
     ]
@@ -70,7 +79,7 @@ const routers = [
         name: 'product-detail',
         component: resolve => require(["../../components/productCenter/articleDetail.vue"], resolve),
         meta: {
-          token:false
+          title:false
         }
       },
       {
@@ -78,7 +87,7 @@ const routers = [
         name: 'product-log',
         component: resolve => require(["../../components/productCenter/articleLog.vue"], resolve),
         meta: {
-          token:false
+          title:false
         }
       },
       {
@@ -86,7 +95,7 @@ const routers = [
         name: 'product-comment',
         component: resolve => require(["../../components/productCenter/itemComment.vue"], resolve),
         meta: {
-          token:false
+          title:false
         }
       },
       {
@@ -94,7 +103,7 @@ const routers = [
         name: 'product-spec',
         component: resolve => require(["../../components/productCenter/productSpec.vue"], resolve),
         meta: {
-          token:false
+          title:false
         }
       },
       {
@@ -102,7 +111,7 @@ const routers = [
         name: 'product-senior',
         component: resolve => require(["../../components/productCenter/productSenior.vue"], resolve),
         meta: {
-          token:false
+          title:false
         }
       },
       {
@@ -110,7 +119,7 @@ const routers = [
         name: 'product-img',
         component: resolve => require(["../../components/productCenter/imgList.vue"], resolve),
         meta: {
-          token:false
+          title:false
         }
       }
     ]
@@ -129,7 +138,7 @@ const routers = [
         name: 'reserve-detail',
         component: resolve => require(["../../components/reserveOnline/reserveDetail.vue"], resolve),
         meta: {
-          token:false
+          title: '预约确认'
         }
       }
     ]
@@ -140,6 +149,9 @@ const routers = [
     name: 'channelRegister',
     component (resolve) {
       require(["../../components/wxPromotion/editChannel.vue"], resolve)
+    },
+    meta: {
+      title: '推广人员注册'
     }
   },
   {
@@ -148,6 +160,9 @@ const routers = [
     name: 'receiveGift',
     component (resolve) {
       require(["../../components/party/receiveGift.vue"], resolve)
+    },
+    meta: {
+      title: '领取礼品'
     }
   },
   {
@@ -156,6 +171,9 @@ const routers = [
     name: 'groupDetail',
     component (resolve) {
       require(["../../components/group/groupDetail.vue"], resolve)
+    },
+    meta: {
+      title: '套券信息'
     }
   }
 ]

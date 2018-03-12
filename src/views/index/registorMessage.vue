@@ -1,7 +1,7 @@
 <template>
     <section class="null-message-box">
         注册成功<br>
-        请登陆企业微信
+        请登录企业微信
     </section>
 </template>
 <script>
