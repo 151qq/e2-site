@@ -116,7 +116,7 @@ body {
 .wx-area-line {
   width: 100%;
   height: 0.6em;
-  background: #f8f8f8;
+  background: #e5e5e5;
 }
 
 .text-box-check {
@@ -145,8 +145,7 @@ body {
   left: 0;
   bottom: 0;
   width: 100%;
-  border-top: 1px solid #e5e5e5;
-  background: #f8f8f8;
+  background: #e5e5e5;
   z-index: 101;
 
   .wx-nav-item {
@@ -154,7 +153,7 @@ body {
     font-size: 16px;
     line-height: 50px;
     text-align: center;
-    border-left: 1px solid #e5e5e5;
+    border-left: 1px solid #ffffff;
     color: #000000;
 
     &:first-child {
@@ -163,14 +162,13 @@ body {
   }
 
   .nav-now {
-    color: #999999;
+    background: #8f8f90;
+    color: #ffffff;
   }
 
   .nav-blue {
     background: #2f7dcd;
     color: #ffffff;
-    line-height: 51px;
-    margin-top: -1px;
   }
 
   .wx-nav-item-20 {
@@ -178,7 +176,7 @@ body {
     font-size: 16px;
     line-height: 50px;
     text-align: center;
-    border-left: 1px solid #e5e5e5;
+    border-left: 1px solid #ffffff;
     color: #000000;
 
     &:first-child {
@@ -191,8 +189,21 @@ body {
     text-align: right;
     font-size: 16px;
     line-height: 2.4;
-    border-left: 1px solid #e5e5e5;
+    border-left: 1px solid #ffffff;
     color: #000000;
+  }
+
+  .wx-nav-item-66 {
+    width: 66%;
+    font-size: 16px;
+    line-height: 50px;
+    text-align: center;
+    border-left: 1px solid #ffffff;
+    color: #000000;
+
+    &:first-child {
+      border: none;
+    }
   }
 }
 
@@ -561,7 +572,7 @@ body {
 
 .mapBox {
     box-sizing: border-box;
-    height: 120px;
+    height: 160px;
     overflow: hidden;
 
     img {
@@ -655,13 +666,34 @@ body {
   height: 10px;
   border-radius: 5px;
   background-color: #F43530;
-  top: 10px;
-  left: 70px;
+  top: 5px;
+  left: 60px;
   z-index: 188;
 }
 
+.has-read {
+  position: relative;
+
+  &:after {
+    content: "  ";
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    background-color: #F43530;
+    top: -5px;
+    right: -5px;
+  }
+}
+
 .small-img {
-  width: 20px;
+  width: 40px;
+  margin-right: 5px;
+  display: block;
+}
+
+.mini-img {
+  width: 40px;
   margin-right: 5px;
   display: block;
 }
@@ -670,3 +702,27 @@ body {
   font-size: 14px;
 }
 
+.weui-media-box {
+  padding: 10px 15px; 
+}
+
+.weui-media-box_appmsg .weui-media-box__hd {
+  width: 50px;
+  height: 50px;
+  line-height: 50px;
+}
+
+.content-box .des-box {
+  font-size: 16px !important;
+  color: #666666;
+}
+
+.weui-label {
+  color: #666666;
+}
+
+.number-box {
+  &>div p {
+    color: #666666;
+  }
+}
