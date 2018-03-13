@@ -229,6 +229,8 @@ export default {
                 return
             }
 
+            this.base.tourl = 'http://mobile.socialmarketingcloud.com/wxPromotion/channelDetail?enterpriseCode=' + this.$route.query.enterpriseCode + '&agentId=' + this.$route.query.agentId
+
             tools.request({
                 method: 'post',
                 interface: 'updateChannel',
