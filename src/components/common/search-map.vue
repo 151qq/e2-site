@@ -115,11 +115,14 @@ export default {
                 if (this.$route.query.point) {
                     var pointArr = this.$route.query.point.split(',')
                     point = new window.BMap.Point(pointArr[0], pointArr[1])
+                    map.centerAndZoom(point, 15)
+                    map.clearOverlays()
+                    var marker = new window.BMap.Marker(point)
+                    map.addOverlay(marker)
                 } else {
                     point = new window.BMap.Point(116.409, 39.918)
+                    map.centerAndZoom(point, 15)
                 }
-
-                map.centerAndZoom(point, 15)
             }
         },
         drawMap (mapInfo) {

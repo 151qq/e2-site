@@ -1,7 +1,7 @@
 <template>
     <section class="reserve-box">
         <div class="height-1"></div>
-        <div class="weui-cells">
+        <div class="weui-cells no-margin">
             <div class="weui-cell weui-cell_access show-message-box">
                 <div class="weui-cell__hd"><label class="weui-label">预约标题</label></div>
                 <div class="weui-cell__bd">{{base.reserveTitle}}</div>
