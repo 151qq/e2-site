@@ -20,7 +20,6 @@
                 <div class="weui-cell__bd wx-placeholder">
                    最多可以选择9张图片
                 </div>
-                <div class="weui-cell__ft"></div>
             </div>
         </div>
         <div class="weui-cells no-margin">
@@ -109,60 +108,56 @@ export default {
             })
         },
         submitFn () {
-            if (this.userInfo && this.userInfo.memberInfo.memberCode) {
-                var formData = {
-                    appId: this.$route.query.appid,
-                    enterpriseCode: this.$route.query.enterpriseCode,
-                    pageCode: this.$route.query.pageCode,
-                    commentType: this.$route.query.commentType,
-                    commentFloor: this.$route.query.commentFloor,
-                    memberCode: this.userInfo.memberInfo.memberCode,
-                    attachments: this.serverIdList,
-                    commentContent: this.commentData.commentContent
-                }
-
-                if (this.$route.query.commentTitle) {
-                    formData.commentTitle = this.$route.query.commentTitle
-                }
-
-                util.request({
-                    method: 'post',
-                    interface: 'publishComment',
-                    data: formData
-                }).then(res => {
-                    if (res.result.success == '1') {
-                        var pathUrl = {
-                            name: 'article-detail',
-                            query: {
-                                enterpriseCode: this.$route.query.enterpriseCode,
-                                appid: this.$route.query.appid,
-                                pageCode: this.$route.query.pageCode,
-                                templateCode: this.$route.query.templateCode,
-                                S: this.$route.query.S,
-                                sShareTo: this.$route.query.sShareTo,
-                                C: this.$route.query.C,
-                                cShareTo: this.$route.query.cShareTo,
-                                spreadType: this.$route.query.spreadType,
-                                T: this.$route.query.T,
-                                tShareTo: this.$route.query.tShareTo
-                            }
-                        }
-                        window.ISCOMMENT = true
-
-                        var types = ['enterprise_channel_open', 'enterprise_user_open']
-
-                        if (types.indexOf(this.userInfo.openType) < 0) {
-                            this.setLog('customerGeneralLog', '1', 'memberCommentRate', res.result.result.commentCode)
-                        }
-
-                        this.setLog('customerGeneralLog', '1', 'memberCommentRate', res.result.result.commentCode)
-
-                        this.$router.replace(pathUrl)
-                    } else {
-                        this.$message.error(res.result.message)
-                    }
-                })
+            var formData = {
+                appId: this.$route.query.appid,
+                enterpriseCode: this.$route.query.enterpriseCode,
+                pageCode: this.$route.query.pageCode,
+                commentType: this.$route.query.commentType,
+                commentFloor: this.$route.query.commentFloor,
+                memberCode: this.userInfo.memberInfo.memberCode,
+                attachments: this.serverIdList,
+                commentContent: this.commentData.commentContent
             }
+
+            if (this.$route.query.commentTitle) {
+                formData.commentTitle = this.$route.query.commentTitle
+            }
+
+            util.request({
+                method: 'post',
+                interface: 'publishComment',
+                data: formData
+            }).then(res => {
+                if (res.result.success == '1') {
+                    var pathUrl = {
+                        name: 'article-detail',
+                        query: {
+                            enterpriseCode: this.$route.query.enterpriseCode,
+                            appid: this.$route.query.appid,
+                            pageCode: this.$route.query.pageCode,
+                            templateCode: this.$route.query.templateCode,
+                            S: this.$route.query.S,
+                            sShareTo: this.$route.query.sShareTo,
+                            C: this.$route.query.C,
+                            cShareTo: this.$route.query.cShareTo,
+                            spreadType: this.$route.query.spreadType,
+                            T: this.$route.query.T,
+                            tShareTo: this.$route.query.tShareTo
+                        }
+                    }
+                    window.ISCOMMENT = true
+
+                    var types = ['enterprise_channel_open', 'enterprise_user_open']
+
+                    if (types.indexOf(this.userInfo.openType) < 0) {
+                        this.setLog('customerGeneralLog', '1', 'memberCommentRate', res.result.result.commentCode)
+                    }
+
+                    this.$router.replace(pathUrl)
+                } else {
+                    this.$message.error(res.result.message)
+                }
+            })
         },
         showBigImg (index) {
             this.nowIndex = index

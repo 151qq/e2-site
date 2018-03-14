@@ -64,9 +64,9 @@
             </div>
         </template>
 
-        <div class="wx-area-line"></div>
-        <div class="comments-box" v-if="isComments">
-            <comment :comment-url="'article-comment'" @submitSuccess="submitSuccess"></comment>
+        <div class="wx-area-line" v-if="isComments && articleData.pageStatus == '1' && articleData.pageCommentOpt == '1'"></div>
+        <div class="comments-box" v-if="isComments && articleData.pageStatus == '1' && articleData.pageCommentOpt == '1'">
+            <comment :comment-url="'article-comment'" :is-comment="!isEnterprise"></comment>
         </div>
 
         <paket :is-show="isShow"
@@ -125,16 +125,17 @@ export default {
             this.getArticles()
             this.selectEscs()
             this.isComments = true
-
-            if (window.ISCOMMENT) {
-                this.showEsc('coupon_scenario_3')
-            }
         }, 'snsapi_base')
     },
     computed: {
         ...mapGetters({
             userInfo: 'getUserInfo'
         }),
+        isEnterprise () {
+            var types = ['enterprise_channel_open', 'enterprise_user_open']
+            return types.indexOf(this.userInfo.openType) > -1
+            // return false
+        },
         arTitle () {
             var styleData = {
                 'display': 'block',
@@ -290,25 +291,18 @@ export default {
                     link: link,
                     imgUrl: this.articleData.pageCover,
                     success (type) {
-                        if (_self.escData['coupon_scenario_2']) {
+                        if (!this.isEnterprise && type) {
                             _self.showEsc('coupon_scenario_2')
-                        } else {
-                            var types = ['enterprise_channel_open', 'enterprise_user_open']
-
-                            if (types.indexOf(_self.userInfo.openType) < 0 && type) {
-                                _self.setLog('customerGeneralLog', '1', type, _self.$route.query.pageCode)
-                            }
-
-                            _self.$message({
-                                message: '恭喜你，分享成功！',
-                                type: 'success'
-                            })
+                            _self.setLog('customerGeneralLog', '1', type, _self.$route.query.pageCode)
                         }
+
+                        _self.$message({
+                            message: '恭喜你，分享成功！',
+                            type: 'success'
+                        })
                     },
                     cancel (type) {
-                        var types = ['enterprise_channel_open', 'enterprise_user_open']
-
-                        if (types.indexOf(_self.userInfo.openType) < 0 && type) {
+                        if (!this.isEnterprise && type) {
                             _self.setLog('customerGeneralLog', '1', type, _self.$route.query.pageCode)
                         }
                     }
@@ -332,8 +326,12 @@ export default {
                     this.escData = res.result.result
 
                     // 第一次打开可以领取
-                    if (this.userInfo.openType != 'customer_open_first') {
+                    if (this.userInfo.openType == 'customer_open_first') {
                         this.showEsc('coupon_scenario_1')
+                    }
+                    // 评论成功
+                    if (window.ISCOMMENT) {
+                        this.showEsc('coupon_scenario_3')
                     }
                 } else {
                   this.$message.error(res.result.message)
@@ -355,13 +353,7 @@ export default {
             }).then(res => {})
         },
         showEsc (type) {
-            var types = ['enterprise_channel_open', 'enterprise_user_open']
-
-            if (types.indexOf(this.userInfo.openType) > -1) {
-                return false
-            }
-            
-            if (!this.escData[type].length || !this.escData[type]) {
+            if (this.isEnterprise || !this.escData[type] || !this.escData[type].length) {
                 return false
             }
 
@@ -384,9 +376,7 @@ export default {
         hiddenPaket () {
             this.isShow.value = false
 
-            var types = ['enterprise_channel_open', 'enterprise_user_open']
-
-            if (types.indexOf(this.userInfo.openType) < 0) {
+            if (!this.isEnterprise) {
                 this.setLog('customerGeneralLog', '1', 'memberCancelGetCoupon', this.groupCode)
             }
         },
@@ -422,9 +412,6 @@ export default {
                     this.$message.error(res.result.message)
                 }
             })
-        },
-        submitSuccess () {
-            this.showEsc('coupon_scenario_3')
         }
     },
     components: {

@@ -15,7 +15,7 @@ const routers = [
       require(["./enterprise-registor.vue"], resolve)
     },
     meta: {
-      title: '员工注册'
+      title: '营销精英'
     }
   },
   {
@@ -37,7 +37,18 @@ const routers = [
       require(["./registor.vue"], resolve)
     },
     meta: {
-      title: '会员注册'
+      title: '营销精英'
+    }
+  },
+  {
+    // 地图搜索
+    path: '/search-map',
+    name: 'search-map',
+    component (resolve) {
+      require(["../../components/common/search-map.vue"], resolve)
+    },
+    meta: {
+      title: '地图搜索'
     }
   },
   {
@@ -53,7 +64,7 @@ const routers = [
         name: 'article-detail',
         component: resolve => require(["../../components/spreedArticle/itemDetail.vue"], resolve),
         meta: {
-          title: '文章详情'
+          title: '推广文章详情'
         }
       },
       {
@@ -66,64 +77,64 @@ const routers = [
       }
     ]
   },
-  {
-    // 产品分类
-    path: '/productCenter',
-    name: 'productCenter',
-    component (resolve) {
-      require(["../../components/productCenter/main.vue"], resolve)
-    },
-    children: [
-      {
-        path: 'productDetail',
-        name: 'product-detail',
-        component: resolve => require(["../../components/productCenter/articleDetail.vue"], resolve),
-        meta: {
-          title:false
-        }
-      },
-      {
-        path: 'productLog',
-        name: 'product-log',
-        component: resolve => require(["../../components/productCenter/articleLog.vue"], resolve),
-        meta: {
-          title:false
-        }
-      },
-      {
-        path: 'productComment',
-        name: 'product-comment',
-        component: resolve => require(["../../components/productCenter/itemComment.vue"], resolve),
-        meta: {
-          title:false
-        }
-      },
-      {
-        path: 'productSpec',
-        name: 'product-spec',
-        component: resolve => require(["../../components/productCenter/productSpec.vue"], resolve),
-        meta: {
-          title:false
-        }
-      },
-      {
-        path: 'productSenior',
-        name: 'product-senior',
-        component: resolve => require(["../../components/productCenter/productSenior.vue"], resolve),
-        meta: {
-          title:false
-        }
-      },
-      {
-        path: 'productimg',
-        name: 'product-img',
-        component: resolve => require(["../../components/productCenter/imgList.vue"], resolve),
-        meta: {
-          title:false
-        }
-      }
-    ]
-  },
+  // {
+  //   // 产品分类
+  //   path: '/productCenter',
+  //   name: 'productCenter',
+  //   component (resolve) {
+  //     require(["../../components/productCenter/main.vue"], resolve)
+  //   },
+  //   children: [
+  //     {
+  //       path: 'productDetail',
+  //       name: 'product-detail',
+  //       component: resolve => require(["../../components/productCenter/articleDetail.vue"], resolve),
+  //       meta: {
+  //         title:false
+  //       }
+  //     },
+  //     {
+  //       path: 'productLog',
+  //       name: 'product-log',
+  //       component: resolve => require(["../../components/productCenter/articleLog.vue"], resolve),
+  //       meta: {
+  //         title:false
+  //       }
+  //     },
+  //     {
+  //       path: 'productComment',
+  //       name: 'product-comment',
+  //       component: resolve => require(["../../components/productCenter/itemComment.vue"], resolve),
+  //       meta: {
+  //         title:false
+  //       }
+  //     },
+  //     {
+  //       path: 'productSpec',
+  //       name: 'product-spec',
+  //       component: resolve => require(["../../components/productCenter/productSpec.vue"], resolve),
+  //       meta: {
+  //         title:false
+  //       }
+  //     },
+  //     {
+  //       path: 'productSenior',
+  //       name: 'product-senior',
+  //       component: resolve => require(["../../components/productCenter/productSenior.vue"], resolve),
+  //       meta: {
+  //         title:false
+  //       }
+  //     },
+  //     {
+  //       path: 'productimg',
+  //       name: 'product-img',
+  //       component: resolve => require(["../../components/productCenter/imgList.vue"], resolve),
+  //       meta: {
+  //         title:false
+  //       }
+  //     }
+  //   ]
+  // },
   // 预约详情
   {
     // 在线预约

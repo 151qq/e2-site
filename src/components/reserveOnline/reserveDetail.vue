@@ -1,15 +1,6 @@
 <template>
     <section class="reserve-box">
         <div class="height-1"></div>
-        <div v-if="base.reserveAddr" class="mapBox">
-            <img :src="base.reserveAddr">
-        </div>
-        <div class="weui-cells no-margin">
-            <div class="weui-cell weui-cell_access show-message-box">
-                <div class="weui-cell__hd"><label class="weui-label">预约地点</label></div>
-                <div class="weui-cell__bd">{{base.reserveCity}}</div>
-            </div>
-        </div>
         <div class="weui-cells">
             <div class="weui-cell weui-cell_access show-message-box">
                 <div class="weui-cell__hd"><label class="weui-label">预约标题</label></div>
@@ -31,7 +22,7 @@
                 <div class="weui-cell__hd"><label class="weui-label">结束时间</label></div>
                 <div class="weui-cell__bd">{{base.reserveEndTime}}</div>
             </div>
-            <div class="weui-cell weui-cell_access show-message-box">
+            <div class="weui-cell weui-cell_access show-message-box" @click="goToMap">
                 <div class="weui-cell__hd"><label class="weui-label">预约地点</label></div>
                 <div class="weui-cell__bd">{{base.reserveCity}}</div>
             </div>
@@ -95,7 +86,8 @@ export default {
                 receptionBeginTime: '',
                 receptionEndTime: '',
                 receptionResult: '',
-                receptionMemo: ''
+                receptionMemo: '',
+                addrBaiduGps: ''
             },
             newReserveImgData: [],
             newReservePageData: [],
@@ -155,6 +147,17 @@ export default {
                     this.$message.error(res.result.message)
                 }
             })
+        },
+        goToMap () {
+            var pathUrl = {
+                name: 'search-map',
+                query: {
+                    enterpriseCode: this.$route.query.enterpriseCode,
+                    agentId: this.$route.query.agentId,
+                    point: this.base.addrBaiduGps
+                }
+            }
+            this.$router.push(pathUrl)
         }
     },
     components: {

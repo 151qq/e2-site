@@ -1,8 +1,8 @@
 <template>
     <section class="comment-box">
-        <div class="head-box">
+        <div class="head-box" @click="showSubmit('1')">
             <span class="left">评论</span>
-            <div class="right" @click="showSubmit('1')">
+            <div class="right" v-if="isComment">
                 <img src="../../assets/images/edit-icon.png">
             </div>
         </div>
@@ -35,12 +35,14 @@
                     <img-list :img-list="item.attachments"></img-list>
                 </div>
                 <div class="response-box">
-                    <div class="top-box">
+                    <div class="top-box"
+                            v-if="(userInfo.memberInfo.memberCode && item.memberInfo.memberCode != userInfo.memberInfo.memberCode)"
+                            @click="showSubmit('1', item)">
                         <span class="response"
                                 v-if="item.reportComment && item.reportComment.commentContent">
                             作者回复
                         </span>
-                        <div class="comment-btn" v-if="item.status == '1'">
+                        <div class="comment-btn" v-if="item.status == '1' && isComment">
                             <!-- <div class="btn-out-box" @click="countCommentGoodJob(item)">
                                 <img src="../../assets/images/zan-icon.png">
                                 <span class="text">{{item.commentGoodJob}}</span>
@@ -49,14 +51,20 @@
                                 <img src="../../assets/images/nozan-icon.png">
                                 <span class="text">{{item.commentBadJob}}</span>
                             </div> -->
-                            <div class="btn-out-box"
-                                 @click="showSubmit('1', item.commentFloor)"
-                                 v-if="(userInfo.memberInfo.memberCode && item.memberInfo.memberCode != userInfo.memberInfo.memberCode)">
+                            <div class="btn-out-box">
                                 <img src="../../assets/images/edit-icon.png">
                             </div>
-                            <div class="btn-out-box"
-                                 @click="deleteComment(item)"
-                                 v-if="(userInfo.memberInfo.memberCode && item.memberInfo.memberCode == userInfo.memberInfo.memberCode)">
+                        </div>
+                    </div>
+                    <div class="top-box"
+                            @click="deleteComment(item)"
+                            v-if="(userInfo.memberInfo.memberCode && item.memberInfo.memberCode == userInfo.memberInfo.memberCode)">
+                        <span class="response"
+                                v-if="item.reportComment && item.reportComment.commentContent">
+                            作者回复
+                        </span>
+                        <div class="comment-btn" v-if="item.status == '1'">
+                            <div class="btn-out-box">
                                 <img src="../../assets/images/delete-icon.png">
                             </div>
                         </div>
@@ -116,7 +124,7 @@ import {getDateDiff} from '../../assets/common/utils.js'
 import { mapGetters } from 'vuex'
 
 export default {
-    props: ['commentUrl'],
+    props: ['commentUrl', 'isComment'],
     data () {
         return {
             isPage: false,
@@ -135,7 +143,11 @@ export default {
         })
     },
     methods: {
-        showSubmit (type, floor) {
+        showSubmit (type, item) {
+            if ((item && item.status != '1') || !this.isComment) {
+                return false
+            }
+
             var pathUrl = {
                 name: this.commentUrl,
                 query: {
@@ -155,8 +167,8 @@ export default {
                 }
             }
 
-            if (floor) {
-                pathUrl.query.commentTitle = floor
+            if (item && item.commentFloor) {
+                pathUrl.query.commentTitle = item.commentFloor
             }
 
             this.$router.push(pathUrl)
@@ -226,6 +238,10 @@ export default {
             })
         },
         deleteComment (item) {
+            if (item.status != '1') {
+                return
+            }
+            
             util.request({
                 method: 'post',
                 interface: 'deleteComment',

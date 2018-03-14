@@ -7,21 +7,32 @@
                         name: 'groupDetail',
                         query: {
                             enterpriseCode: $route.query.enterpriseCode,
-                            couponGroupType: pathUrl
+                            couponGroupType: pathUrl,
+                            appid: userInfo.appId
                         }
                     }">
             <img :src="iconUrl">
             <span>{{showText}}</span>
         </router-link>
 
-        <a :href="giftUrl" v-if="giftUrl"></a>
+        <a class="paket-con" :href="giftUrl" v-if="giftUrl">
+            <img :src="iconUrl">
+            <span>{{showText}}</span>
+        </a>
     </section>
 </template>
 <script>
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
     props: ['isShow', 'iconUrl', 'pathUrl', 'giftUrl', 'showText', 'hiddenPaket'],
     data () {
         return {}
+    },
+    computed: {
+        ...mapGetters({
+            userInfo: 'getUserInfo'
+        })
     }
 }
 </script>
