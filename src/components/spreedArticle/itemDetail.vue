@@ -23,6 +23,13 @@
             </section>
         </div>
 
+        <section class="no-article-box" v-if="(!articleData || !articleData.pageTitle) && isPage">
+            您寻找的文章已经去了迷失之城了！<br>
+                我们也找不到了！<br><br>
+     
+                    非常抱歉
+        </section>
+
         <template v-if="articleList.length">
             <div class="wx-area-line"></div>
             <div class="weui-cells no-margin no-line">
@@ -33,7 +40,7 @@
                     </div>
                 </div>
             </div>
-            <div class="weui-cells no-line left-padding">
+            <div class="weui-cells no-margin left-padding">
                 <router-link class="weui-media-box weui-media-box_appmsg"
                         v-for="(item, index) in articleList"
                         :to="{
@@ -75,13 +82,6 @@
                 :gift-url="giftUrl"
                 :show-text="showText"
                 :hidden-paket="hiddenPaket"></paket>
-    
-        <section class="no-article-box" v-if="!articleData.pageTitle && isPage">
-            您寻找的文章已经去了迷失之城了！<br>
-                我们也找不到了！<br><br>
-     
-                    非常抱歉
-        </section>
     </section>    
 </template>
 <script>
@@ -432,7 +432,7 @@ export default {
     }
 
     .no-article-box {
-        padding: 150px 15px 0;
+        padding: 60px 15px;
         font-size: 14px;
         line-height: 1.6;
         text-align: center;

@@ -66,9 +66,9 @@ const tools = {
         }
 
         if (afterTime) {
-          theDate = new Date(beforeTime[0], beforeTime[1], beforeTime[2], afterTime[0], afterTime[1], afterTime[2])
+          theDate = new Date(beforeTime[0], beforeTime[1] - 1, beforeTime[2], afterTime[0], afterTime[1], afterTime[2])
         } else {
-          theDate = new Date(beforeTime[0], beforeTime[1], beforeTime[2])
+          theDate = new Date(beforeTime[0], beforeTime[1] - 1, beforeTime[2])
         }
       }
 
