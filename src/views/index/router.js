@@ -2,10 +2,7 @@ const routers = [
   {
     // 详情编辑
     path: '/',
-    name: 'home',
-    component (resolve) {
-      require(["./home.vue"], resolve)
-    }
+    name: 'home'
   },
   {
     // 详情编辑

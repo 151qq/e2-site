@@ -4,7 +4,7 @@ var utils = require('./utils')
 var config = require('../config')
 var vueLoaderConfig = require('./vue-loader.conf')
 var entries = getEntry('./src/views/**/*.html')
-
+var vuxLoader = require('vux-loader')
 
 
 //获取入口js文件
@@ -20,14 +20,11 @@ function getEntry(globPath) {
   return entries;
 }
 
-
-
-
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
 }
 console.log(entries)
-module.exports = {
+var webpackConfig = {
   // entry: {
   //   app: './src/main.js'
   // },
@@ -84,3 +81,7 @@ module.exports = {
     ]
   }
 }
+
+module.exports = vuxLoader.merge(webpackConfig, {
+  plugins: ['vux-ui']
+})

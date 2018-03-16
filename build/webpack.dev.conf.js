@@ -7,19 +7,18 @@ var HtmlWebpackPlugin = require('html-webpack-plugin')
 var FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 var glob = require('glob')
 var path = require('path')
-var vuxLoader = require('vux-loader')
 
 // add hot-reload related code to entry chunks
 Object.keys(baseWebpackConfig.entry).forEach(function (name) {
   baseWebpackConfig.entry[name] = ['./build/dev-client'].concat(baseWebpackConfig.entry[name])
 })
 
-var webpackConfig = merge(baseWebpackConfig, {
+module.exports = merge(baseWebpackConfig, {
   module: {
     rules: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap })
   },
   // cheap-module-eval-source-map is faster for development
-  devtool: '#source-map',
+  devtool: 'cheap-module-eval-source-map',
   plugins: [
     new webpack.DefinePlugin({
       'process.env': config.dev.env
@@ -28,17 +27,8 @@ var webpackConfig = merge(baseWebpackConfig, {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
     // https://github.com/ampedandwired/html-webpack-plugin
-    // new HtmlWebpackPlugin({
-    //   filename: 'index.html',
-    //   template: 'index.html',
-    //   inject: true
-    // }),
     new FriendlyErrorsPlugin()
   ]
-})
-
-module.exports = vuxLoader.merge(webpackConfig, {
-  plugins: ['vux-ui']
 })
 
 function getEntry(globPath) {
@@ -46,7 +36,6 @@ function getEntry(globPath) {
     basename;
 
   glob.sync(globPath).forEach(function(entry) {
-
     basename = path.basename(entry, path.extname(entry));
     entries[basename] = entry;
   });
