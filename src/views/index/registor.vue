@@ -214,7 +214,6 @@ export default {
                     this.$message.error(res.result.message)
                 }
             })
-            
         },
         saveUserInfo () {
             if (this.memberInfo.memberName == '') {
@@ -236,6 +235,22 @@ export default {
                 this.memberInfo.spreadCode = this.$route.query.T
             }
 
+            if (this.$route.query.userCode) {
+                this.memberInfo.enterpriseMemberSales = this.$route.query.userCode
+            }
+
+            if (this.$route.query.channelCode) {
+                this.memberInfo.enterpriseMemberChannel = this.$route.query.channelCode
+            }
+
+            if (this.$route.query.appid) {
+                this.memberInfo.appid = this.$route.query.appid
+            }
+
+            if (this.$route.query.reserveCode) {
+                this.memberInfo.reserveCode = this.$route.query.reserveCode
+            }
+
             tools.request({
               method: 'post',
               interface: 'saveMemberInfo',
@@ -243,7 +258,6 @@ export default {
             }).then(res => {
                 if (res.result.success == '1') {
                     this.setUserInfo(res.result.result)
-
                     var pathUrl = tools.formDataUrl(window.decodeURIComponent(this.$route.query.redirectUrl))
                     this.$router.replace(pathUrl)
                 } else {

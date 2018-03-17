@@ -32,7 +32,9 @@
                                 @click="showBigImg(index)">
                                     <img :src="item">
                             </li>
-                            <li @click="chooseImage" class="weui-uploader__input-box"></li>
+                            <li @click="chooseImage"
+                                v-if="commentData.attachments.length < 9"
+                                class="weui-uploader__input-box"></li>
                         </ul>
                     </div>
                 </div>
