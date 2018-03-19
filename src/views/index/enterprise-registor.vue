@@ -50,7 +50,7 @@
                 <div class="weui-cell__bd">
                     <div class="wx-uploader"
                         @click="chooseImage">
-                            <img v-if="mediaId" :src="mediaId">
+                            <img v-if="memberInfo.localId" :src="memberInfo.localId">
                     </div>
                 </div>
             </div>
@@ -58,7 +58,7 @@
 
         <div class="btn-height-box"></div>
         <div class="weui-btn-area">
-            <a class="weui-btn weui-btn_primary" @click="submitComment">确认</a>
+            <a class="weui-btn weui-btn_primary" @click="saveUserInfo">确认</a>
         </div>
     </section>
 </template>
@@ -81,14 +81,13 @@ export default {
                 userImage: '',
                 openId: '',
                 smsCode: '',
-                mediaId: ''
+                mediaId: '',
+                localId: ''
             },
             timer: null,
             seconds: 90,
             enterPassword: '',
-            isClick: false,
-            mediaId: '',
-            serverId: ''
+            isClick: false
         }
     },
     mounted () {
@@ -103,16 +102,9 @@ export default {
     },
     methods: {
         chooseImage () {
-            var num = 1
-            jsSdk.chooseImage(num ,(localIds) => {
-                this.mediaId = localIds[0]
-            })
-        },
-        submitComment () {
-            var imgList = this.mediaId ? [this.mediaId] : []
-            jsSdk.uploadImgs(imgList, (serverIdList) => {
-                this.memberInfo.mediaId = serverIdList[0]
-                this.saveUserInfo()
+            jsSdk.chooseImage((localId ,serverId) => {
+                this.memberInfo.localId = localId
+                this.memberInfo.mediaId = serverId
             })
         },
         corpWechatRedirectUrl () {
@@ -159,7 +151,8 @@ export default {
                         userImage: data.headimgurl,
                         openId: data.openid,
                         smsCode: '',
-                        mediaId: ''
+                        mediaId: '',
+                        localId: ''
                     }
                     jsSdk.init()
 

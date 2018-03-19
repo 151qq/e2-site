@@ -28,12 +28,12 @@
                     <div class="weui-uploader__bd">
                          <ul class="weui-uploader__files" id="uploaderFiles">
                             <li class="weui-uploader__file"
-                                v-for="(item, index) in commentData.attachments"
+                                v-for="(item, index) in commentData.localIds"
                                 @click="showBigImg(index)">
                                     <img :src="item">
                             </li>
                             <li @click="chooseImage"
-                                v-if="commentData.attachments.length < 9"
+                                v-if="commentData.localIds.length < 9"
                                 class="weui-uploader__input-box"></li>
                         </ul>
                     </div>
@@ -43,7 +43,7 @@
         
         <div class="btn-height-box"></div>
         <div class="weui-btn-area">
-            <a class="weui-btn weui-btn_primary" @click="submitComment">发布</a>
+            <a class="weui-btn weui-btn_primary" @click="submitFn">发布</a>
         </div>
         <delete-img :index="nowIndex"
                     :img-path="nowPath"
@@ -62,14 +62,14 @@ export default {
         return {
             commentData: {
                 commentContent: '',
-                attachments: []
+                attachments: [],
+                localIds: []
             },
             nowIndex: '',
             nowPath: '',
             isShowImg: {
                 value: false
-            },
-            serverIdList: []
+            }
         }
     },
     mounted () {
@@ -98,15 +98,9 @@ export default {
             }).then(res => {})
         },
         chooseImage () {
-            var num = 9 - this.commentData.attachments.length
-            jsSdk.chooseImage(num ,(localIds) => {
-                this.commentData.attachments = this.commentData.attachments.concat(localIds).splice(0, 9)
-            })
-        },
-        submitComment () {
-            jsSdk.uploadImgs(this.commentData.attachments, (serverIdList) => {
-                this.serverIdList = this.serverIdList.concat(serverIdList).splice(0, 9)
-                this.submitFn()
+            jsSdk.chooseImage((localId ,serverId) => {
+                this.commentData.localIds.push(localId)
+                this.commentData.attachments.push(serverId)
             })
         },
         submitFn () {
@@ -117,7 +111,6 @@ export default {
                 commentType: this.$route.query.commentType,
                 commentFloor: this.$route.query.commentFloor,
                 memberCode: this.userInfo.memberInfo.memberCode,
-                attachments: this.serverIdList,
                 commentContent: this.commentData.commentContent
             }
 
@@ -163,11 +156,12 @@ export default {
         },
         showBigImg (index) {
             this.nowIndex = index
-            this.nowPath = this.commentData.attachments[index]
+            this.nowPath = this.commentData.localIds[index]
             this.isShowImg.value = true
         },
         deleteImg (index) {
             this.commentData.attachments.splice(index, 1)
+            this.commentData.localIds.splice(index, 1)
         }
     },
     components: {
