@@ -59,10 +59,18 @@ const jsSdk = {
             link: con.link + '&sShareTo=Q&cShareTo=Q&tShareTo=Q',
             imgUrl: con.imgUrl,
             success () {
-                con.success && con.success('memberShareWechatZoneRate')
+                var data = {
+                    type: 'memberShareWechatZoneRate',
+                    mess: '客户分享文章到朋友圈'
+                }
+                con.success && con.success(data)
             },
             cancel () {
-                con.cancel && con.cancel('memberCancelSharePage')
+                var data = {
+                    type: 'memberCancelSharePageToGroup',
+                    mess: '客户取消分享朋友圈文章分享'
+                }
+                con.cancel && con.cancel(data)
             }
         })
 
@@ -75,10 +83,18 @@ const jsSdk = {
             type: con.type ? con.type : '',
             dataUrl: con.dataUrl ? con.dataUrl : '',
             success () {
-                con.success && con.success('memberShareWechatFriendRate')
+                var data = {
+                    type: 'memberShareWechatFriendRate',
+                    mess: '客户分享文章给好友'
+                }
+                con.success && con.success(data)
             },
             cancel () {
-                con.cancel && con.cancel('memberCancelSharePage')
+                var data = {
+                    type: 'memberCancelSharePageToFriend',
+                    mess: '客户取消分享分享给好友'
+                }
+                con.cancel && con.cancel(data)
             }
         })
 
@@ -89,10 +105,10 @@ const jsSdk = {
             link: con.link,
             imgUrl: con.imgUrl,
             success () {
-                con.success && con.success('memberShareWeiboRate')
+                con.success && con.success()
             },
             cancel () {
-                con.cancel && con.cancel('memberCancelSharePage')
+                con.cancel && con.cancel()
             }
         })
 
@@ -103,10 +119,10 @@ const jsSdk = {
             link: con.link,
             imgUrl: con.imgUrl,
             success () {
-                con.success && con.success('memberShareRate')
+                con.success && con.success()
             },
             cancel () {
-                con.cancel && con.cancel('memberCancelSharePage')
+                con.cancel && con.cancel()
             }
         })
     },

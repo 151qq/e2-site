@@ -27,6 +27,16 @@
                     <div class="weui-cell__hd"><label class="weui-label">预约地点</label></div>
                     <div class="weui-cell__bd">{{base.reserveCity}}</div>
                 </div>
+                <div class="weui-cell weui-cell_access">
+                    <div class="weui-cell__hd"><label class="weui-label">预约接待</label></div>
+                    <div class="weui-cell__bd">{{base.reserveReceptionName}}</div>
+                    <div class="weui-cell__ft"></div>
+                </div>
+                <div class="weui-cell weui-cell_access">
+                    <div class="weui-cell__hd"><label class="weui-label">接待手机</label></div>
+                    <div class="weui-cell__bd">{{base.reserveReceptionMobile}}</div>
+                    <div class="weui-cell__ft"></div>
+                </div>
             </div>
             
             <div class="wx-area-line"></div>
@@ -142,7 +152,9 @@ export default {
                 receptionEndTime: '',
                 receptionResult: '',
                 receptionMemo: '',
-                addrBaiduGps: ''
+                addrBaiduGps: '',
+                reserveReceptionName: '',
+                reserveReceptionMobile: ''
             },
             newReserveImgData: [],
             newReservePageData: [],

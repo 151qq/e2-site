@@ -75,6 +75,19 @@ export default {
     mounted () {
         util.getUser(() => {
             jsSdk.init()
+
+            var types = ['enterprise_channel_open', 'enterprise_user_open']
+
+            // 客户准备发表评论
+            if (types.indexOf(this.userInfo.openType) < 0) {
+                var logData = {
+                    interactionType: 'memberTryComment',
+                    interactionDesc: '客户准备发表评论',
+                    primeObject: this.$route.query.pageCode,
+                    subObject: this.$route.query.S
+                }
+                this.setLog(logData)
+            }
         }, 'snsapi_userinfo')
     },
     computed: {
@@ -83,17 +96,19 @@ export default {
         })
     },
     methods: {
-        setLog (interfaceName ,customerType, interactionType, code) {
+        setLog (data) {
             util.request({
                 method: 'post',
-                interface: interfaceName,
+                interface: 'customerGeneralLog',
                 data: {
                     enterpriseCode: this.$route.query.enterpriseCode,
                     customerCode: this.userInfo.customerCode,
-                    customerType: customerType,
-                    userCode: this.$route.query.S,
-                    interactionType: interactionType,
-                    interactionObjectCode: code
+                    customerType: this.userInfo.customerType,
+                    interactionType: data.interactionType,
+                    interactionDesc: data.interactionDesc,
+                    interactionPrimeObject: data.primeObject,
+                    interactionSubObject: data.subObject,
+                    interactionOtherObject: data.otherObject
                 }
             }).then(res => {})
         },
@@ -111,7 +126,8 @@ export default {
                 commentType: this.$route.query.commentType,
                 commentFloor: this.$route.query.commentFloor,
                 memberCode: this.userInfo.memberInfo.memberCode,
-                commentContent: this.commentData.commentContent
+                commentContent: this.commentData.commentContent,
+                spreadCode: this.$route.query.S
             }
 
             if (this.$route.query.commentTitle) {
@@ -141,12 +157,6 @@ export default {
                         }
                     }
                     window.ISCOMMENT = true
-
-                    var types = ['enterprise_channel_open', 'enterprise_user_open']
-
-                    if (types.indexOf(this.userInfo.openType) < 0) {
-                        this.setLog('customerGeneralLog', '1', 'memberCommentRate', res.result.result.commentCode)
-                    }
 
                     this.$router.replace(pathUrl)
                 } else {

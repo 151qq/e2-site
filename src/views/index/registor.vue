@@ -168,6 +168,15 @@ export default {
                             smsCode: ''
                         }
 
+                        // 记录日志
+                        var logData = {
+                            interactionType: 'memberOpenMobilePage',
+                            interactionDesc: '客户准备注册',
+                            customerCode: data.customerCode,
+                            customerType: data.customerType
+                        }
+                        this.setLog(logData)
+
                         this.isShowPage = true
                         this.memberInfo = memberInfo
                     } else {
@@ -180,6 +189,22 @@ export default {
                     this.$message.error(res.result.message)
                 }
             })
+        },
+        setLog (data) {
+            tools.request({
+                method: 'post',
+                interface: 'customerGeneralLog',
+                data: {
+                    enterpriseCode: this.$route.query.enterpriseCode,
+                    customerCode: data.customerCode,
+                    customerType: data.customerType,
+                    interactionType: data.interactionType,
+                    interactionDesc: data.interactionDesc,
+                    interactionPrimeObject: data.primeObject,
+                    interactionSubObject: data.subObject,
+                    interactionOtherObject: data.otherObject
+                }
+            }).then(res => {})
         },
         mobileChange () {
             if (this.memberInfo.memberMobile && (/^1[3|4|5|8][0-9]{9}$/).test(this.memberInfo.memberMobile.trim())) {

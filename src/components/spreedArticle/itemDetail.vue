@@ -259,8 +259,15 @@ export default {
                   this.areaList = res.result.result.pageAreas
                   this.isPage = true
 
+                  // 客户打开文章
                   if (this.userInfo.openType == 'customer_open_first') {
-                    this.setLog('customerSpreadLog', '0', 'memberReadingRate', this.$route.query.pageCode)
+                    var logData = {
+                        interactionType: 'memberReadingRate',
+                        interactionDesc: '客户阅读文章',
+                        primeObject: this.$route.query.pageCode,
+                        subObject: this.$route.query.S
+                    }
+                    this.setLog(logData)
                   }
 
                   var queryData = {
@@ -290,10 +297,17 @@ export default {
                     desc: this.articleData.pageAbstract,
                     link: link,
                     imgUrl: this.articleData.pageCover,
-                    success (type) {
-                        if (!this.isEnterprise && type) {
+                    success (data) {
+                        if (!this.isEnterprise && data) {
                             _self.showEsc('coupon_scenario_2')
-                            _self.setLog('customerGeneralLog', '1', type, _self.$route.query.pageCode)
+
+                            var logData = {
+                                interactionType: data.type,
+                                interactionDesc: data.mess,
+                                primeObject: _self.$route.query.pageCode,
+                                subObject: _self.$route.query.S
+                            }
+                            _self.setLog(logData)
                         }
 
                         _self.$message({
@@ -301,9 +315,15 @@ export default {
                             type: 'success'
                         })
                     },
-                    cancel (type) {
-                        if (!this.isEnterprise && type) {
-                            _self.setLog('customerGeneralLog', '1', type, _self.$route.query.pageCode)
+                    cancel (data) {
+                        if (!this.isEnterprise && data) {
+                            var logData = {
+                                interactionType: data.type,
+                                interactionDesc: data.mess,
+                                primeObject: _self.$route.query.pageCode,
+                                subObject: _self.$route.query.S
+                            }
+                            _self.setLog(logData)
                         }
                     }
                   }
@@ -338,17 +358,19 @@ export default {
                 }
             })
         },
-        setLog (interfaceName ,customerType, interactionType, code) {
+        setLog (data) {
             util.request({
                 method: 'post',
-                interface: interfaceName,
+                interface: 'customerGeneralLog',
                 data: {
                     enterpriseCode: this.$route.query.enterpriseCode,
                     customerCode: this.userInfo.customerCode,
-                    customerType: customerType,
-                    userCode: this.$route.query.S,
-                    interactionType: interactionType,
-                    interactionObjectCode: code
+                    customerType: this.userInfo.customerType,
+                    interactionType: data.interactionType,
+                    interactionDesc: data.interactionDesc,
+                    interactionPrimeObject: data.primeObject,
+                    interactionSubObject: data.subObject,
+                    interactionOtherObject: data.otherObject
                 }
             }).then(res => {})
         },
@@ -375,10 +397,6 @@ export default {
         },
         hiddenPaket () {
             this.isShow.value = false
-
-            if (!this.isEnterprise) {
-                this.setLog('customerGeneralLog', '1', 'memberCancelGetCoupon', this.groupCode)
-            }
         },
         getTemplate () {
             util.request({
