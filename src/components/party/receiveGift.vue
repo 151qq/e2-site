@@ -12,7 +12,7 @@
         </div>
         
         <div class="btn-height-box"></div>
-        <div class="weui-btn-area">
+        <div class="weui-btn-area" v-if="!isEnterprise">
             <a class="weui-btn weui-btn_primary"
                 :href="base.couponGroupStore">
                 领取
@@ -22,6 +22,7 @@
 </template>
 <script>
 import util from '../../utils/tools'
+import { mapGetters } from 'vuex'
 
 export default {
     data () {
@@ -32,6 +33,15 @@ export default {
                 couponGroupIntro: '',
                 couponGroupStore: ''
             }
+        }
+    },
+    computed: {
+        ...mapGetters({
+            userInfo: 'getUserInfo'
+        }),
+        isEnterprise () {
+            var types = ['enterprise_channel_open', 'enterprise_user_open']
+            return types.indexOf(this.userInfo.openType) > -1
         }
     },
     mounted () {

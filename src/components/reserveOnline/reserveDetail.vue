@@ -1,6 +1,6 @@
 <template>
     <section class="reserve-box">
-        <template v-if="isPage && isTel">
+        <template v-if="isPage && isTel && !isEnterprise">
             <div class="height-1"></div>
             <div class="weui-cells no-margin">
                 <div class="weui-cell weui-cell_access show-message-box">
@@ -114,7 +114,7 @@
                 </a>
             </div>
         </template>
-        <div class="null-page" v-if="isPage && !isTel">
+        <div class="null-page" v-if="isPage && (!isTel || isEnterprise)">
             抱歉，您不是预约人！
         </div>
 
@@ -180,7 +180,11 @@ export default {
     computed: {
         ...mapGetters({
             userInfo: 'getUserInfo'
-        })
+        }),
+        isEnterprise () {
+            var types = ['enterprise_channel_open', 'enterprise_user_open']
+            return types.indexOf(this.userInfo.openType) > -1
+        }
     },
     methods: {
         confirmReserve () {
@@ -231,7 +235,10 @@ export default {
                     this.reservedPageData = data.reservedPageData
 
                     this.isPage = true
-                    this.isTel = this.base.reserverMobile == this.userInfo.memberInfo.memberMobile
+
+                    if (this.userInfo.memberInfo) {
+                        this.isTel = this.base.reserverMobile == this.userInfo.memberInfo.memberMobile
+                    }
                 } else {
                     this.$message.error(res.result.message)
                 }

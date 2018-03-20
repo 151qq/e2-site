@@ -36,7 +36,7 @@
                 </div>
                 <div class="response-box">
                     <div class="top-box"
-                            v-if="(userInfo.memberInfo.memberCode && item.memberInfo.memberCode != userInfo.memberInfo.memberCode)"
+                            v-if="(userInfo.memberInfo && userInfo.memberInfo.memberCode && item.memberInfo.memberCode != userInfo.memberInfo.memberCode)"
                             @click="showSubmit('1', item)">
                         <span class="response"
                                 v-if="item.reportComment && item.reportComment.commentContent">
@@ -58,7 +58,7 @@
                     </div>
                     <div class="top-box"
                             @click="deleteComment(item)"
-                            v-if="(userInfo.memberInfo.memberCode && item.memberInfo.memberCode == userInfo.memberInfo.memberCode)">
+                            v-if="(userInfo.memberInfo && userInfo.memberInfo.memberCode && item.memberInfo.memberCode == userInfo.memberInfo.memberCode)">
                         <span class="response"
                                 v-if="item.reportComment && item.reportComment.commentContent">
                             作者回复
