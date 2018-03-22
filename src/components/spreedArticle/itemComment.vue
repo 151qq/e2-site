@@ -83,8 +83,7 @@ export default {
                 var logData = {
                     interactionType: 'memberTryComment',
                     interactionDesc: '客户准备发表评论',
-                    primeObject: this.$route.query.pageCode,
-                    subObject: this.$route.query.S
+                    primeObject: this.$route.query.pageCode
                 }
                 this.setLog(logData)
             }

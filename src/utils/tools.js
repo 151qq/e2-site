@@ -22,7 +22,7 @@ const tools = {
     }
 
     if (type == 'snsapi_userinfo') {
-      if (!userInfo.openId || !userInfo.customerType) {
+      if (!userInfo.openId || !userInfo.customerType || userInfo.customerType == '0') {
         var path = location.origin + '/registor' + location.search + '&scope=snsapi_userinfo&redirectUrl=' + window.encodeURIComponent(window.location.href)
         console.log(path, 'snsapi_userinfo')
         window.location.replace(path)
