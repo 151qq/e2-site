@@ -276,9 +276,9 @@ export default {
                     pageCode: this.$route.query.pageCode,
                     templateCode: this.$route.query.templateCode,
                     S: this.userInfo.s ? this.userInfo.s : this.$route.query.S,
-                    C: this.userInfo.spreadChannelCode ? this.userInfo.spreadChannelCode : this.$route.query.C,
+                    C: this.userInfo.c ? this.userInfo.c : this.$route.query.C,
                     spreadType: this.userInfo.spreadParentType ? this.userInfo.spreadParentType : this.$route.query.spreadType,
-                    T: this.userInfo.adchanneltrace ? this.userInfo.adchanneltrace : this.$route.query.T
+                    T: this.userInfo.t ? this.userInfo.t : this.$route.query.T
                   }
 
                   var queryList = []

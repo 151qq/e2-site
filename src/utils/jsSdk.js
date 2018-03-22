@@ -57,7 +57,7 @@ const jsSdk = {
         window.wx.onMenuShareTimeline({
             title: con.title,
             link: con.link + '&sShareTo=Q&cShareTo=Q&tShareTo=Q',
-            imgUrl: con.imgUrl,
+            imgUrl: con.imgUrl ? con.imgUrl : 'http://site.socialmarketingcloud.com/static/images/logo.png',
             success () {
                 var data = {
                     type: 'memberShareWechatZoneRate',
@@ -77,9 +77,9 @@ const jsSdk = {
         // 分享到朋友
         window.wx.onMenuShareAppMessage({
             title: con.title,
-            desc: con.desc,
+            desc: con.desc ? con.desc : '猜到了开头，却猜不到这结局！',
             link: con.link + '&sShareTo=F&cShareTo=F&tShareTo=F',
-            imgUrl: con.imgUrl,
+            imgUrl: con.imgUrl ? con.imgUrl : 'http://site.socialmarketingcloud.com/static/images/logo.png',
             type: con.type ? con.type : '',
             dataUrl: con.dataUrl ? con.dataUrl : '',
             success () {
@@ -101,9 +101,9 @@ const jsSdk = {
         // 分享到QQ
         window.wx.onMenuShareQQ({
             title: con.title,
-            desc: con.desc,
-            link: con.link,
-            imgUrl: con.imgUrl,
+            desc: con.desc ? con.desc : '猜到了开头，却猜不到这结局！',
+            link: con.link + '&sShareTo=N&cShareTo=N&tShareTo=N',
+            imgUrl: con.imgUrl ? con.imgUrl : 'http://site.socialmarketingcloud.com/static/images/logo.png',
             success () {
                 con.success && con.success()
             },
@@ -115,9 +115,9 @@ const jsSdk = {
         // 分享到腾讯微博
         window.wx.onMenuShareWeibo({
             title: con.title,
-            desc: con.desc,
-            link: con.link,
-            imgUrl: con.imgUrl,
+            desc: con.desc ? con.desc : '猜到了开头，却猜不到这结局！',
+            link: con.link + '&sShareTo=N&cShareTo=N&tShareTo=N',
+            imgUrl: con.imgUrl ? con.imgUrl : 'http://site.socialmarketingcloud.com/static/images/logo.png',
             success () {
                 con.success && con.success()
             },
