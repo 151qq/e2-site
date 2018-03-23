@@ -14,7 +14,7 @@ const tools = {
       if (!userInfo.openId) {
         var path = location.origin + '/registor' + location.search + '&scope=snsapi_base&redirectUrl=' + window.encodeURIComponent(window.location.href)
 
-        window.location.replace(path)
+        window.ROUTER.push(window.decodeURIComponent(path))
         return false
       } else {
         cb()
@@ -24,7 +24,7 @@ const tools = {
     if (type == 'snsapi_userinfo') {
       if (!userInfo.openId || !userInfo.customerType || userInfo.customerType == '0') {
         var path = location.origin + '/registor' + location.search + '&scope=snsapi_userinfo&redirectUrl=' + window.encodeURIComponent(window.location.href)
-        window.location.replace(path)
+        window.ROUTER.push(window.decodeURIComponent(path))
         return false
       }
       cb()

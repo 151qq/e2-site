@@ -2,7 +2,7 @@
     <section class="paket-big-box" v-if="isShow.value">
         <div class="paket-bg" @click.self="hiddenPaket"></div>
         <div class="paket-con">
-            <a class="close-btn" @click.self="hiddenPaket">
+            <a class="close-btn" @click="hiddenPaket">
                 <img src="/static/images/close-btn.png">
             </a>
             <span class="card-desc">{{showDesc}}</span>
@@ -19,7 +19,7 @@
                     }">
                 立即领取
             </router-link>
-            <a :href="giftUrl" class="btn-paket">立即领取</a>
+            <a v-if="giftUrl" :href="giftUrl" class="btn-paket">立即领取</a>
         </div>
     </section>
 </template>
@@ -69,6 +69,7 @@ export default {
             top: 0;
             width: 60px;
             height: 60px;
+            z-index: 99;
 
             img {
                 display: block;
