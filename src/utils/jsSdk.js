@@ -3,7 +3,7 @@ import tools from './tools'
 import store from '../vuex/store'
 
 const jsSdk = {
-    init () {
+    init (cb) {
         const parsed = queryString.parse(location.search)
         const nonceStr = 'Wm3WZYTPz0wzccnW'
         const timestamp = String(Math.floor(new Date().getTime() / 1000))
@@ -27,7 +27,6 @@ const jsSdk = {
             }
         }).then(res => {
             if (res.result.success == '1') {
-
                 window.wx.config({
                     debug: false,
                     appId: appid,
@@ -47,6 +46,11 @@ const jsSdk = {
                         'showMenuItems'
                     ]
                 })
+                if (cb) {
+                    window.wx.ready(() => {
+                        cb()
+                    })
+                }
             } else {
               alert(res.result.message)
             }

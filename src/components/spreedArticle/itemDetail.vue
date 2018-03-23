@@ -52,12 +52,12 @@
                                     appid: item.pubWechatAppId,
                                     templateCode: item.templateCode,
                                     S: $route.query.S,
-                                    sShareTo: 'F',
-                                    C: 'N',
-                                    cShareTo: 'N',
-                                    T: $route.query.S,
-                                    tShareTo: 'N',
-                                    spreadType: '1'
+                                    sShareTo: $route.query.sShareTo,
+                                    C: $route.query.C,
+                                    cShareTo: $route.query.cShareTo,
+                                    T: $route.query.T,
+                                    tShareTo: $route.query.tShareTo,
+                                    spreadType: $route.query.spreadType
                                 }
                             }">
                     <div class="weui-media-box__hd">
@@ -78,7 +78,7 @@
 
         <paket :is-show="isShow"
                 :path-url="pathUrl"
-                :icon-url="iconUrl"
+                :show-desc="showDesc"
                 :gift-url="giftUrl"
                 :show-text="showText"
                 :hidden-paket="hiddenPaket"></paket>
@@ -110,7 +110,7 @@ export default {
                 value: false
             },
             pathUrl: '',
-            iconUrl: '',
+            showDesc: '',
             giftUrl: '',
             showText: '',
             groupCode: '',
@@ -119,12 +119,13 @@ export default {
     },
     mounted () {
         util.getUser(() => {
-            jsSdk.init()
-            this.getData()
-            this.getTemplate()
-            this.getArticles()
-            this.selectEscs()
-            this.isComments = true
+            jsSdk.init(() => {
+                this.getData()
+                this.getTemplate()
+                this.getArticles()
+                this.selectEscs()
+                this.isComments = true
+            })
         }, 'snsapi_base')
     },
     computed: {
@@ -272,13 +273,14 @@ export default {
 
                   var queryData = {
                     enterpriseCode: this.$route.query.enterpriseCode,
+                    agentId: this.$route.query.agentId,
                     appid: this.$route.query.appid,
                     pageCode: this.$route.query.pageCode,
                     templateCode: this.$route.query.templateCode,
                     S: this.userInfo.s ? this.userInfo.s : this.$route.query.S,
                     C: this.userInfo.c ? this.userInfo.c : this.$route.query.C,
-                    spreadType: this.userInfo.spreadParentType ? this.userInfo.spreadParentType : this.$route.query.spreadType,
-                    T: this.userInfo.t ? this.userInfo.t : this.$route.query.T
+                    spreadType: this.userInfo.spreadParentType ? this.userInfo.spreadParentType : 'N',
+                    T: this.userInfo.t ? this.userInfo.t : 'N'
                   }
 
                   var queryList = []
@@ -293,12 +295,12 @@ export default {
                   var _self = this
 
                   var shareData = {
-                    title: this.articleData.pageTitle,
-                    desc: this.articleData.pageAbstract,
+                    title: _self.articleData.pageTitle,
+                    desc: _self.articleData.pageAbstract,
                     link: link,
-                    imgUrl: this.articleData.pageCover,
+                    imgUrl: _self.articleData.pageCover,
                     success (data) {
-                        if (!this.isEnterprise && data) {
+                        if (!_self.isEnterprise && data) {
                             _self.showEsc('coupon_scenario_2')
 
                             var logData = {
@@ -316,7 +318,7 @@ export default {
                         })
                     },
                     cancel (data) {
-                        if (!this.isEnterprise && data) {
+                        if (!_self.isEnterprise && data) {
                             var logData = {
                                 interactionType: data.type,
                                 interactionDesc: data.mess,
@@ -381,7 +383,7 @@ export default {
 
             if (this.escData[type]) {
                 this.pathUrl = this.escData[type][0].couponGroutScenario
-                this.iconUrl = this.escData[type][0].couponGroupCover
+                this.showDesc = this.escData[type][0].couponGroupIntro
                 this.showText = this.escData[type][0].couponGroupName
                 this.groupCode = this.escData[type][0].couponGroupCode
 

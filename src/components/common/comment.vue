@@ -246,6 +246,7 @@ export default {
                 method: 'post',
                 interface: 'deleteComment',
                 data: {
+                    enterpriseCode: this.$route.query.enterpriseCode,
                     commentCode: item.commentCode
                 }
             }).then(res => {

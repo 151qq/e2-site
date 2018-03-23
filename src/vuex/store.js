@@ -11,6 +11,9 @@ const userStore = new Vuex.Store({
   getters: {
     getUserInfo (state) {
       return state.userInfo
+    },
+    getUrl (state) {
+      return state.iosUrl
     }
   },
   mutations: {

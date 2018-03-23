@@ -23,7 +23,7 @@ const routers = [
       require(["./registorMessage.vue"], resolve)
     },
     meta: {
-      title: '注册成功'
+      title: '营销精英'
     }
   },
   {
@@ -45,7 +45,7 @@ const routers = [
       require(["../../components/common/search-map.vue"], resolve)
     },
     meta: {
-      title: '地图搜索'
+      title: '营销精英'
     }
   },
   {
@@ -61,7 +61,7 @@ const routers = [
         name: 'article-detail',
         component: resolve => require(["../../components/spreedArticle/itemDetail.vue"], resolve),
         meta: {
-          title: '推广文章详情'
+          title: '营销精英'
         }
       },
       {
@@ -69,7 +69,7 @@ const routers = [
         name: 'article-comment',
         component: resolve => require(["../../components/spreedArticle/itemComment.vue"], resolve),
         meta: {
-          title: '发表评论'
+          title: '营销精英'
         }
       }
     ]
@@ -146,7 +146,7 @@ const routers = [
         name: 'reserve-detail',
         component: resolve => require(["../../components/reserveOnline/reserveDetail.vue"], resolve),
         meta: {
-          title: '预约确认'
+          title: '营销精英'
         }
       }
     ]
@@ -159,7 +159,7 @@ const routers = [
       require(["../../components/wxPromotion/editChannel.vue"], resolve)
     },
     meta: {
-      title: '推广人员注册'
+      title: '营销精英'
     }
   },
   {
@@ -170,7 +170,7 @@ const routers = [
       require(["../../components/party/receiveGift.vue"], resolve)
     },
     meta: {
-      title: '领取礼品'
+      title: '营销精英'
     }
   },
   {
@@ -181,7 +181,7 @@ const routers = [
       require(["../../components/group/groupDetail.vue"], resolve)
     },
     meta: {
-      title: '套券信息'
+      title: '营销精英'
     }
   }
 ]

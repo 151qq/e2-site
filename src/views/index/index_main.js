@@ -27,6 +27,8 @@ const router = new VueRouter({
   }
 })
 
+window.ROUTER = router
+
 router.beforeEach((to, from, next) => {
     if (to.meta.title) {
       document.title = to.meta.title
@@ -34,6 +36,12 @@ router.beforeEach((to, from, next) => {
     // 处理jssdk签名,兼容history模式
     if (!store.state.iosUrl) {
       store.commit('setUrl', document.URL)
+    }
+
+    var userInfo = sessionStorage.getItem('userInfo')
+
+    if (userInfo) {
+      store.commit('setUserInfo', JSON.parse(userInfo))
     }
     
     next()

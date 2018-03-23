@@ -75,7 +75,7 @@ export default {
     mounted () {
         util.getUser(() => {
             jsSdk.init()
-
+            
             var types = ['enterprise_channel_open', 'enterprise_user_open']
 
             // 客户准备发表评论

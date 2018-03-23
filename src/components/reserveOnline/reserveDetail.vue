@@ -70,11 +70,11 @@
                                         pageCode: item.pageCode,
                                         appid: item.pubWechatAppId,
                                         templateCode: item.templateCode,
-                                        S: userInfo.userCode,
+                                        S: base.reserveCreator,
                                         sShareTo: 'F',
                                         C: 'N',
                                         cShareTo: 'N',
-                                        T: userInfo.userCode,
+                                        T: 'N',
                                         tShareTo: 'N',
                                         spreadType: '1'
                                     }
@@ -120,7 +120,7 @@
 
         <paket :is-show="isShow"
                 :path-url="pathUrl"
-                :icon-url="iconUrl"
+                :show-desc="showDesc"
                 :gift-url="giftUrl"
                 :show-text="showText"
                 :hidden-paket="hiddenPaket"></paket>
@@ -128,7 +128,6 @@
 </template>
 <script>
 import imgList from '../common/imgList.vue'
-import jsSdk from '../../utils/jsSdk'
 import util from '../../utils/tools'
 import paket from '../common/paket'
 import { mapGetters } from 'vuex'
@@ -139,6 +138,7 @@ export default {
             isPage: false,
             isTel: false,
             base: {
+                reserveCreator: '',
                 reserveTitle: '',
                 reserverName: '',
                 reserverMobile: '',
@@ -164,7 +164,7 @@ export default {
                 value: false
             },
             pathUrl: '',
-            iconUrl: '',
+            showDesc: '',
             giftUrl: '',
             showText: '',
             groupCode: '',
@@ -277,7 +277,7 @@ export default {
 
             if (this.escData[type]) {
                 this.pathUrl = this.escData[type][0].couponGroutScenario
-                this.iconUrl = this.escData[type][0].couponGroupCover
+                this.showDesc = this.escData[type][0].couponGroupIntro
                 this.showText = this.escData[type][0].couponGroupName
                 this.groupCode = this.escData[type][0].couponGroupCode
                 this.giftUrl = this.escData[type][0].couponGroupStore

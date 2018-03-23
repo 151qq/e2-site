@@ -42,7 +42,7 @@
             <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label">验证码</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" v-model="memberInfo.smsCode" placeholder="请输入">
+                    <input class="weui-input" type="tel" v-model="memberInfo.smsCode" placeholder="请输入">
                 </div>
             </div>
         </section>
@@ -53,7 +53,6 @@
 </template>
 <script>
 import tools from '../../utils/tools'
-import { mapGetters, mapActions } from 'vuex'
 
 export default {
     data () {
@@ -92,15 +91,7 @@ export default {
             }
         }
     },
-    computed: {
-        ...mapGetters({
-            userInfo: 'getUserInfo'
-        })
-    },
     methods: {
-        ...mapActions([
-          'setUserInfo'
-        ]),
         corpWechatRedirectUrl (scope) {
             var appid = this.$route.query.appid
             var redirectUri = window.encodeURIComponent(window.location.href)
@@ -130,10 +121,8 @@ export default {
                 data: formData
             }).then(res => {
                 if (res.result.success == '1') {
-                    this.setUserInfo(res.result.result)
-
-                    var pathUrl = tools.formDataUrl(window.decodeURIComponent(this.$route.query.redirectUrl))
-                    this.$router.replace(pathUrl)
+                    window.sessionStorage.setItem('userInfo', JSON.stringify(res.result.result))
+                    window.location.replace(window.decodeURIComponent(this.$route.query.redirectUrl))
                 } else {
                     this.$message.error(res.result.message)
                 }
@@ -180,11 +169,9 @@ export default {
                         this.isShowPage = true
                         this.memberInfo = memberInfo
                     } else {
-                        this.setUserInfo(res.result.result)
-
-                        var pathUrl = tools.formDataUrl(window.decodeURIComponent(this.$route.query.redirectUrl))
-                        this.$router.replace(pathUrl)
-                    }
+                        window.sessionStorage.setItem('userInfo', JSON.stringify(res.result.result))
+                        window.location.replace(window.decodeURIComponent(this.$route.query.redirectUrl))
+                        }
                 } else {
                     this.$message.error(res.result.message)
                 }
@@ -218,6 +205,8 @@ export default {
                 return
             }
 
+            this.seconds = 90
+
             tools.request({
                 method: 'post',
                 interface: 'sentSms',
@@ -230,7 +219,6 @@ export default {
                     this.timer = setInterval(() => {
                         this.seconds--
                         if (this.seconds === 0) {
-                            this.seconds = 90
                             clearInterval(this.timer)
                             this.timer = null
                         }
@@ -282,9 +270,9 @@ export default {
               data: this.memberInfo
             }).then(res => {
                 if (res.result.success == '1') {
-                    this.setUserInfo(res.result.result)
-                    var pathUrl = tools.formDataUrl(window.decodeURIComponent(this.$route.query.redirectUrl))
-                    this.$router.replace(pathUrl)
+
+                    window.sessionStorage.setItem('userInfo', JSON.stringify(res.result.result))
+                    window.location.replace(window.decodeURIComponent(this.$route.query.redirectUrl))
                 } else {
                     this.$message.error(res.result.message)
                 }

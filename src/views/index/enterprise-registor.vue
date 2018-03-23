@@ -42,7 +42,7 @@
             <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label">验证码</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" v-model="memberInfo.smsCode" placeholder="请输入">
+                    <input class="weui-input" type="tel" v-model="memberInfo.smsCode" placeholder="请输入">
                 </div>
             </div>
             <div class="weui-cell">
@@ -174,6 +174,8 @@ export default {
             if (!this.isClick) {
                 return
             }
+
+            this.seconds = 90
 
             tools.request({
                 method: 'post',
