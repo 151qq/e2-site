@@ -4,15 +4,14 @@
         <div class="wx-area-title">
             {{base.couponGroupName}}
         </div>
-        <div class="wx-area-img">
+        <div class="wx-area-img padding-15">
             <img :src="base.couponGroupCover">
         </div>
         <div class="wx-area-text">
             {{base.couponGroupIntro}}
         </div>
         
-        <div class="btn-height-box"></div>
-        <div class="weui-btn-area" v-if="!isEnterprise">
+        <div class="weui-btn-area-next" v-if="!isEnterprise">
             <a class="weui-btn weui-btn_primary"
                 :href="base.couponGroupStore">
                 领取
@@ -47,7 +46,7 @@ export default {
     mounted () {
         util.getUser(() => {
             this.selectEscs()
-        }, 'snsapi_userinfo')
+        }, 'snsapi_userinfo', this.$route.query.nextPage)
     },
     methods: {
         formDataDate (str) {

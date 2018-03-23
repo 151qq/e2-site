@@ -172,18 +172,18 @@ const routers = [
     meta: {
       title: '营销精英'
     }
-  },
-  {
-    // 地推活动
-    path: '/groupDetail',
-    name: 'groupDetail',
-    component (resolve) {
-      require(["../../components/group/groupDetail.vue"], resolve)
-    },
-    meta: {
-      title: '营销精英'
-    }
   }
+  // {
+  //   // 地推活动
+  //   path: '/groupDetail',
+  //   name: 'groupDetail',
+  //   component (resolve) {
+  //     require(["../../components/group/groupDetail.vue"], resolve)
+  //   },
+  //   meta: {
+  //     title: '营销精英'
+  //   }
+  // }
 ]
 
 export default routers

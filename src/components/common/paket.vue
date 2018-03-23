@@ -7,27 +7,16 @@
             </a>
             <span class="card-desc">{{showDesc}}</span>
             <span class="card-title">{{showText}}</span>
-            <router-link class="btn-paket"
-                        v-if="!giftUrl"
-                        :to="{
-                        name: 'groupDetail',
-                        query: {
-                            enterpriseCode: $route.query.enterpriseCode,
-                            couponGroupType: pathUrl,
-                            appid: userInfo.appId
-                        }
-                    }">
-                立即领取
-            </router-link>
-            <a v-if="giftUrl" :href="giftUrl" class="btn-paket">立即领取</a>
+            <a @click="setLog" class="btn-paket">立即领取</a>
         </div>
     </section>
-</template>
+</template>memberTryGetCoupon
 <script>
+import util from '../../utils/tools'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
-    props: ['isShow', 'showDesc', 'pathUrl', 'giftUrl', 'showText', 'hiddenPaket'],
+    props: ['isShow', 'showDesc', 'pathUrl', 'giftUrl', 'showText', 'hiddenPaket', 'groupCode'],
     data () {
         return {}
     },
@@ -35,6 +24,31 @@ export default {
         ...mapGetters({
             userInfo: 'getUserInfo'
         })
+    },
+    methods: {
+        gotoCoupon () {
+            if (this.userInfo.customerType == '1') {
+                window.location.href = this.giftUrl
+            } else {
+                util.getUser(() => {}, 'snsapi_userinfo', window.encodeURIComponent(this.giftUrl))
+            }
+        },
+        setLog () {
+            util.request({
+                method: 'post',
+                interface: 'customerGeneralLog',
+                data: {
+                    enterpriseCode: this.$route.query.enterpriseCode,
+                    customerCode: this.userInfo.customerCode,
+                    customerType: this.userInfo.customerType,
+                    interactionType: 'memberTryGetCoupon',
+                    interactionDesc: '客户准备领券',
+                    interactionPrimeObject: this.groupCode
+                }
+            }).then(res => {
+                this.gotoCoupon()
+            })
+        }
     }
 }
 </script>

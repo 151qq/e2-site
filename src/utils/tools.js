@@ -5,16 +5,18 @@ import store from '../vuex/store'
 import queryString from 'query-string'
 
 const tools = {
-  getUser (cb, type) {
+  getUser (cb, type, nextPage) {
     var location = window.location
     var parsed = queryString.parse(location.search)
     var userInfo = store.state.userInfo
 
+    var nextPage = nextPage ? nextPage : window.encodeURIComponent(window.location.href)
+
     if (type == 'snsapi_base') {
       if (!userInfo.openId) {
-        var path = location.origin + '/registor' + location.search + '&scope=snsapi_base&redirectUrl=' + window.encodeURIComponent(window.location.href)
+        var path = location.origin + '/registor' + location.search + '&scope=snsapi_base&redirectUrl=' + nextPage
 
-        window.ROUTER.push(window.decodeURIComponent(path))
+        window.ROUTER.push(this.formDataUrl(path))
         return false
       } else {
         cb()
@@ -23,8 +25,8 @@ const tools = {
 
     if (type == 'snsapi_userinfo') {
       if (!userInfo.openId || !userInfo.customerType || userInfo.customerType == '0') {
-        var path = location.origin + '/registor' + location.search + '&scope=snsapi_userinfo&redirectUrl=' + window.encodeURIComponent(window.location.href)
-        window.ROUTER.push(window.decodeURIComponent(path))
+        var path = location.origin + '/registor' + location.search + '&scope=snsapi_userinfo&redirectUrl=' + nextPage
+        window.ROUTER.push(this.formDataUrl(path))
         return false
       }
       cb()

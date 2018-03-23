@@ -81,6 +81,7 @@
                 :show-desc="showDesc"
                 :gift-url="giftUrl"
                 :show-text="showText"
+                :group-code="groupCode"
                 :hidden-paket="hiddenPaket"></paket>
     </section>    
 </template>
@@ -386,12 +387,7 @@ export default {
                 this.showDesc = this.escData[type][0].couponGroupIntro
                 this.showText = this.escData[type][0].couponGroupName
                 this.groupCode = this.escData[type][0].couponGroupCode
-
-                if (this.userInfo.customerType != '0') {
-                    this.giftUrl = this.escData[type][0].couponGroupStore
-                } else {
-                    this.giftUrl = ''
-                }
+                this.giftUrl = this.escData[type][0].couponGroupStore
 
                 window.ISCOMMENT = false
                 this.isShow.value = true

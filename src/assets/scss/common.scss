@@ -88,6 +88,10 @@ body {
   }
 }
 
+.padding-15 {
+  padding: 0 15px;
+}
+
 .wx-area-con {
   border: none;
   width: 100%;
@@ -393,6 +397,15 @@ body {
     bottom: 0;
     left: 0;
     margin: 0;
+    box-sizing: border-box;
+    padding: 9px 15px 5px;
+    background: #ffffff;
+    z-index: 100;
+}
+
+.weui-btn-area-next {
+    width: 100%;
+    margin-top: 30px;
     box-sizing: border-box;
     padding: 9px 15px 5px;
     background: #ffffff;

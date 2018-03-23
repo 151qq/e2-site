@@ -122,7 +122,7 @@ export default {
             }).then(res => {
                 if (res.result.success == '1') {
                     window.sessionStorage.setItem('userInfo', JSON.stringify(res.result.result))
-                    window.location.replace(window.decodeURIComponent(this.$route.query.redirectUrl))
+                    window.location.replace(this.$route.query.redirectUrl)
                 } else {
                     this.$message.error(res.result.message)
                 }
@@ -170,8 +170,8 @@ export default {
                         this.memberInfo = memberInfo
                     } else {
                         window.sessionStorage.setItem('userInfo', JSON.stringify(res.result.result))
-                        window.location.replace(window.decodeURIComponent(this.$route.query.redirectUrl))
-                        }
+                        window.location.replace(this.$route.query.redirectUrl)
+                    }
                 } else {
                     this.$message.error(res.result.message)
                 }
@@ -250,10 +250,14 @@ export default {
 
             if (this.$route.query.userCode) {
                 this.memberInfo.enterpriseMemberSales = this.$route.query.userCode
+            } else if (this.$route.query.S) {
+                this.memberInfo.enterpriseMemberSales = this.$route.query.S
             }
 
             if (this.$route.query.channelCode) {
                 this.memberInfo.enterpriseMemberChannel = this.$route.query.channelCode
+            } else if (this.$route.query.C) {
+                this.memberInfo.enterpriseMemberChannel = this.$route.query.C
             }
 
             if (this.$route.query.appid) {
@@ -270,9 +274,8 @@ export default {
               data: this.memberInfo
             }).then(res => {
                 if (res.result.success == '1') {
-
                     window.sessionStorage.setItem('userInfo', JSON.stringify(res.result.result))
-                    window.location.replace(window.decodeURIComponent(this.$route.query.redirectUrl))
+                    window.location.replace(this.$route.query.redirectUrl)
                 } else {
                     this.$message.error(res.result.message)
                 }

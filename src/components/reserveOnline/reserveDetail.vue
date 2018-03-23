@@ -123,6 +123,7 @@
                 :show-desc="showDesc"
                 :gift-url="giftUrl"
                 :show-text="showText"
+                :group-code="groupCode"
                 :hidden-paket="hiddenPaket"></paket>
     </section>
 </template>
