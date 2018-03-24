@@ -4,18 +4,15 @@
         <div class="wx-area-title">
             {{base.couponGroupName}}
         </div>
-        <div class="wx-area-img padding-15">
+        <div class="wx-area-img padding-15 margin-top-10">
             <img :src="base.couponGroupCover">
         </div>
-        <div class="wx-area-text">
+        <div class="wx-area-text-desc align-center">
             {{base.couponGroupIntro}}
         </div>
         
         <div class="weui-btn-area-next" v-if="!isEnterprise">
-            <a class="weui-btn weui-btn_primary"
-                :href="base.couponGroupStore">
-                领取
-            </a>
+            <a class="weui-btn weui-btn_primary" @click="setLog">领取</a>
         </div>
     </section>
 </template>
@@ -46,7 +43,7 @@ export default {
     mounted () {
         util.getUser(() => {
             this.getPartyCouponGroup()
-        }, 'snsapi_userinfo')
+        }, 'snsapi_base')
     },
     methods: {
         formDataDate (str) {
@@ -75,6 +72,31 @@ export default {
                 }
 
                 this.base = res.result.result[0]
+            })
+        },
+        gotoCoupon () {
+            if (this.base.couponGroupStore) {
+                util.getUser(() => {
+                    window.location.href = this.base.couponGroupStore
+                }, 'snsapi_userinfo', window.encodeURIComponent(this.base.couponGroupStore))
+            } else {
+                this.$message.error('该券已被领空！')
+            }
+        },
+        setLog () {
+            util.request({
+                method: 'post',
+                interface: 'customerGeneralLog',
+                data: {
+                    enterpriseCode: this.$route.query.enterpriseCode,
+                    customerCode: this.userInfo.customerCode,
+                    customerType: this.userInfo.customerType,
+                    interactionType: 'memberOffllineSign',
+                    interactionDesc: '客户准备领券',
+                    interactionPrimeObject: this.base.couponGroupCode
+                }
+            }).then(res => {
+                this.gotoCoupon()
             })
         }
     }

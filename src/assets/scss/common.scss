@@ -92,6 +92,14 @@ body {
   padding: 0 15px;
 }
 
+.margin-top-10 {
+  margin-top: 20px;
+}
+
+.align-center {
+  text-align: center;
+}
+
 .wx-area-con {
   border: none;
   width: 100%;
@@ -414,6 +422,13 @@ body {
 
 .wx-area-text {
     font-size: 14px;
+    line-height: 1.8;
+    background: #ffffff;
+    padding: 15px;
+}
+
+.wx-area-text-desc {
+    font-size: 18px;
     line-height: 1.8;
     background: #ffffff;
     padding: 15px;

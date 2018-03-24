@@ -53,6 +53,7 @@
 </template>
 <script>
 import tools from '../../utils/tools'
+import { mapGetters } from 'vuex'
 
 export default {
     data () {
@@ -75,6 +76,11 @@ export default {
             enterPassword: '',
             isClick: false
         }
+    },
+    computed: {
+        ...mapGetters({
+            userInfo: 'getUserInfo'
+        })
     },
     mounted () {
         this.coverImg = '/static/images/B' + Math.ceil(Math.random() * 13) + '.jpg'
@@ -134,6 +140,12 @@ export default {
                 enterpriseCode: this.$route.query.enterpriseCode,
                 scope: this.$route.query.scope,
                 appId: this.$route.query.appid
+            }
+
+            if (this.$route.query.T && this.$route.query.T != 'N') {
+                this.formData.T = this.$route.query.T
+            } else if (this.$route.query.T && this.userInfo.t) {
+                this.formData.T = this.userInfo.t
             }
 
             tools.request({
@@ -244,8 +256,10 @@ export default {
                 return
             }
 
-            if (this.$route.query.T) {
+            if (this.$route.query.T && this.$route.query.T != 'N') {
                 this.memberInfo.spreadCode = this.$route.query.T
+            } else if (this.$route.query.T && this.userInfo.t) {
+                this.memberInfo.spreadCode = this.userInfo.t
             }
 
             if (this.$route.query.userCode) {

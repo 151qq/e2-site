@@ -280,8 +280,8 @@ export default {
                     templateCode: this.$route.query.templateCode,
                     S: this.userInfo.s ? this.userInfo.s : this.$route.query.S,
                     C: this.userInfo.c ? this.userInfo.c : this.$route.query.C,
-                    spreadType: this.userInfo.spreadParentType ? this.userInfo.spreadParentType : 'N',
-                    T: this.userInfo.t ? this.userInfo.t : 'N'
+                    spreadType: this.userInfo.spreadParentType ? this.userInfo.spreadParentType : this.$route.query.spreadType,
+                    T: this.userInfo.t ? this.userInfo.t : this.$route.query.T
                   }
 
                   var queryList = []

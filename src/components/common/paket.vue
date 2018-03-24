@@ -30,7 +30,9 @@ export default {
             if (this.userInfo.customerType == '1') {
                 window.location.href = this.giftUrl
             } else {
-                util.getUser(() => {}, 'snsapi_userinfo', window.encodeURIComponent(this.giftUrl))
+                util.getUser(() => {
+                    window.location.href = this.giftUrl
+                }, 'snsapi_userinfo', window.encodeURIComponent(this.giftUrl))
             }
         },
         setLog () {
