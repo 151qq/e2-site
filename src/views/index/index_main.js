@@ -38,6 +38,8 @@ router.beforeEach((to, from, next) => {
       store.commit('setUrl', document.URL)
     }
 
+    window.FROMPAGE = from
+
     var userInfo = sessionStorage.getItem('userInfo')
 
     if (userInfo) {

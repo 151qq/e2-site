@@ -1,54 +1,56 @@
 <template>
     <section class="submit-box">
-        <div class="height-1"></div>
-        <div class="weui-cells no-margin no-line">
-            <div class="weui-cell weui-cell_access no-center">
-                <div class="weui-cell__hd"><label class="weui-label">评论内容</label></div>
-                <div class="weui-cell__bd">
-                   <textarea class="weui-textarea"
-                        placeholder="请输入文字"
-                        :rows="commentData.commentContent ? 3 : 1"
-                        v-model="commentData.commentContent"></textarea>
-                </div>
-            </div>       
-        </div>
-
-        <div class="wx-area-line"></div>
-        <div class="weui-cells no-margin no-line">
-            <div class="weui-cell weui-cell_access">
-                <div class="weui-cell__hd"><label class="weui-label">本地图片</label></div>
-                <div class="weui-cell__bd wx-placeholder">
-                   最多可以选择9张图片
-                </div>
+        <template v-if="isPage">
+            <div class="height-1"></div>
+            <div class="weui-cells no-margin no-line">
+                <div class="weui-cell weui-cell_access no-center">
+                    <div class="weui-cell__hd"><label class="weui-label">评论内容</label></div>
+                    <div class="weui-cell__bd">
+                       <textarea class="weui-textarea"
+                            placeholder="请输入文字"
+                            :rows="commentData.commentContent ? 3 : 1"
+                            v-model="commentData.commentContent"></textarea>
+                    </div>
+                </div>       
             </div>
-        </div>
-        <div class="weui-cells no-margin">
-            <div class="weui-cell no-line">
-                <div class="weui-uploader">
-                    <div class="weui-uploader__bd">
-                         <ul class="weui-uploader__files" id="uploaderFiles">
-                            <li class="weui-uploader__file"
-                                v-for="(item, index) in commentData.localIds"
-                                @click="showBigImg(index)">
-                                    <img :src="item">
-                            </li>
-                            <li @click="chooseImage"
-                                v-if="commentData.localIds.length < 9"
-                                class="weui-uploader__input-box"></li>
-                        </ul>
+
+            <div class="wx-area-line"></div>
+            <div class="weui-cells no-margin no-line">
+                <div class="weui-cell weui-cell_access">
+                    <div class="weui-cell__hd"><label class="weui-label">本地图片</label></div>
+                    <div class="weui-cell__bd wx-placeholder">
+                       最多可以选择9张图片
                     </div>
                 </div>
             </div>
-        </div>
-        
-        <div class="btn-height-box"></div>
-        <div class="weui-btn-area">
-            <a class="weui-btn weui-btn_primary" @click="submitFn">发布</a>
-        </div>
-        <delete-img :index="nowIndex"
-                    :img-path="nowPath"
-                    :is-show-img="isShowImg"
-                    @deleteImg="deleteImg"></delete-img>
+            <div class="weui-cells no-margin">
+                <div class="weui-cell no-line">
+                    <div class="weui-uploader">
+                        <div class="weui-uploader__bd">
+                             <ul class="weui-uploader__files" id="uploaderFiles">
+                                <li class="weui-uploader__file"
+                                    v-for="(item, index) in commentData.localIds"
+                                    @click="showBigImg(index)">
+                                        <img :src="item">
+                                </li>
+                                <li @click="chooseImage"
+                                    v-if="commentData.localIds.length < 9"
+                                    class="weui-uploader__input-box"></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="weui-btn-area-next">
+                <a class="weui-btn weui-btn_primary" @click="gotoDetail">放弃</a>
+                <a class="weui-btn weui-btn_primary" @click="submitFn">发布</a>
+            </div>
+            <delete-img :index="nowIndex"
+                        :img-path="nowPath"
+                        :is-show-img="isShowImg"
+                        @deleteImg="deleteImg"></delete-img>
+        </template>
     </section>
 </template>
 <script>
@@ -60,6 +62,7 @@ import { mapGetters } from 'vuex'
 export default {
     data () {
         return {
+            isPage: false,
             commentData: {
                 commentContent: '',
                 attachments: [],
@@ -74,6 +77,8 @@ export default {
     },
     mounted () {
         util.getUser(() => {
+            this.isPage = true
+            
             jsSdk.init()
             
             var types = ['enterprise_channel_open', 'enterprise_user_open']
@@ -139,29 +144,60 @@ export default {
                 data: formData
             }).then(res => {
                 if (res.result.success == '1') {
-                    var pathUrl = {
-                        name: 'article-detail',
-                        query: {
-                            enterpriseCode: this.$route.query.enterpriseCode,
-                            appid: this.$route.query.appid,
-                            pageCode: this.$route.query.pageCode,
-                            templateCode: this.$route.query.templateCode,
-                            S: this.$route.query.S,
-                            sShareTo: this.$route.query.sShareTo,
-                            C: this.$route.query.C,
-                            cShareTo: this.$route.query.cShareTo,
-                            spreadType: this.$route.query.spreadType,
-                            T: this.$route.query.T,
-                            tShareTo: this.$route.query.tShareTo
-                        }
-                    }
                     window.ISCOMMENT = true
-
-                    this.$router.replace(pathUrl)
+            
+                    if (window.FROMPAGE.name) {
+                        this.$router.go(-1)
+                    } else {
+                        var pathUrl = {
+                            name: 'article-detail',
+                            query: {
+                                enterpriseCode: this.$route.query.enterpriseCode,
+                                agentId: this.$route.query.agentId,
+                                appid: this.$route.query.appid,
+                                pageCode: this.$route.query.pageCode,
+                                templateCode: this.$route.query.templateCode,
+                                S: this.$route.query.S,
+                                sShareTo: this.$route.query.sShareTo,
+                                C: this.$route.query.C,
+                                cShareTo: this.$route.query.cShareTo,
+                                spreadType: this.$route.query.spreadType,
+                                T: this.$route.query.T,
+                                tShareTo: this.$route.query.tShareTo
+                            }
+                        }
+                        this.$router.replace(pathUrl)
+                    }
                 } else {
                     this.$message.error(res.result.message)
                 }
             })
+        },
+        gotoDetail () {
+            window.ISCOMMENT = false
+
+            if (window.FROMPAGE.name) {
+                this.$router.go(-1)
+            } else {
+                var pathUrl = {
+                    name: 'article-detail',
+                    query: {
+                        enterpriseCode: this.$route.query.enterpriseCode,
+                        agentId: this.$route.query.agentId,
+                        appid: this.$route.query.appid,
+                        pageCode: this.$route.query.pageCode,
+                        templateCode: this.$route.query.templateCode,
+                        S: this.$route.query.S,
+                        sShareTo: this.$route.query.sShareTo,
+                        C: this.$route.query.C,
+                        cShareTo: this.$route.query.cShareTo,
+                        spreadType: this.$route.query.spreadType,
+                        T: this.$route.query.T,
+                        tShareTo: this.$route.query.tShareTo
+                    }
+                }
+                this.$router.replace(pathUrl)
+            }
         },
         showBigImg (index) {
             this.nowIndex = index

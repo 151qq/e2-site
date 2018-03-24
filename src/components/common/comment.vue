@@ -152,6 +152,7 @@ export default {
                 name: this.commentUrl,
                 query: {
                     enterpriseCode: this.$route.query.enterpriseCode,
+                    agentId: this.$route.query.agentId,
                     appid: this.$route.query.appid,
                     pageCode: this.$route.query.pageCode,
                     templateCode: this.$route.query.templateCode,

@@ -142,10 +142,8 @@ export default {
                 appId: this.$route.query.appid
             }
 
-            if (this.$route.query.T && this.$route.query.T != 'N') {
-                this.formData.T = this.$route.query.T
-            } else if (this.$route.query.T && this.userInfo.t) {
-                this.formData.T = this.userInfo.t
+            if (this.$route.query.T && this.userInfo.t) {
+                formData.T = this.userInfo.t
             }
 
             tools.request({
@@ -256,10 +254,12 @@ export default {
                 return
             }
 
-            if (this.$route.query.T && this.$route.query.T != 'N') {
+            if (this.$route.query.T) {
                 this.memberInfo.spreadCode = this.$route.query.T
-            } else if (this.$route.query.T && this.userInfo.t) {
-                this.memberInfo.spreadCode = this.userInfo.t
+            }
+            
+            if (this.$route.query.T && this.userInfo.t) {
+                this.memberInfo.T = this.userInfo.t
             }
 
             if (this.$route.query.userCode) {

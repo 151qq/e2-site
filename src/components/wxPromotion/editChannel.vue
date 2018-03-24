@@ -23,6 +23,7 @@
                     <div class="weui-cell__hd"><label class="weui-label">性别</label></div>
                     <div class="weui-cell__bd">
                         <select class="weui-select" v-model="base.memberGender">
+                            <option value=""></option>
                             <option v-for="(item, index) in genderList" :value="item.key">
                                 {{item.value}}
                             </option>
