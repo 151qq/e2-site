@@ -57,10 +57,26 @@ const jsSdk = {
         })
     },
     setShare (con) {
+        var strQueryQ = ''
+        var strQueryF = ''
+        var queryData = tools.formDataUrl(window.location.href).query
+        var userInfo = store.state.userInfo
+
+        if (userInfo.t && userInfo.t != 'N') {
+            strQueryQ = '&sShareTo=' + queryData.sShareTo + '&cShareTo=' + queryData.cShareTo + '&tShareTo=Q'
+            strQueryF = '&sShareTo=' + queryData.sShareTo + '&cShareTo=' + queryData.cShareTo + '&tShareTo=F'
+        } else if (userInfo.c && userInfo.c != 'N') {
+            strQueryQ = '&sShareTo=' + queryData.sShareTo + '&cShareTo=Q&tShareTo=N'
+            strQueryF = '&sShareTo=' + queryData.sShareTo + '&cShareTo=F&tShareTo=N'
+        } else if (userInfo.s && userInfo.s != 'N') {
+            strQueryQ = '&sShareTo=Q&cShareTo=N&tShareTo=N'
+            strQueryF = '&sShareTo=F&cShareTo=N&tShareTo=N'
+        }
+
         // 分享到朋友圈
         window.wx.onMenuShareTimeline({
             title: con.title,
-            link: con.link + '&sShareTo=Q&cShareTo=Q&tShareTo=Q',
+            link: con.link + strQueryQ,
             imgUrl: con.imgUrl ? con.imgUrl : 'http://site.socialmarketingcloud.com/static/images/logo.png',
             success () {
                 var data = {
@@ -82,7 +98,7 @@ const jsSdk = {
         window.wx.onMenuShareAppMessage({
             title: con.title,
             desc: con.desc ? con.desc : '猜到了开头，却猜不到这结局！',
-            link: con.link + '&sShareTo=F&cShareTo=F&tShareTo=F',
+            link: con.link + strQueryF,
             imgUrl: con.imgUrl ? con.imgUrl : 'http://site.socialmarketingcloud.com/static/images/logo.png',
             type: con.type ? con.type : '',
             dataUrl: con.dataUrl ? con.dataUrl : '',
