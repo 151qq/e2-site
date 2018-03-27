@@ -93,7 +93,8 @@ export default {
                     customerType: this.userInfo.customerType,
                     interactionType: 'memberOffllineSign',
                     interactionDesc: '客户准备领券',
-                    interactionPrimeObject: this.base.couponGroupCode
+                    interactionPrimeObject: this.$route.query.partyCode,
+                    interactionSubObject: this.base.couponGroupCode
                 }
             }).then(res => {
                 this.gotoCoupon()

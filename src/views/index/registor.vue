@@ -282,6 +282,10 @@ export default {
                 this.memberInfo.reserveCode = this.$route.query.reserveCode
             }
 
+            if (this.$route.query.partyCode) {
+                this.memberInfo.partyCode = this.$route.query.partyCode
+            }
+
             tools.request({
               method: 'post',
               interface: 'saveMemberInfo',

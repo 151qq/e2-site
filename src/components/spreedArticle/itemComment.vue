@@ -131,7 +131,7 @@ export default {
                 commentFloor: this.$route.query.commentFloor,
                 memberCode: this.userInfo.memberInfo.memberCode,
                 commentContent: this.commentData.commentContent,
-                spreadCode: this.$route.query.S
+                templateCode: this.$route.query.templateCode
             }
 
             if (this.$route.query.commentTitle) {

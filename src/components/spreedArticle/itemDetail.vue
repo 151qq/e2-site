@@ -267,7 +267,8 @@ export default {
                         interactionType: 'memberReadingRate',
                         interactionDesc: '客户阅读文章',
                         primeObject: this.$route.query.pageCode,
-                        subObject: this.$route.query.S
+                        subObject: this.$route.query.S,
+                        otherObject: this.$route.query.templateCode
                     }
                     this.setLog(logData)
                   }
@@ -308,7 +309,8 @@ export default {
                                 interactionType: data.type,
                                 interactionDesc: data.mess,
                                 primeObject: _self.$route.query.pageCode,
-                                subObject: _self.$route.query.S
+                                subObject: _self.$route.query.S,
+                                otherObject: _self.$route.query.templateCode
                             }
                             _self.setLog(logData)
                         }
