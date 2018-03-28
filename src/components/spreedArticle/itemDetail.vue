@@ -267,7 +267,7 @@ export default {
                         interactionType: 'memberReadingRate',
                         interactionDesc: '客户阅读文章',
                         primeObject: this.$route.query.pageCode,
-                        subObject: this.$route.query.S,
+                        subObject: this.userInfo.t,
                         otherObject: this.$route.query.templateCode
                     }
                     this.setLog(logData)

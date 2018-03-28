@@ -43,8 +43,8 @@
             </div>
             
             <div class="weui-btn-area-next">
-                <a class="weui-btn weui-btn_primary" @click="gotoDetail">放弃</a>
                 <a class="weui-btn weui-btn_primary" @click="submitFn">发布</a>
+                <a class="weui-btn backgroundGray" @click="gotoDetail">放弃</a>
             </div>
             <delete-img :index="nowIndex"
                         :img-path="nowPath"
@@ -217,6 +217,10 @@ export default {
 <style lang="scss">
 .submit-box {
     background: #ffffff;
+
+    .backgroundGray {
+        background: #abafaa;
+    }
 
     .weui-cells {
         margin-top: 0;
