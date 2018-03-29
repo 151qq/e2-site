@@ -280,7 +280,7 @@ export default {
             font-size: 18px;
             color: #000000;
 
-            .span {
+            span {
                 color: #F43530;
             }
         }
