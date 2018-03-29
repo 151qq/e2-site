@@ -1,7 +1,9 @@
 <template>
     <section class="comment-box">
         <div class="head-box" @click="showSubmit('1')">
-            <div class="left">评论(<span>{{commentList.length}}</span>)</div>
+            <div class="left">
+                评论<template v-if="commentList.length">（<span>{{commentList.length}}</span>）</template>
+            </div>
             <div class="right" v-if="isComment">
                 <img src="../../assets/images/edit-icon.png">
             </div>
