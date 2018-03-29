@@ -1,7 +1,7 @@
 <template>
     <section class="comment-box">
         <div class="head-box" @click="showSubmit('1')">
-            <span class="left">评论</span>
+            <div class="left">评论(<span>{{commentList.length}}</span>)</div>
             <div class="right" v-if="isComment">
                 <img src="../../assets/images/edit-icon.png">
             </div>
@@ -279,6 +279,10 @@ export default {
         .left {
             font-size: 18px;
             color: #000000;
+
+            .span {
+                color: #F43530;
+            }
         }
 
         .right {
