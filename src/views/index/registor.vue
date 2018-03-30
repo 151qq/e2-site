@@ -257,7 +257,15 @@ export default {
             if (this.$route.query.T) {
                 this.memberInfo.spreadCode = this.$route.query.T
             }
-            
+
+            if (this.$route.query.C) {
+                this.memberInfo.C = this.$route.query.C
+            }
+
+            if (this.$route.query.S) {
+                this.memberInfo.S = this.$route.query.S
+            }
+
             if (this.$route.query.T && this.userInfo.t) {
                 this.memberInfo.T = this.userInfo.t
             }

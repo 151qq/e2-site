@@ -268,7 +268,9 @@ export default {
                         interactionDesc: '客户阅读文章',
                         primeObject: this.$route.query.pageCode,
                         subObject: this.userInfo.t,
-                        otherObject: this.$route.query.templateCode
+                        otherObject: this.$route.query.templateCode,
+                        C: this.$route.query.C,
+                        S: this.$route.query.S
                     }
                     this.setLog(logData)
                   }
@@ -375,7 +377,9 @@ export default {
                     interactionDesc: data.interactionDesc,
                     interactionPrimeObject: data.primeObject,
                     interactionSubObject: data.subObject,
-                    interactionOtherObject: data.otherObject
+                    interactionOtherObject: data.otherObject,
+                    C: data.C,
+                    S: data.S
                 }
             }).then(res => {})
         },
