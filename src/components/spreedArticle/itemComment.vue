@@ -132,6 +132,7 @@ export default {
                 memberCode: this.userInfo.memberInfo.memberCode,
                 commentContent: this.commentData.commentContent,
                 templateCode: this.$route.query.templateCode,
+                attachments: this.commentData.attachments,
                 C: this.$route.query.C,
                 S: this.$route.query.S
             }
